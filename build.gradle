@@ -1,0 +1,55 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+jar {
+    baseName = 'night-owl'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // tag::gui[]
+    compile files("./external/intellij_forms_rt.jar")
+    // end::gui[]
+    // tag::guava[]
+    compile("com.google.guava:guava:17.0")
+    // end::guava[]
+    // tag::context[]
+    compile("org.springframework:spring-context:4.0.4.RELEASE")
+    // end::context[]
+    // tag::context-support[]
+    compile("org.springframework:spring-context-support:4.0.4.RELEASE")
+    // end::context-support[]
+    // tag::log[]
+    compile("org.slf4j:slf4j-api:1.7.7")
+    // end::log[]
+
+    testCompile("junit:junit:4.11")
+    testCompile("org.mockito:mockito-all:1.9.5")
+    testCompile("org.assertj:assertj-core:1.6.0")
+    testCompile("com.googlecode.catch-exception:catch-exception:1.2.0")
+    testCompile("nl.jqno.equalsverifier:equalsverifier:1.4.1")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+jar {
+    manifest.attributes("Main-Class": "com.piotrglazar.nightowl.NightOwl")
+}
+
+sourceCompatibility = 1.8
+
+mainClassName = "com.piotrglazar.nightowl.NightOwl"
