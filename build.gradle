@@ -19,20 +19,22 @@ dependencies {
     compile("com.google.guava:guava:17.0")
     // end::guava[]
     // tag::context[]
-    compile("org.springframework:spring-context:4.0.4.RELEASE")
+    compile("org.springframework:spring-context:4.0.5.RELEASE")
     // end::context[]
     // tag::context-support[]
-    compile("org.springframework:spring-context-support:4.0.4.RELEASE")
+    compile("org.springframework:spring-context-support:4.0.5.RELEASE")
     // end::context-support[]
     // tag::log[]
     compile("org.slf4j:slf4j-api:1.7.7")
     // end::log[]
 
+    testCompile("org.springframework:spring-test:4.0.5.RELEASE")
     testCompile("junit:junit:4.11")
     testCompile("org.mockito:mockito-all:1.9.5")
     testCompile("org.assertj:assertj-core:1.6.0")
     testCompile("com.googlecode.catch-exception:catch-exception:1.2.0")
     testCompile("nl.jqno.equalsverifier:equalsverifier:1.4.1")
+    testCompile("pl.pragmatists:JUnitParams:1.0.2")
 }
 
 task wrapper(type: Wrapper) {

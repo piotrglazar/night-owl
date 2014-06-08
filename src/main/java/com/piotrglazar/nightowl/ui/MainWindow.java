@@ -1,21 +1,34 @@
 package com.piotrglazar.nightowl.ui;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+import com.piotrglazar.nightowl.configuration.Localisation;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
 public class MainWindow {
     private JPanel mainPanel;
     private JLabel timeLabel;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private JLabel siderealHourAngleLabel;
+    private JLabel cityName;
+    private JLabel cityLatitude;
+    private JLabel cityLongitude;
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public MainWindow preDisplay() {
-        timeLabel.setText(LocalDateTime.now().format(formatter));
-
+        timeLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
+        siderealHourAngleLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
+        cityName.setText(Localisation.WARSAW_CITY_NAME);
+        cityLatitude.setText(String.format("Latitude: %s N", Localisation.WARSAW_LATIDUDE.getLatitude()));
+        cityLongitude.setText(String.format("Longitude: %s E", Localisation.WARSAW_LONGITUDE.getLongitude()));
         return this;
     }
 
@@ -23,8 +36,12 @@ public class MainWindow {
         return mainPanel;
     }
 
+    public void setSiderealHourAngleLabel(final LocalTime siderealHourAngle) {
+        siderealHourAngleLabel.setText(siderealHourAngle.format(timeFormatter));
+    }
+
     public void setTimeLabel(final LocalDateTime now) {
-        timeLabel.setText(now.format(formatter));
+        timeLabel.setText(now.format(dateTimeFormatter));
     }
 
     {
@@ -43,15 +60,27 @@ public class MainWindow {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        mainPanel.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        mainPanel.setLayout(new GridLayoutManager(4, 4, new Insets(0, 0, 0, 0), -1, -1));
+        final Spacer spacer1 = new Spacer();
+        mainPanel.add(spacer1, new GridConstraints(1, 3, 3, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("NightOwl welcomes the world");
-        mainPanel.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(80, 16), null, 0, false));
+        mainPanel.add(label1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(80, 16), null, 0, false));
         timeLabel = new JLabel();
         timeLabel.setText("You will see time here");
-        mainPanel.add(timeLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(timeLabel, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        siderealHourAngleLabel = new JLabel();
+        siderealHourAngleLabel.setText("You will see sidereal hour angle here");
+        mainPanel.add(siderealHourAngleLabel, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cityName = new JLabel();
+        cityName.setText("cityName");
+        mainPanel.add(cityName, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cityLatitude = new JLabel();
+        cityLatitude.setText("Latitude: ");
+        mainPanel.add(cityLatitude, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cityLongitude = new JLabel();
+        cityLongitude.setText("Longitude:");
+        mainPanel.add(cityLongitude, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
