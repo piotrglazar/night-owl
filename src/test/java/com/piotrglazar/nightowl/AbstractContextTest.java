@@ -4,11 +4,13 @@ import junitparams.JUnitParamsRunner;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ActiveProfiles("test")
 public abstract class AbstractContextTest {
 
     @Rule

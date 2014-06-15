@@ -20,6 +20,7 @@ public class UtcStarTimeAtZeroUniversalTimeTest {
     @Parameters({
             "2014-11-21 | 2014-09-21",
             "2014-09-21 | 2014-09-21",
+            "2014-09-20 | 2013-09-21",
             "2014-05-15 | 2013-09-21"
     })
     public void shouldCalculateAriesPoint(String currentDate, String ariesPoint) {
