@@ -1,7 +1,10 @@
 package com.piotrglazar.nightowl.coordinates;
 
+import com.piotrglazar.nightowl.converters.LocalTimeConverter;
+import com.piotrglazar.nightowl.converters.LongitudeConverter;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import junitparams.converters.ConvertParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,11 +43,8 @@ public class LongitudeTest {
             "150.0 | 10:00:00",
             "180.0 | 12:00:00"
     })
-    public void shouldCalculateHourShiftEastwards(double rawLongitude, String rawTimeShift) {
-        // given
-        final Longitude longitude = new Longitude(rawLongitude);
-        final LocalTime expectedTimeShift = LocalTime.parse(rawTimeShift);
-
+    public void shouldCalculateHourShiftEastwards(@ConvertParam(LongitudeConverter.class) Longitude longitude,
+                                                  @ConvertParam(LocalTimeConverter.class) LocalTime expectedTimeShift) {
         // when
         final int shiftInSeconds = longitude.toSeconds();
         final LocalTime timeShift = LocalTime.ofSecondOfDay(-shiftInSeconds);
@@ -61,11 +61,8 @@ public class LongitudeTest {
             "-150.0 | 10:00:00",
             "-180.0 | 12:00:00"
     })
-    public void shouldCalculateHourShiftWestwards(double rawLongitude, String rawTimeShift) {
-        // given
-        final Longitude longitude = new Longitude(rawLongitude);
-        final LocalTime expectedTimeShift = LocalTime.parse(rawTimeShift);
-
+    public void shouldCalculateHourShiftWestwards(@ConvertParam(LongitudeConverter.class) Longitude longitude,
+                                                  @ConvertParam(LocalTimeConverter.class) LocalTime expectedTimeShift) {
         // when
         final int shiftInSeconds = longitude.toSeconds();
         final LocalTime timeShift = LocalTime.ofSecondOfDay(shiftInSeconds);

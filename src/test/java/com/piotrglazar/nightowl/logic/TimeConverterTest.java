@@ -1,7 +1,10 @@
 package com.piotrglazar.nightowl.logic;
 
+import com.piotrglazar.nightowl.converters.LocalTimeConverter;
+import com.piotrglazar.nightowl.converters.ZonedDateTimeConverter;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import junitparams.converters.ConvertParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,11 +26,8 @@ public class TimeConverterTest {
             "2014-08-06T00:07:00Z | 00:00:01",
             "2014-08-06T22:59:59Z | 00:03:46"
     })
-    public void shouldConvertSolarTimeToStarTime(String rawTime, String rawExpectedTimeDelta) {
-        // given
-        final ZonedDateTime utc = ZonedDateTime.parse(rawTime);
-        final LocalTime expectedTimeDelta = LocalTime.parse(rawExpectedTimeDelta);
-
+    public void shouldConvertSolarTimeToStarTime(@ConvertParam(ZonedDateTimeConverter.class) ZonedDateTime utc,
+                                                 @ConvertParam(LocalTimeConverter.class) LocalTime expectedTimeDelta) {
         // when
         final ZonedDateTime star = timeConverter.solarToStar(utc);
 

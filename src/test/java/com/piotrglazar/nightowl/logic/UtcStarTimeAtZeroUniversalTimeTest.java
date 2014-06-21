@@ -1,7 +1,11 @@
 package com.piotrglazar.nightowl.logic;
 
+import com.piotrglazar.nightowl.converters.LocalDateConverter;
+import com.piotrglazar.nightowl.converters.LocalDateTimeConverter;
+import com.piotrglazar.nightowl.converters.LocalTimeConverter;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import junitparams.converters.ConvertParam;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,11 +27,8 @@ public class UtcStarTimeAtZeroUniversalTimeTest {
             "2014-09-20 | 2013-09-21",
             "2014-05-15 | 2013-09-21"
     })
-    public void shouldCalculateAriesPoint(String currentDate, String ariesPoint) {
-        // given
-        final LocalDate date = LocalDate.parse(currentDate);
-        final LocalDate expectedAriesPoint = LocalDate.parse(ariesPoint);
-
+    public void shouldCalculateAriesPoint(@ConvertParam(LocalDateConverter.class) LocalDate date,
+                                          @ConvertParam(LocalDateConverter.class) LocalDate expectedAriesPoint) {
         // when
         final LocalDate calculatedAriesPoint = time.getAriesPoint(date);
 
@@ -41,11 +42,8 @@ public class UtcStarTimeAtZeroUniversalTimeTest {
             "2014-09-21 | 00:00:00",
             "2014-08-21 | 21:57:40"
     })
-    public void shouldCalculateUtcStarTimeAtZeroUniversalTime(String currentDate, String rawExpectedTime) {
-        // given
-        final LocalDateTime date = LocalDateTime.of(LocalDate.parse(currentDate), LocalTime.now());
-        final LocalTime expectedTime = LocalTime.parse(rawExpectedTime);
-
+    public void shouldCalculateUtcStarTimeAtZeroUniversalTime(@ConvertParam(LocalDateTimeConverter.class) LocalDateTime date,
+                                                              @ConvertParam(LocalTimeConverter.class) LocalTime expectedTime) {
         // when
         final LocalTime calculatedTime = time.getTime(date);
 
