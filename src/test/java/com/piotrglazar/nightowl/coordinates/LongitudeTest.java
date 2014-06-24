@@ -71,4 +71,21 @@ public class LongitudeTest {
         assertThat(timeShift).isEqualTo(expectedTimeShift);
         assertThat(shiftInSeconds).isGreaterThanOrEqualTo(0);
     }
+
+    @Test
+    @Parameters({
+            "-21.0 | 21.00 W",
+            "0.0 | 0.00",
+            "10.0 | 10.00 E"
+    })
+    public void shouldUseEastOrWestSuffix(double rawLongitude, String expectedToString) {
+        // given
+        final Longitude longitude = new Longitude(rawLongitude);
+
+        // when
+        final String toString = longitude.toString();
+
+        // then
+        assertThat(toString).isEqualTo(expectedToString);
+    }
 }

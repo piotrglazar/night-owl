@@ -3,7 +3,7 @@ package com.piotrglazar.nightowl.ui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.piotrglazar.nightowl.configuration.Localisation;
+import com.piotrglazar.nightowl.model.UserLocation;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -21,15 +21,13 @@ public class MainWindow {
     private JLabel cityLatitude;
     private JLabel cityLongitude;
     private JLabel stars;
+    private JLabel userLocations;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public MainWindow preDisplay() {
         timeLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
         siderealHourAngleLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
-        cityName.setText(Localisation.WARSAW_CITY_NAME);
-        cityLatitude.setText(String.format("Latitude: %s N", Localisation.WARSAW_LATIDUDE.getLatitude()));
-        cityLongitude.setText(String.format("Longitude: %s E", Localisation.WARSAW_LONGITUDE.getLongitude()));
         return this;
     }
 
@@ -47,6 +45,16 @@ public class MainWindow {
 
     public void setNumberOfStars(long numberOfStars) {
         stars.setText("Number of stars: " + numberOfStars);
+    }
+
+    public void setNumberOfUserLocations(long numberOfUserLocations) {
+        userLocations.setText("Number of locations: " + numberOfUserLocations);
+    }
+
+    public void setUserLocation(final UserLocation userLocation) {
+        cityName.setText(userLocation.getName());
+        cityLatitude.setText(String.format("Latitude: %s", userLocation.getLatitude()));
+        cityLongitude.setText(String.format("Longitude: %s", userLocation.getLongitude()));
     }
 
     {
@@ -89,6 +97,9 @@ public class MainWindow {
         stars = new JLabel();
         stars.setText("stars: 0");
         mainPanel.add(stars, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        userLocations = new JLabel();
+        userLocations.setText("userLocations: 0");
+        mainPanel.add(userLocations, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

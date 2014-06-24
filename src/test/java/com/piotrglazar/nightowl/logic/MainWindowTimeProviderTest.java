@@ -1,6 +1,8 @@
 package com.piotrglazar.nightowl.logic;
 
-import com.piotrglazar.nightowl.configuration.Localisation;
+import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
+import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.ui.MainWindow;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
@@ -21,12 +23,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainWindowTimeProviderTest {
+
+    @Mock
+    private NightOwlRuntimeConfiguration runtimeConfiguration;
 
     @Mock
     private TimerFactory timerFactory;
@@ -53,7 +57,9 @@ public class MainWindowTimeProviderTest {
         // given
         given(dateTimeSupplier.get()).willReturn(ZonedDateTime.now());
         given(timerFactory.timer(anyString())).willReturn(timer);
-        timeProvider = new MainWindowTimeProvider(timerFactory, dateTimeSupplier, siderealHourAngleCalculator, applicationEventPublisher);
+        given(runtimeConfiguration.getUserLocation()).willReturn(UserLocation.builder().build());
+        timeProvider = new MainWindowTimeProvider(timerFactory, dateTimeSupplier, siderealHourAngleCalculator, applicationEventPublisher,
+                runtimeConfiguration);
 
         // when
         timeProvider.setupTimerTask();
@@ -72,6 +78,6 @@ public class MainWindowTimeProviderTest {
         updateEvents.getAllValues().stream().forEach(ui -> ui.action(mainWindow));
         verify(mainWindow).setTimeLabel(any(LocalDateTime.class));
         verify(mainWindow).setSiderealHourAngleLabel(any(LocalTime.class));
-        verify(siderealHourAngleCalculator).siderealHourAngle(any(ZonedDateTime.class), eq(Localisation.WARSAW_LONGITUDE));
+        verify(siderealHourAngleCalculator).siderealHourAngle(any(ZonedDateTime.class), any(Longitude.class));
     }
 }

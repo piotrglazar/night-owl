@@ -1,5 +1,7 @@
 package com.piotrglazar.nightowl.logic;
 
+import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
+import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +15,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Supplier;
 
-import static com.piotrglazar.nightowl.configuration.Localisation.WARSAW_LONGITUDE;
-
 @Component
 public class MainWindowTimeProvider {
 
@@ -24,13 +24,16 @@ public class MainWindowTimeProvider {
     private final Supplier<ZonedDateTime> dateTimeSupplier;
     private final SiderealHourAngleCalculator siderealHourAngleCalculator;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final NightOwlRuntimeConfiguration runtimeConfiguration;
 
     @Autowired
     public MainWindowTimeProvider(TimerFactory timerFactory, Supplier<ZonedDateTime> dateTimeSupplier,
                                   SiderealHourAngleCalculator siderealHourAngleCalculator,
-                                  ApplicationEventPublisher applicationEventPublisher) {
+                                  ApplicationEventPublisher applicationEventPublisher,
+                                  NightOwlRuntimeConfiguration runtimeConfiguration) {
         this.dateTimeSupplier = dateTimeSupplier;
         this.siderealHourAngleCalculator = siderealHourAngleCalculator;
+        this.runtimeConfiguration = runtimeConfiguration;
         this.timer = timerFactory.timer("UiTimeRefresher");
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -52,7 +55,9 @@ public class MainWindowTimeProvider {
     }
 
     private ApplicationEvent siderealHourAngleEvent(final ZonedDateTime now) {
+        final UserLocation userLocation = runtimeConfiguration.getUserLocation();
         return new UiUpdateEvent(this,
-                (mainWindow) -> mainWindow.setSiderealHourAngleLabel(siderealHourAngleCalculator.siderealHourAngle(now, WARSAW_LONGITUDE)));
+                (mainWindow) -> mainWindow.setSiderealHourAngleLabel(siderealHourAngleCalculator.siderealHourAngle(now,
+                        userLocation.getLongitude())));
     }
 }

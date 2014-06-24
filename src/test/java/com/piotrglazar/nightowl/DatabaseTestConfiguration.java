@@ -1,8 +1,14 @@
 package com.piotrglazar.nightowl;
 
 import com.google.common.collect.ImmutableMap;
+import com.piotrglazar.nightowl.coordinates.Latitude;
+import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
 import com.piotrglazar.nightowl.model.StarInfo;
 import com.piotrglazar.nightowl.model.StarInfoRepository;
+import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,26 +41,55 @@ public class DatabaseTestConfiguration {
 
     @Bean
     @Autowired
-    public DatabasePopulator databasePopulator(StarInfoRepository starInfoRepository) {
-        return new DatabasePopulator(starInfoRepository);
+    public DatabasePopulator databasePopulator(StarInfoRepository starInfoRepository, UserLocationRepository userLocationRepository,
+            RuntimeConfigurationRepository runtimeConfigurationRepository) {
+        return new DatabasePopulator(userLocationRepository, runtimeConfigurationRepository, starInfoRepository);
     }
 
     static class DatabasePopulator {
 
-        private StarInfoRepository starInfoRepository;
+        private final UserLocationRepository userLocationRepository;
+        private final RuntimeConfigurationRepository runtimeConfigurationRepository;
+        private final StarInfoRepository starInfoRepository;
 
-        public DatabasePopulator(final StarInfoRepository starInfoRepository) {
+        public DatabasePopulator(UserLocationRepository userLocationRepository,
+                                 RuntimeConfigurationRepository runtimeConfigurationRepository,
+                                 StarInfoRepository starInfoRepository) {
+            this.userLocationRepository = userLocationRepository;
+            this.runtimeConfigurationRepository = runtimeConfigurationRepository;
             this.starInfoRepository = starInfoRepository;
         }
 
         @PostConstruct
         public void fillTestDatabase() {
             saveSomeStarInfo();
+            prepareUserLocalisation();
+        }
+
+        private void prepareUserLocalisation() {
+            final UserLocation warsaw = warsaw();
+            userLocationRepository.saveAndFlush(warsaw);
+
+            runtimeConfigurationRepository.saveAndFlush(defaultRuntimeConfiguration(warsaw));
         }
 
         private void saveSomeStarInfo() {
             starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now(), 42.42, "A0"));
             starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(100), 13.13, "B0"));
+        }
+
+        private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation) {
+            final RuntimeConfiguration runtimeConfiguration = new RuntimeConfiguration();
+            runtimeConfiguration.setChosenUserLocation(defaultLocation);
+            return runtimeConfiguration;
+        }
+
+        private UserLocation warsaw() {
+            return UserLocation.builder()
+                    .latitude(new Latitude(52.23))
+                    .longitude(new Longitude(21.0))
+                    .name("Warsaw")
+                    .build();
         }
     }
 
