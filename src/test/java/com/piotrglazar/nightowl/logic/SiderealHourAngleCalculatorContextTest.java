@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.AbstractContextTest;
-import com.piotrglazar.nightowl.configuration.Localisation;
+import com.piotrglazar.nightowl.coordinates.Longitude;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,9 +34,10 @@ public class SiderealHourAngleCalculatorContextTest extends AbstractContextTest 
         // given
         final LocalTime expectedSiderealHourAngle = LocalTime.of(21, 10, 54);
         final ZonedDateTime time = ZonedDateTime.of(2014, 11, 21, 18, 28, 0, 0, ZoneId.of("UTC"));
+        final Longitude warsawLongitude = new Longitude(21.0);
 
         // when
-        final LocalTime siderealHourAngleInWarsaw = calculator.siderealHourAngle(time, Localisation.WARSAW_LONGITUDE);
+        final LocalTime siderealHourAngleInWarsaw = calculator.siderealHourAngle(time, warsawLongitude);
 
         // then
         assertThat(siderealHourAngleInWarsaw).isEqualTo(expectedSiderealHourAngle);

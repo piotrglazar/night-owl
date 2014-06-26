@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.UserLocationProvider;
 import com.piotrglazar.nightowl.ui.MainWindow;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
@@ -12,10 +13,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.ApplicationEventPublisher;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DatabaseStatisticsTest {
+
+    @Mock
+    private UserLocationProvider userLocationProvider;
 
     @Mock
     private StarInfoProvider starInfoProvider;
@@ -32,16 +37,24 @@ public class DatabaseStatisticsTest {
     @Test
     public void shouldSendStarCountMessage() {
         // given
-        given(starInfoProvider.starsCount()).willReturn(42L);
+        given(starInfoProvider.count()).willReturn(42L);
+        given(userLocationProvider.count()).willReturn(3L);
 
         // when
         databaseStatistics.displayDatabaseStatisticsOnUi();
 
         // then
-        ArgumentCaptor<UiUpdateEvent> captor = ArgumentCaptor.forClass(UiUpdateEvent.class);
-        verify(applicationEventPublisher).publishEvent(captor.capture());
+        ArgumentCaptor<UiUpdateEvent> uiUpdateEvents = ArgumentCaptor.forClass(UiUpdateEvent.class);
+        verify(applicationEventPublisher, times(2)).publishEvent(uiUpdateEvents.capture());
         // then ui event will update ui
-        captor.getValue().action(mainWindow);
-        verify(mainWindow).setNumberOfStars(42L);
+        invokeUiActions(uiUpdateEvents);
+        verify(mainWindow).setNumberOfStars(42);
+        verify(mainWindow).setNumberOfUserLocations(3);
+    }
+
+    private void invokeUiActions(final ArgumentCaptor<UiUpdateEvent> events) {
+        for (UiUpdateEvent event : events.getAllValues()) {
+            event.action(mainWindow);
+        }
     }
 }

@@ -10,5 +10,5 @@ public interface StarInfoProvider {
 
     List<StarInfo> getAllStars();
 
-    long starsCount();
+    long count();
 }

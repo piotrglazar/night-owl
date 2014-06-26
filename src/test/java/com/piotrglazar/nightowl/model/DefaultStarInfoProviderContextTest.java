@@ -20,7 +20,7 @@ public class DefaultStarInfoProviderContextTest extends AbstractContextTest {
     @Test
     public void shouldReadStarsCount() {
         // when
-        final long starsCount = starInfoProvider.starsCount();
+        final long starsCount = starInfoProvider.count();
 
         // then
         assertThat(starsCount).isEqualTo(2);

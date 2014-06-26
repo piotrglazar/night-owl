@@ -27,7 +27,7 @@ class DefaultStarInfoProvider implements StarInfoProvider {
     }
 
     @Override
-    public long starsCount() {
+    public long count() {
         return starInfoRepository.count();
     }
 }
