@@ -11,4 +11,6 @@ public interface StarInfoProvider {
     List<StarInfo> getAllStars();
 
     long count();
+
+    void deleteAll();
 }

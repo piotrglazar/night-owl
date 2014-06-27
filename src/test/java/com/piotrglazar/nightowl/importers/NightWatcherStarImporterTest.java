@@ -36,5 +36,6 @@ public class NightWatcherStarImporterTest {
 
         // then
         verify(starInfoProvider, times(5)).saveStarInfo(any(StarInfo.class));
+        verify(starInfoProvider).deleteAll();
     }
 }

@@ -2,6 +2,8 @@ package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
 import com.piotrglazar.nightowl.model.StarInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.time.LocalTime;
 
 @Component
 public class NightWatcherStarImporter {
+
+    private static final Logger LOG = LoggerFactory.getLogger("STAR_IMPORTER");
 
     private final StarInfoProvider starInfoProvider;
 
@@ -28,7 +32,10 @@ public class NightWatcherStarImporter {
         final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
         applicationContext.registerShutdownHook();
 
-        applicationContext.getBean(NightWatcherStarImporter.class).importStars(Paths.get(args[0]));
+        final Path starsFilePath = Paths.get(args[0]);
+        LOG.info("Importing stars from {}", starsFilePath);
+        applicationContext.getBean(NightWatcherStarImporter.class).importStars(starsFilePath);
+        LOG.info("Done importing stars");
         System.exit(0);
     }
 
@@ -39,14 +46,17 @@ public class NightWatcherStarImporter {
     }
 
     public void importStars(final Path path) throws IOException {
+        LOG.info("Delete previous stars");
+        starInfoProvider.deleteAll();
+
         Files.lines(path)
-                .map(line -> line.trim())
+                .map(String::trim)
                 .map(line -> line.replace(',', '.'))
                 .map(line -> line.split(" +"))
                 .map(shards ->
                         new StarInfo(convertTimeAsFractionalPartOfHourToLocalTime(shards[0]), Double.parseDouble(shards[1]), shards[5]))
-                .forEach(starInfo -> starInfoProvider.saveStarInfo(starInfo));
-        System.out.println("Imported stars: " + starInfoProvider.getAllStars().size());
+                .forEach(starInfoProvider::saveStarInfo);
+        LOG.info("Imported stars: {}",  starInfoProvider.count());
     }
 
     private LocalTime convertTimeAsFractionalPartOfHourToLocalTime(String doubleRepresentation) {
