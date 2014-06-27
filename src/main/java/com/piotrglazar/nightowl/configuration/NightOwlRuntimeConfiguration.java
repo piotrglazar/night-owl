@@ -4,14 +4,19 @@ import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.model.RuntimeConfiguration;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.lang.invoke.MethodHandles;
 
 @Component
 public class NightOwlRuntimeConfiguration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final RuntimeConfigurationProvider configurationProvider;
@@ -27,6 +32,7 @@ public class NightOwlRuntimeConfiguration {
     @PostConstruct
     public void loadRuntimeConfiguration() {
         runtimeConfiguration = configurationProvider.getConfiguration();
+        LOG.info("Running with configuration {}", runtimeConfiguration);
 
         final UserLocation chosenUserLocation = runtimeConfiguration.getChosenUserLocation();
         applicationEventPublisher.publishEvent(new UiUpdateEvent(this, ui -> ui.setUserLocation(chosenUserLocation)));

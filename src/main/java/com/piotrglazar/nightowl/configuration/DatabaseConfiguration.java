@@ -7,6 +7,8 @@ import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.hsqldb.jdbc.JDBCDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +25,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.lang.invoke.MethodHandles;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.piotrglazar.nightowl")
 @EnableTransactionManagement
 @Profile("default")
 public class DatabaseConfiguration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Bean
     public DataSource dataSource(){
@@ -79,11 +84,17 @@ public class DatabaseConfiguration {
 
         @PostConstruct
         public void prepareDatabase() {
+            LOG.info("Prepopulating database");
+
             prepareCapitals();
+
+            LOG.info("Done prepopulating database");
         }
 
         private void prepareCapitals() {
             if (userLocationRepository.count() == 0) {
+                LOG.info("Prepopulating database with capitals");
+
                 final UserLocation warsaw = warsaw();
                 userLocationRepository.save(warsaw);
                 userLocationRepository.save(london());

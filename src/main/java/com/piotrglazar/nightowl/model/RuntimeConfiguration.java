@@ -49,4 +49,12 @@ public class RuntimeConfiguration {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("id", id)
+                .add("userLocation", chosenUserLocation)
+                .toString();
+    }
 }

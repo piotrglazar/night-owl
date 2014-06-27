@@ -30,4 +30,9 @@ class DefaultStarInfoProvider implements StarInfoProvider {
     public long count() {
         return starInfoRepository.count();
     }
+
+    @Override
+    public void deleteAll() {
+        starInfoRepository.deleteAll();
+    }
 }
