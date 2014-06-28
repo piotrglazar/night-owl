@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class UserLocation {
+public final class UserLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -8,7 +8,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
-public class StarInfo {
+public final class StarInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
