@@ -11,7 +11,7 @@ import java.util.Objects;
  * This should be a singleton!
  */
 @Entity
-public class RuntimeConfiguration {
+public final class RuntimeConfiguration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

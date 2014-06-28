@@ -20,14 +20,13 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class NightOwlRuntimeConfigurationTest {
 
+    private RuntimeConfiguration runtimeConfiguration = new RuntimeConfiguration();
+
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Mock
     private RuntimeConfigurationProvider configurationProvider;
-
-    @Mock
-    private RuntimeConfiguration runtimeConfiguration;
 
     @Mock
     private MainWindow mainWindow;
