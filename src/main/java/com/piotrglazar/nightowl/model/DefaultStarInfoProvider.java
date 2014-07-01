@@ -35,4 +35,19 @@ class DefaultStarInfoProvider implements StarInfoProvider {
     public void deleteAll() {
         starInfoRepository.deleteAll();
     }
+
+    @Override
+    public List<StarInfo> getStarsWithDeclinationGreaterThan(final double declination) {
+        return starInfoRepository.findByDeclinationGreaterThan(declination);
+    }
+
+    @Override
+    public List<StarInfo> getStarsWithDeclinationLessThan(final double declination) {
+        return starInfoRepository.findByDeclinationLessThan(declination);
+    }
+
+    @Override
+    public List<StarInfo> getStarsWithDeclinationBetween(final double lowerBoundary, final double upperBoundary) {
+        return starInfoRepository.findByDeclinationBetween(lowerBoundary, upperBoundary);
+    }
 }
