@@ -13,4 +13,10 @@ public interface StarInfoProvider {
     long count();
 
     void deleteAll();
+
+    List<StarInfo> getStarsWithDeclinationGreaterThan(double declination);
+
+    List<StarInfo> getStarsWithDeclinationLessThan(double declination);
+
+    List<StarInfo> getStarsWithDeclinationBetween(double lowerBoundary, double upperBounday);
 }

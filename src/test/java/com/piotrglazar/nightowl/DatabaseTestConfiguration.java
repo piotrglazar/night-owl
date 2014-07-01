@@ -74,8 +74,12 @@ public class DatabaseTestConfiguration {
         }
 
         private void saveSomeStarInfo() {
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now(), 42.42, "A0"));
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(100), 13.13, "B0"));
+            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(10), 82.71, "A0"));
+            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(50), 73.13, "B0"));
+            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(100), 52.92, "C0"));
+            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(150), 22.42, "D0"));
+            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(200), -23.65, "E0"));
+            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(250), -55.22, "F0"));
         }
 
         private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation) {

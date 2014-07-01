@@ -23,7 +23,7 @@ public class DefaultStarInfoProviderContextTest extends AbstractContextTest {
         final long starsCount = starInfoProvider.count();
 
         // then
-        assertThat(starsCount).isEqualTo(2);
+        assertThat(starsCount).isEqualTo(6);
     }
 
     @Test
@@ -34,9 +34,13 @@ public class DefaultStarInfoProviderContextTest extends AbstractContextTest {
         final List<StarInfo> allStars = starInfoProvider.getAllStars();
 
         // then
-        assertThat(allStars).hasSize(2);
+        assertThat(allStars).hasSize(6);
         assertThat(allStars.get(0).getSpectralType()).isEqualTo("A0");
         assertThat(allStars.get(1).getSpectralType()).isEqualTo("B0");
+        assertThat(allStars.get(2).getSpectralType()).isEqualTo("C0");
+        assertThat(allStars.get(3).getSpectralType()).isEqualTo("D0");
+        assertThat(allStars.get(4).getSpectralType()).isEqualTo("E0");
+        assertThat(allStars.get(5).getSpectralType()).isEqualTo("F0");
     }
 
     @Test
