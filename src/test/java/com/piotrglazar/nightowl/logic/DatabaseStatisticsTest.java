@@ -1,11 +1,13 @@
 package com.piotrglazar.nightowl.logic;
 
+import com.google.common.collect.Lists;
 import com.piotrglazar.nightowl.StarInfoProvider;
 import com.piotrglazar.nightowl.UserLocationProvider;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.ui.MainWindow;
 import com.piotrglazar.nightowl.util.StarsVisibilityMessage;
+import com.piotrglazar.nightowl.util.TimeProvider;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.time.ZonedDateTime;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -22,6 +26,9 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DatabaseStatisticsTest {
+
+    @Mock
+    private TimeProvider timeProvider;
 
     @Mock
     private NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration;
@@ -52,18 +59,20 @@ public class DatabaseStatisticsTest {
         given(starPositionProvider.getNumberOfStarsSometimesVisible(any(UserLocation.class))).willReturn(3L);
         given(starPositionProvider.getNumberOfStarsAlwaysVisible(any(UserLocation.class))).willReturn(5L);
         given(starPositionProvider.getNumberOfStarsNeverVisible(any(UserLocation.class))).willReturn(1L);
+        given(starPositionProvider.getStarsPositions(any(UserLocation.class), any(ZonedDateTime.class))).willReturn(Lists.newLinkedList());
 
         // when
         databaseStatistics.displayDatabaseStatisticsOnUi();
 
         // then
         ArgumentCaptor<UiUpdateEvent> uiUpdateEvents = ArgumentCaptor.forClass(UiUpdateEvent.class);
-        verify(applicationEventPublisher, times(3)).publishEvent(uiUpdateEvents.capture());
+        verify(applicationEventPublisher, times(4)).publishEvent(uiUpdateEvents.capture());
         // then ui event will update ui
         invokeUiActions(uiUpdateEvents);
         verify(mainWindow).setNumberOfStars(42);
         verify(mainWindow).setNumberOfUserLocations(3);
         verify(mainWindow).setStarsVisibility(new StarsVisibilityMessage(5, 3, 1));
+        verify(mainWindow).setNumberOfStarsVisibleNow(0);
     }
 
     private void invokeUiActions(final ArgumentCaptor<UiUpdateEvent> events) {

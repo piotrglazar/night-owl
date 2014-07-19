@@ -3,7 +3,9 @@ package com.piotrglazar.nightowl.logic;
 import com.google.common.collect.Lists;
 import com.piotrglazar.nightowl.StarInfoProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
+import com.piotrglazar.nightowl.model.StarCelestialPosition;
 import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.UserLocation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,15 +13,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StarPositionProviderTest {
+
+    @Mock
+    private SiderealHourAngleCalculator siderealHourAngleCalculator;
 
     @Mock
     private StarInfoProvider starInfoProvider;
@@ -142,6 +153,31 @@ public class StarPositionProviderTest {
         verify(starInfoProvider).getStarsWithDeclinationGreaterThan(-declination);
         verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
         assertThat(numberOfStarsNeverVisible).isEqualTo(starInfo.size());
+    }
+
+    @Test
+    public void shouldGetStarPositionsOnTheSky() {
+        // given
+        final UserLocation userLocation = userLocationWithLatitude(52.0);
+        final ZonedDateTime arbitraryDate = ZonedDateTime.of(2014, 7, 16, 23, 29, 0, 0, ZoneId.of("UTC"));
+        final List<StarInfo> alwaysVisibleStars = someStarInfo();
+        final List<StarInfo> sometimesVisibleStars = someStarInfo();
+        final int starsCount = alwaysVisibleStars.size() + sometimesVisibleStars.size();
+        given(starInfoProvider.getStarsWithDeclinationLessThan(anyDouble())).willReturn(alwaysVisibleStars);
+        given(starInfoProvider.getStarsWithDeclinationBetween(anyDouble(), anyDouble())).willReturn(sometimesVisibleStars);
+        given(starPositionCalculator.getMaximumZenithDistance()).willReturn(50.0);
+        given(starPositionCalculator.calculateCelestialPosition(any(Latitude.class), any(LocalTime.class), any(StarInfo.class)))
+                .willReturn(new StarCelestialPosition(60, 0), new StarCelestialPosition(0, 0));
+
+        // when
+        final List<StarPositionDto> starsPositions = provider.getStarsPositions(userLocation, arbitraryDate);
+
+        // then
+        assertThat(starsPositions).hasSize(starsCount - 1);
+        verify(siderealHourAngleCalculator).siderealHourAngle(arbitraryDate, userLocation.getLongitude());
+        verify(starPositionCalculator).getMaximumZenithDistance();
+        verify(starPositionCalculator, times(starsCount))
+                .calculateCelestialPosition(any(Latitude.class), any(LocalTime.class), any(StarInfo.class));
     }
 
     private List<StarInfo> someStarInfo() {

@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
@@ -27,12 +28,21 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.time.LocalTime;
+import java.util.List;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.piotrglazar.nightowl")
 @EnableTransactionManagement
 @Profile("test")
 public class DatabaseTestConfiguration {
+
+    public static final List<StarInfo> STARS = ImmutableList.of(
+            new StarInfo(LocalTime.of(23, 36, 32), 77.46, "A0"),
+            new StarInfo(LocalTime.of(0, 59, 10), 73.17, "B0"),
+            new StarInfo(LocalTime.of(4, 45, 18), 53.17, "C0"),
+            new StarInfo(LocalTime.of(11, 45, 18), 22.41, "D0"),
+            new StarInfo(LocalTime.of(15, 12, 50), -23.65, "E0"),
+            new StarInfo(LocalTime.of(22, 10, 12), -55.22, "F0"));
 
     @Bean
     public DataSource dataSource() {
@@ -74,12 +84,8 @@ public class DatabaseTestConfiguration {
         }
 
         private void saveSomeStarInfo() {
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(10), 82.71, "A0"));
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(50), 73.13, "B0"));
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(100), 52.92, "C0"));
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(150), 22.42, "D0"));
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(200), -23.65, "E0"));
-            starInfoRepository.saveAndFlush(new StarInfo(LocalTime.now().plusSeconds(250), -55.22, "F0"));
+            starInfoRepository.save(STARS);
+            starInfoRepository.flush();
         }
 
         private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation) {

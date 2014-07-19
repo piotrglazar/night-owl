@@ -32,7 +32,7 @@ public class SiderealHourAngleCalculatorContextTest extends AbstractContextTest 
     @Test
     public void shouldCalculateSiderealHourAngleInWarsaw() {
         // given
-        final LocalTime expectedSiderealHourAngle = LocalTime.of(21, 10, 54);
+        final LocalTime expectedSiderealHourAngle = LocalTime.of(23, 58, 54);
         final ZonedDateTime time = ZonedDateTime.of(2014, 11, 21, 18, 28, 0, 0, ZoneId.of("UTC"));
         final Longitude warsawLongitude = new Longitude(21.0);
 

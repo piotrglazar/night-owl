@@ -66,4 +66,13 @@ public final class StarInfo {
         final StarInfo other = (StarInfo) obj;
         return Objects.equals(this.id, other.id);
     }
+
+    @Override
+    public String toString() {
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("rightAscension", rightAscension)
+                .add("declination", declination)
+                .add("spectralType", spectralType)
+                .toString();
+    }
 }
