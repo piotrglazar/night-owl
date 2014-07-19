@@ -26,6 +26,7 @@ public class MainWindow {
     private JLabel starsAlwaysVisible;
     private JLabel starsSometimesVisible;
     private JLabel starsNeverVisible;
+    private JLabel starsVisibleNow;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -53,6 +54,10 @@ public class MainWindow {
 
     public void setNumberOfUserLocations(long numberOfUserLocations) {
         userLocations.setText("Number of locations: " + numberOfUserLocations);
+    }
+
+    public void setNumberOfStarsVisibleNow(long numberOfStarsVisibleNow) {
+        starsVisibleNow.setText("Stars visible now: " + String.valueOf(numberOfStarsVisibleNow));
     }
 
     public void setUserLocation(final UserLocation userLocation) {
@@ -120,6 +125,9 @@ public class MainWindow {
         starsNeverVisible = new JLabel();
         starsNeverVisible.setText("stars never visible: 0");
         mainPanel.add(starsNeverVisible, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(185, 16), null, 0, false));
+        starsVisibleNow = new JLabel();
+        starsVisibleNow.setText("Stars visible now: 0");
+        mainPanel.add(starsVisibleNow, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

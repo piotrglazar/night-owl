@@ -31,11 +31,10 @@ public class Longitude implements Serializable {
 
     public int toSeconds() {
         // 12h (43200 seconds) is 180 degrees
-        // negative value eastwards
-        return (int) (12 * 60 * 60 * -longitude / 180.0);
-        // TODO: minus or plus? I will stick to minus now, the same as in the book
-        // http://www.jgiesen.de/astro/astroJS/siderealClock/
-        //return (int) (12 * 60 * 60 * longitude / 180.0);
+        // negative value westwards
+        // the book says that negative values should go eastwards, so there should be '-longitude'
+        // but http://www.jgiesen.de/astro/astroJS/siderealClock/ says otherwise and it seems to be correct
+        return (int) (12 * 60 * 60 * longitude / 180.0);
     }
 
     @Override

@@ -47,11 +47,11 @@ public class LongitudeTest {
                                                   @ConvertParam(LocalTimeConverter.class) LocalTime expectedTimeShift) {
         // when
         final int shiftInSeconds = longitude.toSeconds();
-        final LocalTime timeShift = LocalTime.ofSecondOfDay(-shiftInSeconds);
+        final LocalTime timeShift = LocalTime.ofSecondOfDay(shiftInSeconds);
 
         // then
         assertThat(timeShift).isEqualTo(expectedTimeShift);
-        assertThat(shiftInSeconds).isLessThanOrEqualTo(0);
+        assertThat(shiftInSeconds).isGreaterThanOrEqualTo(0);
     }
 
     @Test
@@ -65,11 +65,11 @@ public class LongitudeTest {
                                                   @ConvertParam(LocalTimeConverter.class) LocalTime expectedTimeShift) {
         // when
         final int shiftInSeconds = longitude.toSeconds();
-        final LocalTime timeShift = LocalTime.ofSecondOfDay(shiftInSeconds);
+        final LocalTime timeShift = LocalTime.ofSecondOfDay(-shiftInSeconds);
 
         // then
         assertThat(timeShift).isEqualTo(expectedTimeShift);
-        assertThat(shiftInSeconds).isGreaterThanOrEqualTo(0);
+        assertThat(shiftInSeconds).isLessThanOrEqualTo(0);
     }
 
     @Test

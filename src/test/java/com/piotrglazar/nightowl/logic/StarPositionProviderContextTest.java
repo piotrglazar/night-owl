@@ -2,11 +2,22 @@ package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.AbstractContextTest;
 import com.piotrglazar.nightowl.coordinates.Latitude;
+import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.UserLocation;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
+
+import static com.piotrglazar.nightowl.DatabaseTestConfiguration.STARS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.offset;
 
 public class StarPositionProviderContextTest extends AbstractContextTest {
 
@@ -45,7 +56,38 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
         assertThat(numberOfStarsNeverVisible).isEqualTo(3);
     }
 
+    @Test
+    public void shouldCalculateStarPositions() {
+        // given
+        final UserLocation userLocation = userLocationWithLatitudeAndLongitude(52.0, 21.0);
+        final ZonedDateTime date = ZonedDateTime.of(LocalDate.of(2014, 7, 16), LocalTime.of(23, 52), ZoneId.of("Europe/Paris"));
+
+        // when
+        final List<StarPositionDto> starsPositions = starPositionProvider.getStarsPositions(userLocation, date);
+
+        // then
+        assertThat(starsPositions).hasSize(5);
+        containsWithTolerance(starsPositions, STARS.get(0), 35.467, 339.383);
+        containsWithTolerance(starsPositions, STARS.get(1), 41.277, 26.029);
+        containsWithTolerance(starsPositions, STARS.get(2), 71.350, 19.922);
+        containsWithTolerance(starsPositions, STARS.get(3), 82.621, 297.299);
+        containsWithTolerance(starsPositions, STARS.get(4), 89.905, 229.179);
+    }
+
+    private void containsWithTolerance(List<StarPositionDto> starsPositions, StarInfo starInfo, double zenithDistance, double azimuth) {
+        final StarPositionDto starPositionDto = starsPositions.stream()
+                .filter(si -> si.getStarInfo().getSpectralType().equals(starInfo.getSpectralType()))
+                .findFirst()
+                .get();
+        assertThat(starPositionDto.getStarCelestialPosition().getAzimuth()).isEqualTo(azimuth, offset(0.001));
+        assertThat(starPositionDto.getStarCelestialPosition().getZenithDistance()).isEqualTo(zenithDistance, offset(0.001));
+    }
+
     private UserLocation userLocationWithLatitude(final double latitude) {
         return new UserLocation(new Latitude(latitude), null, null);
+    }
+
+    private UserLocation userLocationWithLatitudeAndLongitude(final double latitude, final double longitude) {
+        return new UserLocation(new Latitude(latitude), new Longitude(longitude), null);
     }
 }
