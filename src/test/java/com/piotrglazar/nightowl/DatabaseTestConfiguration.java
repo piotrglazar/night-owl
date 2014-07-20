@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
 import com.piotrglazar.nightowl.model.RuntimeConfiguration;
@@ -11,6 +12,8 @@ import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.hsqldb.jdbc.JDBCDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.lang.invoke.MethodHandles;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -35,6 +39,8 @@ import java.util.List;
 @EnableTransactionManagement
 @Profile("test")
 public class DatabaseTestConfiguration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final List<StarInfo> STARS = ImmutableList.of(
             new StarInfo(LocalTime.of(23, 36, 32), 77.46, "A0"),
@@ -46,7 +52,11 @@ public class DatabaseTestConfiguration {
 
     @Bean
     public DataSource dataSource() {
-        return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:/home/nightowl/test", "sa", "");
+        final String currentDirectory = ApplicationConfiguration.getCurrentDirectory();
+
+        LOG.info("Creating test database in {}/db/test", currentDirectory);
+
+        return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:" + currentDirectory + "/db/test", "sa", "");
     }
 
     @Bean
