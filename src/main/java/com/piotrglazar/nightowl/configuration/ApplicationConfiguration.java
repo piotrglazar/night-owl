@@ -25,4 +25,8 @@ public class ApplicationConfiguration {
 
         return propertiesFactoryBean;
     }
+
+    public static String getCurrentDirectory() {
+        return System.getProperty("user.dir");
+    }
 }
