@@ -45,4 +45,15 @@ public class NightOwlRuntimeConfiguration {
     public UserLocation getUserLocation() {
         return runtimeConfiguration.getChosenUserLocation();
     }
+
+    public void updateUserLocation(UserLocation newUserLocation) {
+        LOG.info("Updating runtime configuration - new user location");
+
+        runtimeConfiguration.setChosenUserLocation(newUserLocation);
+        configurationProvider.updateConfiguration(runtimeConfiguration);
+
+        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, ui -> ui.setUserLocation(newUserLocation)));
+
+        LOG.info("Finished updating runtime configuration - new user location");
+    }
 }

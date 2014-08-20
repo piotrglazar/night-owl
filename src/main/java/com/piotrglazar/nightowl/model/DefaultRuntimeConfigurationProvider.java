@@ -25,4 +25,9 @@ class DefaultRuntimeConfigurationProvider implements RuntimeConfigurationProvide
         Preconditions.checkState(runtimeConfigurations.size() == 1, "There must be exactly one configuration");
         return runtimeConfigurations.get(0);
     }
+
+    @Override
+    public void updateConfiguration(final RuntimeConfiguration runtimeConfiguration) {
+        configurationRepository.saveAndFlush(runtimeConfiguration);
+    }
 }

@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.logic;
 
-public class Conversion {
+public final class Conversion {
 
     private Conversion() {
 
