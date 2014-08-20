@@ -4,7 +4,7 @@ import com.piotrglazar.nightowl.UiUpdater;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
+import java.awt.*;
 
 @Component
 @Profile("default")
@@ -12,6 +12,6 @@ import javax.swing.*;
 public class DefaultUiUpdater implements UiUpdater {
     @Override
     public void update(final Runnable action) {
-        SwingUtilities.invokeLater(action);
+        EventQueue.invokeLater(action);
     }
 }

@@ -2,7 +2,7 @@ package com.piotrglazar.nightowl.util;
 
 import java.util.Objects;
 
-public class StarsVisibilityMessage {
+public final class StarsVisibilityMessage {
 
     private final long starsAlwaysVisible;
     private final long starsSometimesVisible;

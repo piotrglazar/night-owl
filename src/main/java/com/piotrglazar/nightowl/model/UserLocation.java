@@ -60,6 +60,10 @@ public final class UserLocation {
         this.name = name;
     }
 
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
     public static UserLocationBuilder builder() {
         return new UserLocationBuilder();
     }

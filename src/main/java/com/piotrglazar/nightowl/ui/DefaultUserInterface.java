@@ -14,18 +14,23 @@ public class DefaultUserInterface implements UserInterface, ApplicationListener<
 
     private final MainWindow mainWindow;
     private final UiUpdater uiUpdater;
+    private final MainMenu mainMenu;
 
     @Autowired
-    public DefaultUserInterface(final MainWindow mainWindow, final UiUpdater uiUpdater) {
+    public DefaultUserInterface(final MainWindow mainWindow, final UiUpdater uiUpdater, final MainMenu mainMenu) {
         this.mainWindow = mainWindow;
         this.uiUpdater = uiUpdater;
+        this.mainMenu = mainMenu;
     }
 
     public void runUserInterface() {
         final JFrame frame = new JFrame("NightOwl");
-        frame.setContentPane(mainWindow.preDisplay().getMainPanel());
+        frame.add(mainWindow.preDisplay().getMainPanel());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
+
+        frame.setJMenuBar(mainMenu.getMenuBar());
+
         frame.setVisible(true);
     }
 
