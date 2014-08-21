@@ -19,33 +19,33 @@ dependencies {
     compile("com.google.guava:guava:17.0")
     // end::guava[]
     // tag::context[]
-    compile("org.springframework:spring-context:4.0.5.RELEASE")
+    compile("org.springframework:spring-context:4.0.6.RELEASE")
     // end::context[]
     // tag::context-support[]
-    compile("org.springframework:spring-context-support:4.0.5.RELEASE")
+    compile("org.springframework:spring-context-support:4.0.6.RELEASE")
     // end::context-support[]
     // tag::log[]
     compile("org.slf4j:slf4j-api:1.7.7")
     compile("ch.qos.logback:logback-classic:1.1.2")
     // end::log[]
     // tag::db[]
-    compile("org.hibernate:hibernate-entitymanager:4.3.5.Final")
+    compile("org.hibernate:hibernate-entitymanager:4.3.6.Final")
     compile("org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final")
-    compile("org.springframework.data:spring-data-jpa:1.6.0.RELEASE")
+    compile("org.springframework.data:spring-data-jpa:1.6.2.RELEASE")
     compile("org.hsqldb:hsqldb:2.3.2")
     // end::db[]
 
-    testCompile("org.springframework:spring-test:4.0.5.RELEASE")
+    testCompile("org.springframework:spring-test:4.0.6.RELEASE")
     testCompile("junit:junit:4.11")
     testCompile("org.mockito:mockito-all:1.9.5")
-    testCompile("org.assertj:assertj-core:1.6.0")
+    testCompile("org.assertj:assertj-core:1.6.1")
     testCompile("com.googlecode.catch-exception:catch-exception:1.2.0")
     testCompile("nl.jqno.equalsverifier:equalsverifier:1.4.1")
     testCompile("pl.pragmatists:JUnitParams:1.0.2")
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
+    gradleVersion = '2.0'
 }
 
 idea {
