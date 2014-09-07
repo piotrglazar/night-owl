@@ -5,6 +5,7 @@ import com.piotrglazar.nightowl.converters.LongitudeConverter;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import junitparams.converters.ConvertParam;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -87,5 +88,11 @@ public class LongitudeTest {
 
         // then
         assertThat(toString).isEqualTo(expectedToString);
+    }
+
+    @Test
+    public void shouldMeetEqualsAndHashCodeContract() {
+        // expect
+        EqualsVerifier.forClass(Longitude.class).verify();
     }
 }

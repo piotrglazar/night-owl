@@ -3,7 +3,11 @@ package com.piotrglazar.nightowl.model;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
 
-public class UserLocationDto {
+import javax.annotation.concurrent.Immutable;
+import java.util.Objects;
+
+@Immutable
+public final class UserLocationDto {
 
     private final Latitude latitude;
     private final Longitude longitude;
@@ -40,5 +44,25 @@ public class UserLocationDto {
     @Override
     public String toString() {
         return String.format("%s %s %s", name, longitude, latitude);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, name, id);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserLocationDto other = (UserLocationDto) obj;
+        return Objects.equals(this.latitude, other.latitude)
+                && Objects.equals(this.longitude, other.longitude)
+                && Objects.equals(this.name, other.name)
+                && Objects.equals(this.id, other.id);
     }
 }

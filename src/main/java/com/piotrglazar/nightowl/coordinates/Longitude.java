@@ -2,13 +2,16 @@ package com.piotrglazar.nightowl.coordinates;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Longitude, in degrees
  */
-public class Longitude implements Serializable {
+@Immutable
+public final class Longitude implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final double EASTWARD = 180.0;
@@ -50,5 +53,22 @@ public class Longitude implements Serializable {
         } else {
             return "E";
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(longitude);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Longitude other = (Longitude) obj;
+        return Objects.equals(this.longitude, other.longitude);
     }
 }
