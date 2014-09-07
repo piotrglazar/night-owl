@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.coordinates;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -46,5 +47,11 @@ public class LatitudeTest {
 
         // then
         assertThat(toString).isEqualTo(expectedToString);
+    }
+
+    @Test
+    public void shouldMeetEqualsAndHashCodeContract() {
+        // expect
+        EqualsVerifier.forClass(Latitude.class).verify();
     }
 }

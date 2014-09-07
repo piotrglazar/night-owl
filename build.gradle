@@ -23,28 +23,24 @@ repositories {
 }
 
 dependencies {
-    // tag::gui[]
+    // gui
     compile files("./external/intellij_forms_rt.jar")
-    // end::gui[]
-    // tag::guava[]
+    // guava
     compile("com.google.guava:guava:17.0")
-    // end::guava[]
-    // tag::context[]
+    // context
     compile("org.springframework:spring-context:4.0.6.RELEASE")
-    // end::context[]
-    // tag::context-support[]
+    // context-support
     compile("org.springframework:spring-context-support:4.0.6.RELEASE")
-    // end::context-support[]
-    // tag::log[]
+    // tag
     compile("org.slf4j:slf4j-api:1.7.7")
     compile("ch.qos.logback:logback-classic:1.1.2")
-    // end::log[]
-    // tag::db[]
+    // db
     compile("org.hibernate:hibernate-entitymanager:4.3.6.Final")
     compile("org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final")
     compile("org.springframework.data:spring-data-jpa:1.6.2.RELEASE")
     compile("org.hsqldb:hsqldb:2.3.2")
-    // end::db[]
+    // annotations
+    compile("com.google.code.findbugs:jsr305:3.0.0")
 
     testCompile("org.springframework:spring-test:4.0.6.RELEASE")
     testCompile("junit:junit:4.11")

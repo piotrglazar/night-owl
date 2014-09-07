@@ -2,7 +2,10 @@ package com.piotrglazar.nightowl.model;
 
 import com.google.common.base.Objects;
 
-public class StarCelestialPosition {
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
+public final class StarCelestialPosition {
 
     private final double zenithDistance;
     private final double azimuth;

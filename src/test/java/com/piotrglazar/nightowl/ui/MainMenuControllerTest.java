@@ -8,13 +8,12 @@ import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -35,6 +34,9 @@ public class MainMenuControllerTest {
     private ObjectFactory<NightOwlRuntimeConfiguration> nightOwlRuntimeConfigurationObjectFactory;
 
     @Mock
+    private ApplicationEventPublisher eventPublisher;
+
+    @Mock
     private UserLocationRepository userLocationRepository;
 
     @Mock
@@ -51,7 +53,8 @@ public class MainMenuControllerTest {
         given(userLocationRepositoryObjectFactory.getObject()).willReturn(userLocationRepository);
         given(nightOwlRuntimeConfigurationObjectFactory.getObject()).willReturn(nightOwlRuntimeConfiguration);
 
-        mainMenuController = new MainMenuController(userLocationRepositoryObjectFactory, nightOwlRuntimeConfigurationObjectFactory);
+        mainMenuController = new MainMenuController(userLocationRepositoryObjectFactory, nightOwlRuntimeConfigurationObjectFactory,
+                eventPublisher);
     }
 
     @Test

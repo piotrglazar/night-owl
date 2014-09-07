@@ -6,19 +6,26 @@ import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.util.StarsVisibilityMessage;
+import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Component
-public class DatabaseStatistics {
+public class DatabaseStatistics implements ApplicationListener<StateReloadEvent> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final StarPositionProvider starPositionProvider;
@@ -73,5 +80,11 @@ public class DatabaseStatistics {
 
     private ApplicationEvent starInfoStatistics() {
         return new UiUpdateEvent(this, mainWindow -> mainWindow.setNumberOfStars(starInfoProvider.count()));
+    }
+
+    @Override
+    public void onApplicationEvent(final StateReloadEvent event) {
+        LOG.info("Reloading database statistics, cause: {}", event.getCause());
+        displayDatabaseStatisticsOnUi();
     }
 }
