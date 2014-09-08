@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.model;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -25,7 +25,7 @@ public final class StarCelestialPosition {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("zenithDistance", zenithDistance)
                 .add("azimuth", azimuth)
                 .toString();

@@ -2,11 +2,7 @@ package com.piotrglazar.nightowl.logic;
 
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
+import java.time.*;
 
 @Component
 public class UtcStarTimeAtZeroUniversalTime {
