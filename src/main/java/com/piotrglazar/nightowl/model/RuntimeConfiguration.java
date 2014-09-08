@@ -1,10 +1,8 @@
 package com.piotrglazar.nightowl.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import com.google.common.base.MoreObjects;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -52,7 +50,7 @@ public final class RuntimeConfiguration {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("userLocation", chosenUserLocation)
                 .toString();

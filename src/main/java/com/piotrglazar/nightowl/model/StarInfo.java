@@ -1,5 +1,7 @@
 package com.piotrglazar.nightowl.model;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -69,7 +71,7 @@ public final class StarInfo {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("rightAscension", rightAscension)
                 .add("declination", declination)
                 .add("spectralType", spectralType)

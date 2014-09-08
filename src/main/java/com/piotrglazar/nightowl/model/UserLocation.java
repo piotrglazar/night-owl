@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.model;
 
+import com.google.common.base.MoreObjects;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
 
@@ -87,7 +88,7 @@ public final class UserLocation {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("name", name)
                 .add("latitude", latitude)
                 .add("longitude", longitude)
