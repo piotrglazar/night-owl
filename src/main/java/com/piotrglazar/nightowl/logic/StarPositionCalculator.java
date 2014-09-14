@@ -21,7 +21,7 @@ public class StarPositionCalculator {
         return poleCompletion(latitude);
     }
 
-    private double poleCompletion(final double latitude) {
+    public double poleCompletion(final double latitude) {
         if (latitude > 0) {
             return 90.0 - latitude;
         } else {

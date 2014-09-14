@@ -16,6 +16,7 @@ public final class Latitude implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final double NORTH = 90.0;
     public static final double SOUTH = -90.0;
+    public static final double MAXIMUM_ABS_LATITUDE = NORTH;
 
     private final double latitude;
 
@@ -38,13 +39,21 @@ public final class Latitude implements Serializable {
     }
 
     private String northOrSouth() {
-        if (latitude < 0) {
+        if (isSouth()) {
             return "S";
-        } else if (latitude == 0) {
-            return "";
-        } else {
+        } else if (isNorth()) {
             return "N";
+        } else {
+            return "";
         }
+    }
+
+    public boolean isNorth() {
+        return latitude > 0;
+    }
+
+    public boolean isSouth() {
+        return latitude < 0;
     }
 
     @Override
