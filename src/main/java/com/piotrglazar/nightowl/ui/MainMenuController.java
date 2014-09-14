@@ -6,6 +6,7 @@ import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
+import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -48,5 +49,6 @@ public class MainMenuController {
         Preconditions.checkState(userLocation != null, "Invalid user location: %s", userLocationDto);
         nightOwlRuntimeConfiguration.getObject().updateUserLocation(userLocation);
         applicationEventPublisher.publishEvent(new StateReloadEvent(this, "changing user location"));
+        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, MainWindow::repaintUi));
     }
 }

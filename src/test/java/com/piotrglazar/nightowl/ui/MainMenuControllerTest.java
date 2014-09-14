@@ -7,15 +7,20 @@ import com.piotrglazar.nightowl.coordinates.Longitude;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
+import com.piotrglazar.nightowl.util.StateReloadEvent;
+import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
@@ -24,14 +29,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainMenuControllerTest {
 
-    private ObjectFactory<UserLocationRepository> userLocationRepositoryObjectFactory;
-
-    private ObjectFactory<NightOwlRuntimeConfiguration> nightOwlRuntimeConfigurationObjectFactory;
+    @Mock
+    private MainWindow mainWindow;
 
     @Mock
     private ApplicationEventPublisher eventPublisher;
@@ -47,8 +52,8 @@ public class MainMenuControllerTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() throws Exception {
-        userLocationRepositoryObjectFactory = mock(ObjectFactory.class);
-        nightOwlRuntimeConfigurationObjectFactory = mock(ObjectFactory.class);
+        ObjectFactory<UserLocationRepository> userLocationRepositoryObjectFactory = mock(ObjectFactory.class);
+        ObjectFactory<NightOwlRuntimeConfiguration> nightOwlRuntimeConfigurationObjectFactory = mock(ObjectFactory.class);
 
         given(userLocationRepositoryObjectFactory.getObject()).willReturn(userLocationRepository);
         given(nightOwlRuntimeConfigurationObjectFactory.getObject()).willReturn(nightOwlRuntimeConfiguration);
@@ -104,9 +109,8 @@ public class MainMenuControllerTest {
     @Test
     public void shouldFailWhenThereAreNoSuchUserLocation() {
         // given
-        final int id = 1;
-        final UserLocationDto userLocationNotExistingInDb = arbitraryUserLocationDtoWithId(id);
-        given(userLocationRepository.findOne((long) id)).willReturn(null);
+        final UserLocationDto userLocationNotExistingInDb = arbitraryUserLocationDtoWithId(123);
+        given(userLocationRepository.findOne(123L)).willReturn(null);
 
         // when
         catchException(mainMenuController).updateUserLocation(userLocationNotExistingInDb);
@@ -118,16 +122,44 @@ public class MainMenuControllerTest {
     @Test
     public void shouldUpdateRuntimeConfiguration() {
         // given
-        final int id = 1;
-        final UserLocation userLocation = arbitraryUserLocationWithId(id);
+        final UserLocation userLocation = arbitraryUserLocationWithId(123);
         final UserLocationDto userLocationDto = UserLocationDto.fromUserLocation(userLocation);
-        given(userLocationRepository.findOne(userLocation.getId())).willReturn(userLocation);
+        given(userLocationRepository.findOne(123L)).willReturn(userLocation);
 
         // when
         mainMenuController.updateUserLocation(userLocationDto);
 
         // then
         verify(nightOwlRuntimeConfiguration).updateUserLocation(userLocation);
+    }
+
+    @Test
+    public void shouldPublishUiRepaintAndConfigurationReloadEvents() {
+        final UserLocation userLocation = arbitraryUserLocationWithId(123);
+        final UserLocationDto userLocationDto = UserLocationDto.fromUserLocation(userLocation);
+        given(userLocationRepository.findOne(123L)).willReturn(userLocation);
+
+        // when
+        mainMenuController.updateUserLocation(userLocationDto);
+
+        // then
+        final ArgumentCaptor<ApplicationEvent> eventsCaptor = ArgumentCaptor.forClass(ApplicationEvent.class);
+        verify(eventPublisher, times(2)).publishEvent(eventsCaptor.capture());
+        final List<ApplicationEvent> events = eventsCaptor.getAllValues();
+        assertThat(events).hasSize(2);
+        containsReloadEvent(events);
+        containsMainWindowRepaintEvent(events);
+    }
+
+    private void containsMainWindowRepaintEvent(final List<ApplicationEvent> events) {
+        final Optional<ApplicationEvent> event = events.stream().filter(e -> e.getClass().equals(UiUpdateEvent.class)).findFirst();
+        assertThat(event.isPresent());
+        ((UiUpdateEvent) event.get()).action(mainWindow);
+        verify(mainWindow).repaintUi();
+    }
+
+    private void containsReloadEvent(final List<ApplicationEvent> events) {
+        assertThat(events.stream().filter(e -> e.getClass().equals(StateReloadEvent.class)).count()).isEqualTo(1);
     }
 
     private UserLocation arbitraryUserLocationWithId(final int id) {
