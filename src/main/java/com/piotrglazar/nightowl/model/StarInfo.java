@@ -22,14 +22,20 @@ public final class StarInfo {
 
     private String spectralType;
 
+    private String name;
+
+    private double apparentMagnitude;
+
     public StarInfo() {
 
     }
 
-    public StarInfo(LocalTime rightAscension, double declination, String spectralType) {
+    public StarInfo(LocalTime rightAscension, double declination, String spectralType, String name, double apparentMagnitude) {
         this.rightAscension = rightAscension;
         this.declination = declination;
         this.spectralType = spectralType;
+        this.name = name;
+        this.apparentMagnitude = apparentMagnitude;
     }
 
     public Long getId() {
@@ -50,6 +56,30 @@ public final class StarInfo {
 
     public void setSpectralType(final String spectralType) {
         this.spectralType = spectralType;
+    }
+
+    public void setRightAscension(final LocalTime rightAscension) {
+        this.rightAscension = rightAscension;
+    }
+
+    public void setDeclination(final double declination) {
+        this.declination = declination;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public double getApparentMagnitude() {
+        return apparentMagnitude;
+    }
+
+    public void setApparentMagnitude(final double apparentMagnitude) {
+        this.apparentMagnitude = apparentMagnitude;
     }
 
     @Override
@@ -75,6 +105,8 @@ public final class StarInfo {
                 .add("rightAscension", rightAscension)
                 .add("declination", declination)
                 .add("spectralType", spectralType)
+                .add("name", name)
+                .add("apparentMagnitude", apparentMagnitude)
                 .toString();
     }
 }

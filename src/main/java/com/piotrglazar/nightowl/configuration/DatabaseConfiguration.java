@@ -36,7 +36,7 @@ public class DatabaseConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:/home/nightowl/production", "sa", "");
     }
 

@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.util;
 
+import com.google.common.base.MoreObjects;
 import org.springframework.context.ApplicationEvent;
 
 public class StateReloadEvent extends ApplicationEvent {
@@ -15,5 +16,12 @@ public class StateReloadEvent extends ApplicationEvent {
 
     public String getCause() {
         return cause;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("cause", cause)
+                .toString();
     }
 }

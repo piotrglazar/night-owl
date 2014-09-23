@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class StarPositionProvider {
 
+    public static final double BRIGHT_STAR_MAGNITUDE = 1.0;
     private final StarInfoProvider starInfoProvider;
     private final StarPositionCalculator starPositionCalculator;
     private final SiderealHourAngleCalculator siderealHourAngleCalculator;
@@ -79,10 +80,19 @@ public class StarPositionProvider {
         return starInfoProvider.getStarsWithDeclinationBetween(lowerBoundary, upperBoundary);
     }
 
-    public List<StarPositionDto> getStarsPositions(final UserLocation userLocation, final ZonedDateTime date) {
+    public List<StarPositionDto> getStarPositions(final UserLocation userLocation, final ZonedDateTime date) {
         final List<StarInfo> stars = getStarsAlwaysVisible(userLocation);
         stars.addAll(getStarsSometimesVisible(userLocation));
 
+        return getStarPositions(userLocation, date, stars);
+    }
+
+    public List<StarPositionDto> getBrightStarPositions(final UserLocation userLocation, final ZonedDateTime date) {
+        final List<StarInfo> brightStars = starInfoProvider.getStarsBrighterThan(BRIGHT_STAR_MAGNITUDE);
+        return getStarPositions(userLocation, date, brightStars);
+    }
+
+    private List<StarPositionDto> getStarPositions(final UserLocation userLocation, final ZonedDateTime date, final List<StarInfo> stars) {
         final LocalTime siderealHourAngle = siderealHourAngleCalculator.siderealHourAngle(date, userLocation.getLongitude());
         final double maximumZenithDistance = starPositionCalculator.getMaximumZenithDistance();
 

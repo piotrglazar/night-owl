@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
-import com.piotrglazar.nightowl.ui.map.DirectionsSign;
+import com.piotrglazar.nightowl.ui.map.CardinalDirections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -30,8 +30,8 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public List<DirectionsSign> directionsSigns() {
-        return Arrays.asList(DirectionsSign.values());
+    public List<CardinalDirections> directionsSigns() {
+        return Arrays.asList(CardinalDirections.values());
     }
 
     public static String getCurrentDirectory() {

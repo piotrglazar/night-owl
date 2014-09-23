@@ -7,7 +7,10 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class StarCelestialPosition {
 
+    // in degrees
     private final double zenithDistance;
+
+    // in degrees
     private final double azimuth;
 
     public StarCelestialPosition(final double zenithDistance, final double azimuth) {

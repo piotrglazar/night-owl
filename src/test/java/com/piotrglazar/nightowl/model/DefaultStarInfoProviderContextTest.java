@@ -46,7 +46,13 @@ public class DefaultStarInfoProviderContextTest extends AbstractContextTest {
     @Test
     public void shouldAddNewStar() {
         // given
-        final StarInfo starInfo = new StarInfo(LocalTime.now(), 42.42, "A0");
+        final StarInfo starInfo = new StarInfoBuilder()
+                                        .rightAscension(LocalTime.now())
+                                        .declination(42.42)
+                                        .spectralType("A0")
+                                        .name("Sirius")
+                                        .apparentMagnitude(0.0)
+                                        .build();
 
         // when
         starInfoProvider.saveStarInfo(starInfo);

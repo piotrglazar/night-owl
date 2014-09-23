@@ -57,7 +57,7 @@ public class DatabaseStatistics implements ApplicationListener<StateReloadEvent>
     @Async
     public void publishEventAboutStarsVisibleRightNow() {
         final List<StarPositionDto> starsPositions =
-                starPositionProvider.getStarsPositions(nightOwlRuntimeConfiguration.getUserLocation(), timeProvider.get());
+                starPositionProvider.getStarPositions(nightOwlRuntimeConfiguration.getUserLocation(), timeProvider.get());
         applicationEventPublisher.publishEvent(
                 new UiUpdateEvent(this, mainWindow -> mainWindow.setNumberOfStarsVisibleNow(starsPositions.size())));
     }

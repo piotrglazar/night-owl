@@ -13,6 +13,6 @@ public class StarInfoConverter implements ParamConverter<StarInfo> {
         final String stringParam = param.toString();
         final String[] tokens = stringParam.split(";");
         Preconditions.checkState(tokens.length == 2, "Expected 2 tokens, got %s in %s", tokens.length, tokens);
-        return new StarInfo(LocalTime.parse(tokens[0]), Double.valueOf(tokens[1]), "spectral type");
+        return new StarInfo(LocalTime.parse(tokens[0]), Double.valueOf(tokens[1]), "spectral type", "name", 0.0);
     }
 }

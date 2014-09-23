@@ -1,9 +1,5 @@
 package com.piotrglazar.nightowl.ui.map;
 
-import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
-import com.piotrglazar.nightowl.coordinates.Latitude;
-import com.piotrglazar.nightowl.logic.StarPositionCalculator;
-import com.piotrglazar.nightowl.model.UserLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,46 +11,71 @@ public class SkyMap {
 
     private final SkyMapCircle skyMapCircle;
     private final SkyMapDot skyMapDot;
-    private java.util.List<DirectionsSign> directionsSigns;
-    private final NightOwlRuntimeConfiguration runtimeConfiguration;
-    private final StarPositionCalculator starPositionCalculator;
+    private final SkyMapCalculations skyMapCalculations;
+    private java.util.List<CardinalDirections> cardinalDirections;
 
     @Autowired
-    public SkyMap(SkyMapCircle skyMapCircle, SkyMapDot skyMapDot, NightOwlRuntimeConfiguration runtimeConfiguration,
-                  StarPositionCalculator starPositionCalculator) {
+    public SkyMap(SkyMapCircle skyMapCircle, SkyMapDot skyMapDot, SkyMapCalculations skyMapCalculations) {
         this.skyMapCircle = skyMapCircle;
         this.skyMapDot = skyMapDot;
-        this.runtimeConfiguration = runtimeConfiguration;
-        this.starPositionCalculator = starPositionCalculator;
-        directionsSigns = Arrays.asList(DirectionsSign.values());
+        this.skyMapCalculations = skyMapCalculations;
+        this.cardinalDirections = Arrays.asList(CardinalDirections.values());
     }
 
-    public void setDirectionsSigns(final java.util.List<DirectionsSign> directionsSigns) {
-        this.directionsSigns = directionsSigns;
+    public void setCardinalDirections(final java.util.List<CardinalDirections> cardinalDirections) {
+        this.cardinalDirections = cardinalDirections;
     }
 
-    public void draw(Graphics graphics, int width, int height) {
-        int radius = calculateMapRadius(width, height);
-        int x = panelCenter(width);
-        int y = panelCenter(height);
-        skyMapCircle.draw(graphics, x, y, radius);
-        skyMapDot.draw(graphics, x, y);
-        directionsSigns.forEach(s -> s.draw(graphics, x, y, radius));
-        int pole = calculatePole(y, radius);
-        skyMapDot.draw(graphics, x, pole);
+    public void draw(final Graphics graphics, final SkyMapDto skyMap) {
+        skyMapCircle.draw(graphics, skyMap.getX(), skyMap.getY(), skyMap.getRadius());
+        skyMapDot.draw(graphics, skyMap.getX(), skyMap.getY());
+        cardinalDirections.forEach(s -> s.draw(graphics, skyMap.getX(), skyMap.getY(), skyMap.getRadius()));
+        final int pole = skyMapCalculations.distanceFromCenter(skyMap.getY(), skyMap.getRadius(), skyMap.getAzimuthDistance());
+        skyMapDot.draw(graphics, skyMap.getX(), pole);
+
+        drawStarPositions(skyMap, graphics);
     }
 
-    private int calculatePole(final int y, final int radius) {
-        final UserLocation userLocation = runtimeConfiguration.getUserLocation();
-        final double distanceFromPoleInAngles = starPositionCalculator.poleCompletion(userLocation.getLatitude().getLatitude());
-        return y - (int) Math.round(distanceFromPoleInAngles * radius / Latitude.MAXIMUM_ABS_LATITUDE);
+    private void drawStarPositions(final SkyMapDto skyMap, final Graphics graphics) {
+        final int x = skyMap.getX();
+        final int y = skyMap.getY();
+        skyMap.getStarPositions().stream()
+                .map(p -> new PointAndName(skyMapCalculations.starLocation(x, y, skyMap.getRadius(), p.getAzimuth(), p.getZenithDistance()),
+                        p.getName()))
+                .forEach(p -> {
+                    graphics.fillRect(mirrorXCoordinate(p.getX(), x), p.getY(), 1, 1);
+                    graphics.drawString(p.getName(), mirrorXCoordinate(p.getX(), x), p.getY());
+                });
     }
 
-    private int panelCenter(final int dimension) {
-        return dimension / 2;
+    public int mirrorXCoordinate(final int pointX, final int x) {
+        final int delta = x - pointX;
+        return x + delta;
     }
 
-    private int calculateMapRadius(final int width, final int height) {
-        return Math.min(width, height) / 2;
+    private static class PointAndName {
+        private final Point point;
+        private final String name;
+
+        private PointAndName(final Point point, final String name) {
+            this.point = point;
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Point getPoint() {
+            return point;
+        }
+
+        public int getX() {
+            return point.getX();
+        }
+
+        public int getY() {
+            return point.getY();
+        }
     }
 }

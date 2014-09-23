@@ -18,6 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("all")
 public class NightWatcherStarImporterTest {
 
     @Mock

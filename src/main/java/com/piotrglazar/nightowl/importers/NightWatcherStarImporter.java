@@ -13,11 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class NightWatcherStarImporter {
 
     private static final Logger LOG = LoggerFactory.getLogger("STAR_IMPORTER");
+    public static final double APPARENT_MAG_FACTOR = 1000.0;
 
     private final StarInfoProvider starInfoProvider;
 
@@ -53,14 +56,46 @@ public class NightWatcherStarImporter {
                 .map(String::trim)
                 .map(line -> line.replace(',', '.'))
                 .map(line -> line.split(" +"))
-                .map(shards ->
-                        new StarInfo(convertTimeAsFractionalPartOfHourToLocalTime(shards[0]), Double.parseDouble(shards[1]), shards[5]))
+                .map(shards -> new StarInfo(rightAscension(shards), declination(shards), spectralType(shards), starNameIfExists(shards),
+                        apparentMagnitude(shards)))
                 .forEach(starInfoProvider::saveStarInfo);
         LOG.info("Imported stars: {}",  starInfoProvider.count());
     }
 
-    private LocalTime convertTimeAsFractionalPartOfHourToLocalTime(String doubleRepresentation) {
-        final double rawRightAscension = Double.parseDouble(doubleRepresentation);
+    private double apparentMagnitude(final String[] shards) {
+        return getDouble(shards[2]) / APPARENT_MAG_FACTOR;
+    }
+
+    private String spectralType(final String[] shards) {
+        return shards[5];
+    }
+
+    private double declination(final String[] shards) {
+        return getDouble(shards[1]);
+    }
+
+    private double getDouble(final String rawDouble) {
+        return Double.parseDouble(rawDouble);
+    }
+
+    private LocalTime rightAscension(final String[] shards) {
+        return convertTimeAsFractionalPartOfHourToLocalTime(shards[0]);
+    }
+
+    private String starNameIfExists(final String[] shards) {
+        if (shards.length >= 14) {
+            return getRemainingShardsAsStarName(shards);
+        } else {
+            return "";
+        }
+    }
+
+    private String getRemainingShardsAsStarName(final String[] shards) {
+        return IntStream.range(13, shards.length).mapToObj(i -> shards[i]).collect(Collectors.joining(" "));
+    }
+
+    private LocalTime convertTimeAsFractionalPartOfHourToLocalTime(final String doubleRepresentation) {
+        final double rawRightAscension = getDouble(doubleRepresentation);
         final double rightAscensionAsSecondsOfDay = (rawRightAscension / 24.0) * 86400;
 
         return LocalTime.ofSecondOfDay((long) rightAscensionAsSecondsOfDay);

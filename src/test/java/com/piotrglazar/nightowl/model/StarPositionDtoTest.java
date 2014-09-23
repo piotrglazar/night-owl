@@ -24,6 +24,6 @@ public class StarPositionDtoTest {
     }
 
     private StarInfo starInfo() {
-        return new StarInfo(LocalTime.of(12, 35), 44.4, "A0");
+        return new StarInfo(LocalTime.of(12, 35), 44.4, "A0", "Sirius", 0.0);
     }
 }

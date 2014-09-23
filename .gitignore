@@ -23,3 +23,6 @@ hs_err_pid*
 
 # Test database
 db/test*
+
+# notes
+stuff.txt
