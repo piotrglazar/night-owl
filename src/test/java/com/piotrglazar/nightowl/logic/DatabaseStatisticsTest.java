@@ -61,7 +61,7 @@ public class DatabaseStatisticsTest {
         given(starPositionProvider.getNumberOfStarsSometimesVisible(any(UserLocation.class))).willReturn(3L);
         given(starPositionProvider.getNumberOfStarsAlwaysVisible(any(UserLocation.class))).willReturn(5L);
         given(starPositionProvider.getNumberOfStarsNeverVisible(any(UserLocation.class))).willReturn(1L);
-        given(starPositionProvider.getStarsPositions(any(UserLocation.class), any(ZonedDateTime.class))).willReturn(Lists.newLinkedList());
+        given(starPositionProvider.getStarPositions(any(UserLocation.class), any(ZonedDateTime.class))).willReturn(Lists.newLinkedList());
 
         // when
         databaseStatistics.displayDatabaseStatisticsOnUi();
@@ -85,7 +85,7 @@ public class DatabaseStatisticsTest {
         given(starPositionProvider.getNumberOfStarsSometimesVisible(any(UserLocation.class))).willReturn(3L);
         given(starPositionProvider.getNumberOfStarsAlwaysVisible(any(UserLocation.class))).willReturn(5L);
         given(starPositionProvider.getNumberOfStarsNeverVisible(any(UserLocation.class))).willReturn(1L);
-        given(starPositionProvider.getStarsPositions(any(UserLocation.class), any(ZonedDateTime.class))).willReturn(Lists.newLinkedList());
+        given(starPositionProvider.getStarPositions(any(UserLocation.class), any(ZonedDateTime.class))).willReturn(Lists.newLinkedList());
 
         // when
         databaseStatistics.onApplicationEvent(mock(StateReloadEvent.class));

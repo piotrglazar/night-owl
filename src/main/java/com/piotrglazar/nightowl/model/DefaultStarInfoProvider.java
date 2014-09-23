@@ -50,4 +50,9 @@ class DefaultStarInfoProvider implements StarInfoProvider {
     public List<StarInfo> getStarsWithDeclinationBetween(final double lowerBoundary, final double upperBoundary) {
         return starInfoRepository.findByDeclinationBetween(lowerBoundary, upperBoundary);
     }
+
+    @Override
+    public List<StarInfo> getStarsBrighterThan(final double apparentMagnitude) {
+        return starInfoRepository.findByApparentMagnitudeLessThan(apparentMagnitude);
+    }
 }

@@ -18,5 +18,7 @@ public interface StarInfoProvider {
 
     List<StarInfo> getStarsWithDeclinationLessThan(double declination);
 
-    List<StarInfo> getStarsWithDeclinationBetween(double lowerBoundary, double upperBounday);
+    List<StarInfo> getStarsWithDeclinationBetween(double lowerBoundary, double upperBoundary);
+
+    List<StarInfo> getStarsBrighterThan(double apparentMagnitude);
 }

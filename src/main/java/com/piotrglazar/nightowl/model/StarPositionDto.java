@@ -24,6 +24,14 @@ public class StarPositionDto {
         return starCelestialPosition.getZenithDistance();
     }
 
+    public double getAzimuth() {
+        return starCelestialPosition.getAzimuth();
+    }
+
+    public String getName() {
+        return starInfo.getName();
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)

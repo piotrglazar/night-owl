@@ -2,7 +2,7 @@ package com.piotrglazar.nightowl.ui.map;
 
 import java.awt.*;
 
-public enum DirectionsSign {
+public enum CardinalDirections {
 
     N {
         @Override
@@ -27,7 +27,7 @@ public enum DirectionsSign {
             graphics.drawString("S", circleX - WIDTH, y - HEIGHT - 2);
         }
     },
-    E {
+    W {
         @Override
         public void draw(final Graphics graphics, final int circleX, final int circleY, final int radius) {
             int x = circleX + radius;
@@ -35,10 +35,10 @@ public enum DirectionsSign {
             int[] ys = {circleY - HALF_WIDTH, circleY - HALF_WIDTH, circleY + HALF_WIDTH, circleY + HALF_WIDTH};
 
             graphics.fillPolygon(xs, ys, 4);
-            graphics.drawString("E", x - 2 * HEIGHT - 2, circleY + HALF_WIDTH);
+            graphics.drawString("W", x - 2 * HEIGHT - 2, circleY + HALF_WIDTH);
         }
     },
-    W {
+    E {
         @Override
         public void draw(final Graphics graphics, final int circleX, final int circleY, final int radius) {
             int x = circleX - radius;
@@ -46,7 +46,7 @@ public enum DirectionsSign {
             int[] ys = {circleY - HALF_WIDTH, circleY - HALF_WIDTH, circleY + HALF_WIDTH, circleY + HALF_WIDTH};
 
             graphics.fillPolygon(xs, ys, 4);
-            graphics.drawString("W", x + HEIGHT, circleY + HALF_HEIGHT);
+            graphics.drawString("E", x + HEIGHT, circleY + HALF_HEIGHT);
         }
     };
 

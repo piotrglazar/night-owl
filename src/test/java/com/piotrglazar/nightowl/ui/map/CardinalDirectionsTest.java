@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JUnitParamsRunner.class)
-public class DirectionsSignTest {
+public class CardinalDirectionsTest {
 
     @Mock
     private Graphics graphics;
@@ -47,7 +47,7 @@ public class DirectionsSignTest {
     })
     public void shouldNorthRenderOnUpperPart(int x, int y, int r, int expectedY) {
         // when
-        DirectionsSign.N.draw(graphics, x, y, r);
+        CardinalDirections.N.draw(graphics, x, y, r);
 
         // then
         verifyThatPolygonAndSignWereDrawn("N");
@@ -61,7 +61,7 @@ public class DirectionsSignTest {
     })
     public void shouldSouthRenderOnLowerPart(int x, int y, int r, int expectedY) {
         // when
-        DirectionsSign.S.draw(graphics, x, y, r);
+        CardinalDirections.S.draw(graphics, x, y, r);
 
         // then
         verifyThatPolygonAndSignWereDrawn("S");
@@ -73,12 +73,12 @@ public class DirectionsSignTest {
             "4, 4, 4 | 8",
             "5, 5, 1 | 6"
     })
-    public void shouldEastRenderOnRightPart(int x, int y, int r, int expectedX) {
+    public void shouldWestRenderOnRightPart(int x, int y, int r, int expectedX) {
         // when
-        DirectionsSign.E.draw(graphics, x, y, r);
+        CardinalDirections.W.draw(graphics, x, y, r);
 
         // then
-        verifyThatPolygonAndSignWereDrawn("E");
+        verifyThatPolygonAndSignWereDrawn("W");
         assertThat(xsCaptor.getValue()).contains(expectedX);
     }
 
@@ -87,12 +87,12 @@ public class DirectionsSignTest {
             "4, 4, 4 | 0",
             "5, 5, 1 | 4"
     })
-    public void shouldWestRenderOnRightLeft(int x, int y, int r, int expectedX) {
+    public void shouldEastRenderOnRightLeftPart(int x, int y, int r, int expectedX) {
         // when
-        DirectionsSign.W.draw(graphics, x, y, r);
+        CardinalDirections.E.draw(graphics, x, y, r);
 
         // then
-        verifyThatPolygonAndSignWereDrawn("W");
+        verifyThatPolygonAndSignWereDrawn("E");
         assertThat(xsCaptor.getValue()).contains(expectedX);
     }
 

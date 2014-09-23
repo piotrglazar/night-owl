@@ -11,4 +11,6 @@ public interface StarInfoRepository extends JpaRepository<StarInfo, Long> {
     List<StarInfo> findByDeclinationLessThan(double declination);
 
     List<StarInfo> findByDeclinationBetween(double lowerBoundary, double upperBoundary);
+
+    List<StarInfo> findByApparentMagnitudeLessThan(double apparentMagnitude);
 }

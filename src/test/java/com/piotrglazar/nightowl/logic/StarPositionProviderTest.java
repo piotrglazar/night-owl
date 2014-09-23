@@ -170,7 +170,7 @@ public class StarPositionProviderTest {
                 .willReturn(new StarCelestialPosition(60, 0), new StarCelestialPosition(0, 0));
 
         // when
-        final List<StarPositionDto> starsPositions = provider.getStarsPositions(userLocation, arbitraryDate);
+        final List<StarPositionDto> starsPositions = provider.getStarPositions(userLocation, arbitraryDate);
 
         // then
         assertThat(starsPositions).hasSize(starsCount - 1);
@@ -178,6 +178,24 @@ public class StarPositionProviderTest {
         verify(starPositionCalculator).getMaximumZenithDistance();
         verify(starPositionCalculator, times(starsCount))
                 .calculateCelestialPosition(any(Latitude.class), any(LocalTime.class), any(StarInfo.class));
+    }
+
+    @Test
+    public void shouldGetOnlyBrightestStars() {
+        // given
+        final UserLocation userLocation = userLocationWithLatitude(52.0);
+        final ZonedDateTime arbitraryDate = ZonedDateTime.of(2014, 7, 16, 23, 29, 0, 0, ZoneId.of("UTC"));
+        final List<StarInfo> starInfo = someStarInfo();
+        given(starInfoProvider.getStarsBrighterThan(anyDouble())).willReturn(starInfo);
+        given(starPositionCalculator.getMaximumZenithDistance()).willReturn(90.0);
+        given(starPositionCalculator.calculateCelestialPosition(any(Latitude.class), any(LocalTime.class), any(StarInfo.class)))
+                .willReturn(new StarCelestialPosition(60, 0), new StarCelestialPosition(0, 0));
+
+        // when
+        final List<StarPositionDto> brightStarPositions = provider.getBrightStarPositions(userLocation, arbitraryDate);
+
+        // then
+        assertThat(brightStarPositions).hasSize(starInfo.size());
     }
 
     private List<StarInfo> someStarInfo() {

@@ -32,11 +32,13 @@ public final class RuntimeConfiguration {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
+        }
 
-        if (!(o instanceof RuntimeConfiguration))
+        if (!(o instanceof RuntimeConfiguration)) {
             return false;
+        }
 
         final RuntimeConfiguration that = (RuntimeConfiguration) o;
 

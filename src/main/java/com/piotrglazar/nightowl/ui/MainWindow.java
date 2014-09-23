@@ -4,7 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.piotrglazar.nightowl.model.UserLocation;
-import com.piotrglazar.nightowl.ui.map.SkyMap;
+import com.piotrglazar.nightowl.ui.map.SkyMapController;
 import com.piotrglazar.nightowl.util.StarsVisibilityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,11 +32,11 @@ public class MainWindow {
     private JPanel mapPanel;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private final SkyMap skyMap;
+    private final SkyMapController skyMapController;
 
     @Autowired
-    public MainWindow(SkyMap skyMap) {
-        this.skyMap = skyMap;
+    public MainWindow(SkyMapController skyMapController) {
+        this.skyMapController = skyMapController;
     }
 
     public MainWindow preDisplay() {
@@ -160,7 +160,7 @@ public class MainWindow {
 
         @Override
         protected void paintComponent(final Graphics g) {
-            skyMap.draw(g, getWidth(), getHeight());
+            skyMapController.draw(g, getWidth(), getHeight());
         }
     }
 }

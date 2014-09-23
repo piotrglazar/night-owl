@@ -63,7 +63,7 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
         final ZonedDateTime date = ZonedDateTime.of(LocalDate.of(2014, 7, 16), LocalTime.of(23, 52), ZoneId.of("Europe/Paris"));
 
         // when
-        final List<StarPositionDto> starsPositions = starPositionProvider.getStarsPositions(userLocation, date);
+        final List<StarPositionDto> starsPositions = starPositionProvider.getStarPositions(userLocation, date);
 
         // then
         assertThat(starsPositions).hasSize(5);
@@ -72,6 +72,19 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
         containsWithTolerance(starsPositions, STARS.get(2), 71.350, 19.922);
         containsWithTolerance(starsPositions, STARS.get(3), 82.621, 297.299);
         containsWithTolerance(starsPositions, STARS.get(4), 89.905, 229.179);
+    }
+
+    @Test
+    public void shouldCalculatePositionsForBrightStars() {
+        // given
+        final UserLocation userLocation = userLocationWithLatitudeAndLongitude(52.0, 21.0);
+        final ZonedDateTime date = ZonedDateTime.of(LocalDate.of(2014, 7, 16), LocalTime.of(23, 52), ZoneId.of("Europe/Paris"));
+
+        // when
+        final List<StarPositionDto> starsPositions = starPositionProvider.getBrightStarPositions(userLocation, date);
+
+        // then
+        assertThat(starsPositions).hasSize(3);
     }
 
     private void containsWithTolerance(List<StarPositionDto> starsPositions, StarInfo starInfo, double zenithDistance, double azimuth) {
