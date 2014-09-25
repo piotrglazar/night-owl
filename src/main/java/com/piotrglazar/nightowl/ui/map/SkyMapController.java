@@ -4,27 +4,19 @@ import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.logic.StarPositionProvider;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.UserLocation;
-import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.TimeProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
-import java.lang.invoke.MethodHandles;
 
 @Component
-public class SkyMapController implements ApplicationListener<StateReloadEvent> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+public class SkyMapController {
 
     private final NightOwlRuntimeConfiguration runtimeConfiguration;
     private final SkyMap skyMap;
     private final StarPositionProvider starPositionProvider;
     private final TimeProvider timeProvider;
-    private java.util.List<StarPositionDto> starPositions;
 
     @Autowired
     public SkyMapController(NightOwlRuntimeConfiguration runtimeConfiguration, SkyMap skyMap, StarPositionProvider starPositionProvider,
@@ -53,10 +45,7 @@ public class SkyMapController implements ApplicationListener<StateReloadEvent> {
     }
 
     private java.util.List<StarPositionDto> getStarPositions() {
-        if (starPositions == null) {
-            starPositions = starPositionProvider.getBrightStarPositions(runtimeConfiguration.getUserLocation(), timeProvider.get());
-        }
-        return starPositions;
+        return starPositionProvider.getBrightStarPositionsCached(runtimeConfiguration.getUserLocation(), timeProvider.get());
     }
 
     public double azimuthDistance() {
@@ -70,12 +59,5 @@ public class SkyMapController implements ApplicationListener<StateReloadEvent> {
 
     private int calculateMapRadius(final int width, final int height) {
         return Math.min(width, height) / 2;
-    }
-
-    @Override
-    public void onApplicationEvent(final StateReloadEvent event) {
-        LOG.info("Reloading star positions {}", event);
-
-        starPositions = starPositionProvider.getBrightStarPositions(runtimeConfiguration.getUserLocation(), timeProvider.get());
     }
 }
