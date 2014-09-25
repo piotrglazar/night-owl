@@ -8,6 +8,7 @@ import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.UserLocation;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.guava.GuavaCacheManager;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,10 +20,14 @@ import static com.piotrglazar.nightowl.DatabaseTestConfiguration.STARS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.offset;
 
+@SuppressWarnings("unchecked")
 public class StarPositionProviderContextTest extends AbstractContextTest {
 
     @Autowired
     private StarPositionProvider starPositionProvider;
+
+    @Autowired
+    private GuavaCacheManager guavaCacheManager;
 
     @Test
     public void shouldGetStarVisibilityCountsForNorth() {
@@ -84,7 +89,25 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
         final List<StarPositionDto> starsPositions = starPositionProvider.getBrightStarPositions(userLocation, date);
 
         // then
-        assertThat(starsPositions).hasSize(3);
+        assertThat(starsPositions).hasSize(4);
+    }
+
+    @Test
+    public void shouldCacheStarPositionCalculations() {
+        // given
+        final UserLocation userLocation = userLocationWithLatitudeAndLongitude(52.0, 21.0);
+        final ZonedDateTime date = ZonedDateTime.of(LocalDate.of(2014, 7, 16), LocalTime.of(23, 52), ZoneId.of("Europe/Paris"));
+
+        // when
+        final List<StarPositionDto> brightStarPositions = starPositionProvider.getBrightStarPositionsCached(userLocation, date);
+
+        // then
+        final List<StarPositionDto> brightStarPositionsCached = getCachedStarPositions(userLocation);
+        assertThat(brightStarPositions).isEqualTo(brightStarPositionsCached);
+    }
+
+    private List<StarPositionDto> getCachedStarPositions(final UserLocation userLocation) {
+        return (List<StarPositionDto>) guavaCacheManager.getCache("nightOwlCache").get(userLocation).get();
     }
 
     private void containsWithTolerance(List<StarPositionDto> starsPositions, StarInfo starInfo, double zenithDistance, double azimuth) {

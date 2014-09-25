@@ -5,7 +5,6 @@ import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.logic.StarPositionProvider;
 import com.piotrglazar.nightowl.model.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationBuilder;
-import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -80,12 +79,15 @@ public class SkyMapControllerTest {
     }
 
     @Test
-    public void shouldReloadStarsOnReloadEvent() {
+    public void shouldUseCachedStarPositions() {
+        // given
+        arbitraryUserLocation();
+
         // when
-        skyMapController.onApplicationEvent(new StateReloadEvent(this, "test"));
+        skyMapController.draw(graphics, 100, 100);
 
         // then
-        verify(starPositionProvider).getBrightStarPositions(any(UserLocation.class), any(ZonedDateTime.class));
+        verify(starPositionProvider).getBrightStarPositionsCached(any(UserLocation.class), any(ZonedDateTime.class));
     }
 
     private void arbitraryUserLocation() {

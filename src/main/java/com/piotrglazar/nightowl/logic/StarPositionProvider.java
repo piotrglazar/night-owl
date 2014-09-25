@@ -1,11 +1,13 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.model.StarInfo;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.UserLocation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -16,7 +18,9 @@ import java.util.stream.Collectors;
 @Component
 public class StarPositionProvider {
 
-    public static final double BRIGHT_STAR_MAGNITUDE = 1.0;
+    public static final double BRIGHT_STAR_MAGNITUDE = 1.5;
+    public static final String USER_LOCATION_KEY = "#userLocation";
+
     private final StarInfoProvider starInfoProvider;
     private final StarPositionCalculator starPositionCalculator;
     private final SiderealHourAngleCalculator siderealHourAngleCalculator;
@@ -90,6 +94,11 @@ public class StarPositionProvider {
     public List<StarPositionDto> getBrightStarPositions(final UserLocation userLocation, final ZonedDateTime date) {
         final List<StarInfo> brightStars = starInfoProvider.getStarsBrighterThan(BRIGHT_STAR_MAGNITUDE);
         return getStarPositions(userLocation, date, brightStars);
+    }
+
+    @Cacheable(value = ApplicationConfiguration.NIGHT_OWL_CACHE, key = USER_LOCATION_KEY)
+    public List<StarPositionDto> getBrightStarPositionsCached(final UserLocation userLocation, final ZonedDateTime date) {
+        return getBrightStarPositions(userLocation, date);
     }
 
     private List<StarPositionDto> getStarPositions(final UserLocation userLocation, final ZonedDateTime date, final List<StarInfo> stars) {
