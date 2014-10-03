@@ -1,6 +1,8 @@
 package com.piotrglazar.nightowl.model;
 
 import com.google.common.base.MoreObjects;
+import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 
 public class StarPositionDto {
 

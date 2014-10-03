@@ -30,8 +30,7 @@ public class UtcStarTimeAtZeroUniversalTime {
 
     public LocalDate getAriesPoint(LocalDate currentDate) {
         final int ariesPointYear = getAriesPointYear(currentDate);
-        final LocalDate ariesPoint = LocalDate.of(ariesPointYear, ARIES_POINT_MONTH, ARIES_POINT_DAY);
-        return ariesPoint;
+        return LocalDate.of(ariesPointYear, ARIES_POINT_MONTH, ARIES_POINT_DAY);
     }
 
     private int getAriesPointYear(final LocalDate currentDate) {
@@ -44,14 +43,14 @@ public class UtcStarTimeAtZeroUniversalTime {
 
     private boolean isCurrentDatePastOrEqualAriesPoint(final LocalDate currentDate) {
         final Month currentMonth = currentDate.getMonth();
-        if (currentMonth.compareTo(ARIES_POINT_MONTH) < 0) {
-            return false;
-        } else if (currentMonth.compareTo(ARIES_POINT_MONTH) == 0 && currentDate.getDayOfMonth() < ARIES_POINT_DAY) {
-            return false;
-        } else if (currentMonth.compareTo(ARIES_POINT_MONTH) == 0 && currentDate.getDayOfMonth() >= ARIES_POINT_DAY) {
-            return true;
-        } else {
-            return true;
-        }
+        return !isBeforeAriesPointMonth(currentMonth) && !isBeforeAriesPointDay(currentDate, currentMonth);
+    }
+
+    private boolean isBeforeAriesPointDay(final LocalDate currentDate, final Month currentMonth) {
+        return currentMonth.compareTo(ARIES_POINT_MONTH) == 0 && currentDate.getDayOfMonth() < ARIES_POINT_DAY;
+    }
+
+    private boolean isBeforeAriesPointMonth(final Month currentMonth) {
+        return currentMonth.compareTo(ARIES_POINT_MONTH) < 0;
     }
 }

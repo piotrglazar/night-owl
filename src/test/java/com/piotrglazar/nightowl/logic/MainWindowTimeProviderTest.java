@@ -2,8 +2,8 @@ package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Longitude;
-import com.piotrglazar.nightowl.model.UserLocation;
-import com.piotrglazar.nightowl.ui.MainWindow;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.util;
 
+import com.piotrglazar.nightowl.util.messages.StarsVisibilityMessage;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 

@@ -1,7 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
 import com.google.common.cache.CacheBuilder;
-import com.piotrglazar.nightowl.ui.map.CardinalDirections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +13,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -38,11 +35,6 @@ public class ApplicationConfiguration {
         propertiesFactoryBean.setLocation(new ClassPathResource("application.properties"));
 
         return propertiesFactoryBean;
-    }
-
-    @Bean
-    public List<CardinalDirections> directionsSigns() {
-        return Arrays.asList(CardinalDirections.values());
     }
 
     @Bean

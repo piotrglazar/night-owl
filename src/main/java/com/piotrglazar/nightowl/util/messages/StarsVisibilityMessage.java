@@ -1,4 +1,4 @@
-package com.piotrglazar.nightowl.util;
+package com.piotrglazar.nightowl.util.messages;
 
 import java.util.Objects;
 

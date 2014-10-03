@@ -1,8 +1,8 @@
 package com.piotrglazar.nightowl.configuration;
 
 import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
-import com.piotrglazar.nightowl.model.RuntimeConfiguration;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

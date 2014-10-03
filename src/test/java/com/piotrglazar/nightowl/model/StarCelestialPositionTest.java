@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.model;
 
+import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

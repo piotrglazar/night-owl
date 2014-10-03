@@ -2,9 +2,9 @@ package com.piotrglazar.nightowl.configuration;
 
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
-import com.piotrglazar.nightowl.model.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl;
 
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 
 import java.util.List;
 

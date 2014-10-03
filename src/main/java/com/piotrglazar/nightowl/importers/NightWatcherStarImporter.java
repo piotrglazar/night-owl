@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

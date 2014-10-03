@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.model;
 
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.Objects;

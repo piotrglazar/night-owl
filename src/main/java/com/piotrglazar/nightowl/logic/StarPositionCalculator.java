@@ -1,8 +1,8 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.coordinates.Latitude;
-import com.piotrglazar.nightowl.model.StarCelestialPosition;
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;

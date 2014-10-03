@@ -1,8 +1,8 @@
 package com.piotrglazar.nightowl.ui.map;
 
 import com.google.common.collect.Lists;
-import com.piotrglazar.nightowl.model.StarCelestialPosition;
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;

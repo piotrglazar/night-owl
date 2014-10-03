@@ -1,9 +1,10 @@
 package com.piotrglazar.nightowl.ui.map;
 
+import com.piotrglazar.nightowl.SkyMapController;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.logic.StarPositionProvider;
 import com.piotrglazar.nightowl.model.StarPositionDto;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 
 @Component
-public class SkyMapController {
+public class DefaultSkyMapController implements SkyMapController {
 
     private final NightOwlRuntimeConfiguration runtimeConfiguration;
     private final SkyMap skyMap;
@@ -19,14 +20,15 @@ public class SkyMapController {
     private final TimeProvider timeProvider;
 
     @Autowired
-    public SkyMapController(NightOwlRuntimeConfiguration runtimeConfiguration, SkyMap skyMap, StarPositionProvider starPositionProvider,
-                            TimeProvider timeProvider) {
+    public DefaultSkyMapController(NightOwlRuntimeConfiguration runtimeConfiguration, SkyMap skyMap, StarPositionProvider starPositionProvider,
+                                   TimeProvider timeProvider) {
         this.runtimeConfiguration = runtimeConfiguration;
         this.skyMap = skyMap;
         this.starPositionProvider = starPositionProvider;
         this.timeProvider = timeProvider;
     }
 
+    @Override
     public void draw(Graphics graphics, int width, int height) {
         int radius = calculateMapRadius(width, height);
         int x = panelCenter(width);
@@ -48,6 +50,7 @@ public class SkyMapController {
         return starPositionProvider.getBrightStarPositionsCached(runtimeConfiguration.getUserLocation(), timeProvider.get());
     }
 
+    @Override
     public double azimuthDistance() {
         final UserLocation userLocation = runtimeConfiguration.getUserLocation();
         return userLocation.getLatitude().getLatitude();

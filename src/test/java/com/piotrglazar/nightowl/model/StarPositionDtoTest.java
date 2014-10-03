@@ -1,5 +1,7 @@
 package com.piotrglazar.nightowl.model;
 
+import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import org.junit.Test;
 
 import java.time.LocalTime;
