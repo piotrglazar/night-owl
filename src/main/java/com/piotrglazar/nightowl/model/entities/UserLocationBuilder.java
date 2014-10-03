@@ -1,4 +1,4 @@
-package com.piotrglazar.nightowl.model;
+package com.piotrglazar.nightowl.model.entities;
 
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;

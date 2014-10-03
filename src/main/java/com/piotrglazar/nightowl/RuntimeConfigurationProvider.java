@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl;
 
-import com.piotrglazar.nightowl.model.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 
 public interface RuntimeConfigurationProvider {
 

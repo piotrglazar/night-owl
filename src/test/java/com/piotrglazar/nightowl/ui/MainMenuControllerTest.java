@@ -1,10 +1,11 @@
 package com.piotrglazar.nightowl.ui;
 
 import com.google.common.collect.Lists;
+import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.util.StateReloadEvent;

@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.converters;
 
 import com.google.common.base.Preconditions;
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import junitparams.converters.ConversionFailedException;
 import junitparams.converters.ParamConverter;
 

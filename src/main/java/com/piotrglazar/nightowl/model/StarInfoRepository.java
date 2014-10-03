@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.model;
 
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

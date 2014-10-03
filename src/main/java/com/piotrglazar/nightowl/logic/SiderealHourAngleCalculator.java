@@ -23,8 +23,7 @@ public class SiderealHourAngleCalculator {
 
     public LocalTime siderealHourAngle(final ZonedDateTime time, final Longitude longitude) {
         final LocalTime siderealHourAngleAtGreenwich = siderealHourAngleAtGreenwich(time);
-        final LocalTime siderealHourAngle = siderealHourAngleAtGreenwich.plusSeconds(longitude.toSeconds());
-        return siderealHourAngle;
+        return siderealHourAngleAtGreenwich.plusSeconds(longitude.toSeconds());
     }
 
     public LocalTime siderealHourAngleAtGreenwich(final ZonedDateTime time) {
@@ -33,8 +32,6 @@ public class SiderealHourAngleCalculator {
         final ZonedDateTime utcStarTime = timeConverter.solarToStar(utc);
         final LocalTime utcStarTimeAtZeroUniversalTime = zeroUniversalTime.getTime(utc.toLocalDateTime());
 
-        final LocalTime siderealHourAngle = utcStarTime.toLocalTime().plusSeconds(utcStarTimeAtZeroUniversalTime.toSecondOfDay());
-
-        return siderealHourAngle;
+        return utcStarTime.toLocalTime().plusSeconds(utcStarTimeAtZeroUniversalTime.toSecondOfDay());
     }
 }

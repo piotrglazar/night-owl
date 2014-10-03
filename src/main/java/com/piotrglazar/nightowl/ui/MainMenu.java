@@ -63,6 +63,7 @@ public class MainMenu {
         return exit;
     }
 
+    @SuppressWarnings("all")
     private void closeApplication() {
         System.exit(0);
     }

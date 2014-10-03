@@ -3,9 +3,10 @@ package com.piotrglazar.nightowl.ui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.piotrglazar.nightowl.model.UserLocation;
-import com.piotrglazar.nightowl.ui.map.SkyMapController;
-import com.piotrglazar.nightowl.util.StarsVisibilityMessage;
+import com.piotrglazar.nightowl.MainWindow;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.SkyMapController;
+import com.piotrglazar.nightowl.util.messages.StarsVisibilityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class MainWindow {
+@SuppressWarnings("all")
+public class DefaultMainWindow implements MainWindow {
     private JPanel mainPanel;
     private JLabel timeLabel;
     private JLabel siderealHourAngleLabel;
@@ -35,46 +37,55 @@ public class MainWindow {
     private final SkyMapController skyMapController;
 
     @Autowired
-    public MainWindow(SkyMapController skyMapController) {
+    public DefaultMainWindow(SkyMapController skyMapController) {
         this.skyMapController = skyMapController;
     }
 
+    @Override
     public MainWindow preDisplay() {
         timeLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
         siderealHourAngleLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
         return this;
     }
 
+    @Override
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
+    @Override
     public void setSiderealHourAngleLabel(final LocalTime siderealHourAngle) {
         siderealHourAngleLabel.setText(siderealHourAngle.format(timeFormatter));
     }
 
+    @Override
     public void setTimeLabel(final LocalDateTime now) {
         timeLabel.setText(now.format(dateTimeFormatter));
     }
 
+    @Override
     public void setNumberOfStars(long numberOfStars) {
         stars.setText("Number of stars: " + numberOfStars);
     }
 
+    @Override
     public void setNumberOfUserLocations(long numberOfUserLocations) {
         userLocations.setText("Number of locations: " + numberOfUserLocations);
     }
 
+    @Override
     public void setNumberOfStarsVisibleNow(long numberOfStarsVisibleNow) {
-        starsVisibleNow.setText("Stars visible now: " + String.valueOf(numberOfStarsVisibleNow));
+        starsVisibleNow.setText("Stars visible now: " + numberOfStarsVisibleNow);
     }
 
+    @Override
     public void setUserLocation(final UserLocation userLocation) {
         cityName.setText(userLocation.getName());
         cityLatitude.setText(String.format("Latitude: %s", userLocation.getLatitude()));
         cityLongitude.setText(String.format("Longitude: %s", userLocation.getLongitude()));
     }
 
+    @Override
     public void setStarsVisibility(final StarsVisibilityMessage message) {
         starsAlwaysVisible.setText(String.format("Stars always visible: %d", message.getStarsAlwaysVisible()));
         starsSometimesVisible.setText(String.format("Stars sometimes visible: %d", message.getStarsSometimesVisible()));
@@ -85,6 +96,7 @@ public class MainWindow {
         mapPanel = new MapPanel();
     }
 
+    @Override
     public void repaintUi() {
         mainPanel.repaint();
     }

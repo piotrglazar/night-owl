@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -3,8 +3,8 @@ package com.piotrglazar.nightowl.ui.map;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.logic.StarPositionProvider;
-import com.piotrglazar.nightowl.model.UserLocation;
-import com.piotrglazar.nightowl.model.UserLocationBuilder;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocationBuilder;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -26,7 +26,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JUnitParamsRunner.class)
-public class SkyMapControllerTest {
+public class DefaultSkyMapControllerTest {
 
     @Mock
     private Graphics graphics;
@@ -44,7 +44,7 @@ public class SkyMapControllerTest {
     private TimeProvider timeProvider;
 
     @InjectMocks
-    private SkyMapController skyMapController;
+    private DefaultSkyMapController skyMapController;
 
     @Captor
     private ArgumentCaptor<SkyMapDto> skyMapDtoCaptor;

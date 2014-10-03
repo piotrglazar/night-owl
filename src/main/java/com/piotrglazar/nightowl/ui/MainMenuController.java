@@ -1,10 +1,12 @@
 package com.piotrglazar.nightowl.ui;
 
 import com.google.common.base.Preconditions;
+import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
+import com.piotrglazar.nightowl.util.MoreCollectors;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.springframework.beans.factory.ObjectFactory;
@@ -13,7 +15,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class MainMenuController {
@@ -32,7 +33,9 @@ public class MainMenuController {
     }
 
     public List<UserLocationDto> getAllUserLocations() {
-        return userLocationRepository.getObject().findAll().stream().map(UserLocationDto::fromUserLocation).collect(Collectors.toList());
+        return userLocationRepository.getObject().findAll().stream()
+                .map(UserLocationDto::fromUserLocation)
+                .collect(MoreCollectors.toImmutableList());
     }
 
     public UserLocationDto getCurrentUserLocation() {

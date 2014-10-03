@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.model;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

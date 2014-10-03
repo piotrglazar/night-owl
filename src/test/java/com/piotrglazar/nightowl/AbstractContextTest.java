@@ -11,6 +11,7 @@ import org.springframework.test.context.TestContextManager;
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 @ActiveProfiles("test")
+@SuppressWarnings("all")
 public abstract class AbstractContextTest {
 
     @Rule

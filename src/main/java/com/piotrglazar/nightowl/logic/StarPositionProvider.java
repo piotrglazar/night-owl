@@ -3,9 +3,10 @@ package com.piotrglazar.nightowl.logic;
 import com.piotrglazar.nightowl.StarInfoProvider;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
-import com.piotrglazar.nightowl.model.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.StarPositionDto;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.util.MoreCollectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class StarPositionProvider {
@@ -109,6 +109,6 @@ public class StarPositionProvider {
             .map(si -> new StarPositionDto(si,
                     starPositionCalculator.calculateCelestialPosition(userLocation.getLatitude(), siderealHourAngle, si)))
             .filter(spd -> spd.getZenithDistance() < maximumZenithDistance)
-            .collect(Collectors.toList());
+            .collect(MoreCollectors.toImmutableList());
     }
 }

@@ -1,6 +1,8 @@
 package com.piotrglazar.nightowl.model;
 
 import com.piotrglazar.nightowl.AbstractContextTest;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfoBuilder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

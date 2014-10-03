@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
-import com.piotrglazar.nightowl.model.UserLocation;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

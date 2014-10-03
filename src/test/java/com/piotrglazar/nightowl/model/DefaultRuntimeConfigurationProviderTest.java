@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.model;
 
 import com.google.common.collect.Lists;
+import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
