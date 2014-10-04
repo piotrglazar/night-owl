@@ -10,6 +10,7 @@ import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jmx.export.annotation.AnnotationMBeanExporter;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.lang.invoke.MethodHandles;
@@ -44,6 +45,11 @@ public class ApplicationConfiguration {
         cacheBuilder.expireAfterWrite(starPositionProviderCache, TimeUnit.SECONDS);
         nightOwlCache.setCacheBuilder(cacheBuilder);
         return nightOwlCache;
+    }
+
+    @Bean
+    public AnnotationMBeanExporter annotationMBeanExporter() {
+        return new AnnotationMBeanExporter();
     }
 
     public static String getCurrentDirectory() {
