@@ -91,15 +91,17 @@ public class StarPositionCalculatorTest {
     @Parameters({
             "52.0 | 10:08:22;11.97 | 11:56 | 45.533 | 218.343",     // regulus at 11:56 sidereal time (16:57 13.07.2014 Warsaw)
             "52.0 | 06:45:08;-16.717 | 11:56 | 95.81 | 250.16",     // sirius at 11:56 sidereal time (16:57 13.07.2014 Warsaw)
-            "52.0 | 18:36:56;38.78 | 03:14 | 79.06 | 322.07",       // wega at 3:14 sidereal time (8:20 14.07.2014 Warsaw)
-            "52.0 | 19:50:47;8.52 | 15:50 | 65.205 | 250.961",      // altair at 15:50 sidereal time (21:04 14.07.2014 Warsaw)
+            "52.0 | 18:36:56;38.78 | 03:14 | 79.06 | 37.931",       // wega at 3:14 sidereal time (8:20 14.07.2014 Warsaw)
+            "52.0 | 19:50:47;8.52 | 15:50 | 65.205 | 109.039",      // altair at 15:50 sidereal time (21:04 14.07.2014 Warsaw)
             "52.0 | 14:15:42;19.11 | 15:50 | 37.706 | 218.163",     // arktur at 15:50 sidereal time (21:04 14.07.2014 Warsaw)
             "52.0 | 14:50:42;74.09 | 15:50 | 22.931 | 349.629",     // kochab at 15:50 sidereal time (21:04 14.07.2014 Warsaw)
-            "52.0 | 21:18:36;62.55 | 15:50 | 42.434 | 317.407",     // alderamin at 15:50 sidereal time (21:04 14.07.2014 Warsaw)
-            "52.0 | 20:41:26;45.267 | 16:26 | 41.348 | 286.987",    // deneb at 16:26 sidereal time (21:32 14.07.2014 Warsaw)
-            "-34.0 | 14:39:35;-60.833 | 03:00 | 85.074 | 182.494",  // alfa centauri at 3:00 sidereal time (17.07.2014 Sydney)
-            "-34.0 | 22:57:39;-29.62 | 03:00 | 50.927 | 257.274",   // fomalhaut at 3:00 sidereal time (17.07.2014 Sydney)
-            "-34.0 | 06:23:57;-52.696 | 03:00 | 40.441 | 226.549"   // canopus at 3:00 sidereal time (17.07.2014 Sydney)
+            "52.0 | 21:18:36;62.55 | 15:50 | 42.434 | 42.593",      // alderamin at 15:50 sidereal time (21:04 14.07.2014 Warsaw)
+            "52.0 | 20:41:26;45.267 | 16:26 | 41.348 | 73.013",     // deneb at 16:26 sidereal time (21:32 14.07.2014 Warsaw)
+            "-34.0 | 14:39:35;-60.833 | 03:00 | 85.074 | 177.506",  // alfa centauri at 3:00 sidereal time (17.07.2014 Sydney)
+            "-34.0 | 22:57:39;-29.62 | 03:00 | 50.927 | 102.726",   // fomalhaut at 3:00 sidereal time (17.07.2014 Sydney)
+            "-34.0 | 06:23:57;-52.696 | 03:00 | 40.441 | 133.451",  // canopus at 3:00 sidereal time (17.07.2014 Sydney)
+            // bug fix
+            "52.0 | 22:57:38;-29.62 | 21:10 | 84.963 | 156.737"     // fomalhaut at 21:10 sidereal time (05.10.2014 Warsaw)
     })
     public void shouldCalculateCelestialPosition(@ConvertParam(LatitudeConverter.class) Latitude latitude,
                                                  @ConvertParam(StarInfoConverter.class) StarInfo starInfo,
@@ -110,7 +112,8 @@ public class StarPositionCalculatorTest {
                 starPositionCalculator.calculateCelestialPosition(latitude, sideRealTime, starInfo);
 
         // then
-        assertThat(starCelestialPosition.getZenithDistance()).isEqualTo(expectedZenithDistance, within(0.001));
-        assertThat(starCelestialPosition.getAzimuth()).isEqualTo(expectedAzimuth, within(0.001));
+        StarCelestialPositionAssert.assertThat(starCelestialPosition)
+                .hasZenithDistance(expectedZenithDistance)
+                .hasAzimuth(expectedAzimuth);
     }
 }
