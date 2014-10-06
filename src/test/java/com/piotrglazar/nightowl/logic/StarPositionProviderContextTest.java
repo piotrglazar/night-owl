@@ -72,7 +72,7 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
 
         // then
         assertThat(starsPositions).hasSize(5);
-        containsWithTolerance(starsPositions, STARS.get(0), 35.467, 339.383);
+        containsWithTolerance(starsPositions, STARS.get(0), 35.467, 20.616);
         containsWithTolerance(starsPositions, STARS.get(1), 41.277, 26.029);
         containsWithTolerance(starsPositions, STARS.get(2), 71.350, 19.922);
         containsWithTolerance(starsPositions, STARS.get(3), 82.621, 297.299);
