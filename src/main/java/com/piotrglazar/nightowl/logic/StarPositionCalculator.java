@@ -51,7 +51,9 @@ public class StarPositionCalculator {
         final double cosAzimuth = (sin(declination) * cos(latitude) - cos(declination) * sin(latitude) * cos(t)) / sin(zenithDistance);
         final double azimuth = Math.acos(cosAzimuth);
 
-        if (t < 0 || t > Math.PI) {
+        if (t < 0 && t > -Math.PI) {
+            return azimuth;
+        } else if (t > Math.PI) {
             return azimuth;
         } else {
             return 2 * Math.PI - azimuth;
