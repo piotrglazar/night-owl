@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JUnitParamsRunner.class)
@@ -87,7 +88,7 @@ public class DefaultSkyMapControllerTest {
         skyMapController.draw(graphics, 100, 100);
 
         // then
-        verify(starPositionProvider).getBrightStarPositionsCached(any(UserLocation.class), any(ZonedDateTime.class));
+        verify(starPositionProvider).getBrightStarPositionsCached(any(UserLocation.class), any(ZonedDateTime.class), anyDouble());
     }
 
     private void arbitraryUserLocation() {

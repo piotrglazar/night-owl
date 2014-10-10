@@ -5,18 +5,19 @@ import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
-import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
+import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.util.DoubleConverter;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -28,10 +29,11 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainMenuControllerTest {
@@ -48,20 +50,11 @@ public class MainMenuControllerTest {
     @Mock
     private NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration;
 
+    @Mock
+    private DoubleConverter doubleConverter;
+
+    @InjectMocks
     private MainMenuController mainMenuController;
-
-    @Before
-    @SuppressWarnings("unchecked")
-    public void setUp() throws Exception {
-        ObjectFactory<UserLocationRepository> userLocationRepositoryObjectFactory = mock(ObjectFactory.class);
-        ObjectFactory<NightOwlRuntimeConfiguration> nightOwlRuntimeConfigurationObjectFactory = mock(ObjectFactory.class);
-
-        given(userLocationRepositoryObjectFactory.getObject()).willReturn(userLocationRepository);
-        given(nightOwlRuntimeConfigurationObjectFactory.getObject()).willReturn(nightOwlRuntimeConfiguration);
-
-        mainMenuController = new MainMenuController(userLocationRepositoryObjectFactory, nightOwlRuntimeConfigurationObjectFactory,
-                eventPublisher);
-    }
 
     @Test
     public void shouldConvertUserLocationsToDto() {
@@ -135,7 +128,7 @@ public class MainMenuControllerTest {
     }
 
     @Test
-    public void shouldPublishUiRepaintAndConfigurationReloadEvents() {
+    public void shouldUpdateUserLocationAndPublishUiRepaintAndConfigurationReloadEvents() {
         final UserLocation userLocation = arbitraryUserLocationWithId(123);
         final UserLocationDto userLocationDto = UserLocationDto.fromUserLocation(userLocation);
         given(userLocationRepository.findOne(123L)).willReturn(userLocation);
@@ -144,6 +137,61 @@ public class MainMenuControllerTest {
         mainMenuController.updateUserLocation(userLocationDto);
 
         // then
+        assertThatReloadsAppAndRepaintsUi();
+    }
+
+    @Test
+    public void shouldAcceptNewVisibilitySettingsAndPublishUiRepaintAndConfigurationReloadEvents() {
+        // given
+        given(doubleConverter.twoDecimalPlaces(anyString())).willReturn(2.0);
+
+        // when
+        mainMenuController.updateStarVisibilityMagnitude("2.0");
+
+        // then
+        verify(nightOwlRuntimeConfiguration).updateStarVisibilityMagnitude(2.0);
+        assertThatReloadsAppAndRepaintsUi();
+    }
+
+    @Test
+    public void shouldNotUpdateApplicationStateWhenProvidedMagnitudeIsTooLow() {
+        // given
+        final double lowMagnitude = SkyObjectVisibilitySettings.minimalStarVisibilityMag - 1.0;
+        given(doubleConverter.twoDecimalPlaces(anyString())).willReturn(lowMagnitude);
+
+        // when
+        mainMenuController.updateStarVisibilityMagnitude(Double.toString(lowMagnitude));
+
+        // then
+        verifyNoMoreInteractions(eventPublisher);
+    }
+
+    @Test
+    public void shouldNotUpdateApplicationStateWhenProvidedMagnitudeIsTooHigh() {
+        // given
+        final double highMagnitude = SkyObjectVisibilitySettings.maximalStarVisibilityMag + 1.0;
+        given(doubleConverter.twoDecimalPlaces(anyString())).willReturn(highMagnitude);
+
+        // when
+        mainMenuController.updateStarVisibilityMagnitude(Double.toString(highMagnitude));
+
+        // then
+        verifyNoMoreInteractions(eventPublisher);
+    }
+
+    @Test
+    public void shouldFetchCurrentStarVisibilitySettings() {
+        // given
+        given(nightOwlRuntimeConfiguration.getStarVisibilityMagnitude()).willReturn(2.0);
+
+        // when
+        final double starVisibilityMagnitude = mainMenuController.currentStarVisibilityMagnitude();
+
+        // then
+        assertThat(starVisibilityMagnitude).isEqualTo(2.0);
+    }
+
+    private void assertThatReloadsAppAndRepaintsUi() {
         final ArgumentCaptor<ApplicationEvent> eventsCaptor = ArgumentCaptor.forClass(ApplicationEvent.class);
         verify(eventPublisher, times(2)).publishEvent(eventsCaptor.capture());
         final List<ApplicationEvent> events = eventsCaptor.getAllValues();

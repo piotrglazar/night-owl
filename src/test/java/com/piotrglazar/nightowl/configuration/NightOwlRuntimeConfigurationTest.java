@@ -1,12 +1,14 @@
 package com.piotrglazar.nightowl.configuration;
 
+import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
-import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -38,6 +40,11 @@ public class NightOwlRuntimeConfigurationTest {
     @InjectMocks
     private NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration;
 
+    @Before
+    public void setUp() {
+        runtimeConfiguration.setVisibilitySettings(new SkyObjectVisibilitySettings());
+    }
+
     @Test
     public void shouldPostEventWithUserConfiguration() {
         // given
@@ -66,13 +73,29 @@ public class NightOwlRuntimeConfigurationTest {
 
         // then
         assertThat(runtimeConfiguration.getChosenUserLocation()).isEqualTo(userLocation);
-        verify(configurationProvider).updateConfiguration(runtimeConfiguration);ArgumentCaptor<UiUpdateEvent> uiUpdateEvent = ArgumentCaptor.forClass(UiUpdateEvent.class);
+        verify(configurationProvider).updateConfiguration(runtimeConfiguration);
+        ArgumentCaptor<UiUpdateEvent> uiUpdateEvent = ArgumentCaptor.forClass(UiUpdateEvent.class);
         verify(applicationEventPublisher, times(2)).publishEvent(uiUpdateEvent.capture());
         // fire event
         assertThat(uiUpdateEvent.getAllValues()).hasSize(2);
         // ignore the first event, it's tested above
         uiUpdateEvent.getAllValues().get(1).action(mainWindow);
         verify(mainWindow).setUserLocation(any(UserLocation.class));
+    }
+
+    @Test
+    public void shouldUpdateStarVisibilityMagnitude() {
+        // given
+        given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
+        nightOwlRuntimeConfiguration.loadRuntimeConfiguration();
+        final double starVisibilityMagnitude = 2.0;
+
+        // when
+        nightOwlRuntimeConfiguration.updateStarVisibilityMagnitude(starVisibilityMagnitude);
+
+        // then
+        assertThat(nightOwlRuntimeConfiguration.getStarVisibilityMagnitude()).isEqualTo(2.0);
+        verify(configurationProvider).updateConfiguration(runtimeConfiguration);
     }
 
     private UserLocation arbitraryUserLocation() {

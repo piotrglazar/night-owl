@@ -18,6 +18,9 @@ public final class RuntimeConfiguration {
     @OneToOne
     private UserLocation chosenUserLocation;
 
+    @OneToOne
+    private SkyObjectVisibilitySettings visibilitySettings;
+
     public Long getId() {
         return id;
     }
@@ -28,6 +31,14 @@ public final class RuntimeConfiguration {
 
     public void setChosenUserLocation(final UserLocation chosenUserLocation) {
         this.chosenUserLocation = chosenUserLocation;
+    }
+
+    public SkyObjectVisibilitySettings getVisibilitySettings() {
+        return visibilitySettings;
+    }
+
+    public void setVisibilitySettings(final SkyObjectVisibilitySettings visibilitySettings) {
+        this.visibilitySettings = visibilitySettings;
     }
 
     @Override
@@ -55,6 +66,7 @@ public final class RuntimeConfiguration {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("userLocation", chosenUserLocation)
+                .add("visibilitySettings", visibilitySettings)
                 .toString();
     }
 }

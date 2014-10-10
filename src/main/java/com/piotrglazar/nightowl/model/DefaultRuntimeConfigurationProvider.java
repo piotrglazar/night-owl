@@ -14,10 +14,13 @@ import java.util.List;
 class DefaultRuntimeConfigurationProvider implements RuntimeConfigurationProvider {
 
     private final RuntimeConfigurationRepository configurationRepository;
+    private final SkyObjectVisibilitySettingsRepository settingsRepository;
 
     @Autowired
-    public DefaultRuntimeConfigurationProvider(final RuntimeConfigurationRepository configurationRepository) {
+    public DefaultRuntimeConfigurationProvider(RuntimeConfigurationRepository configurationRepository,
+                                               SkyObjectVisibilitySettingsRepository settingsRepository) {
         this.configurationRepository = configurationRepository;
+        this.settingsRepository = settingsRepository;
     }
 
     @Override
@@ -29,6 +32,7 @@ class DefaultRuntimeConfigurationProvider implements RuntimeConfigurationProvide
 
     @Override
     public void updateConfiguration(final RuntimeConfiguration runtimeConfiguration) {
-        configurationRepository.saveAndFlush(runtimeConfiguration);
+        settingsRepository.save(runtimeConfiguration.getVisibilitySettings());
+        configurationRepository.save(runtimeConfiguration);
     }
 }

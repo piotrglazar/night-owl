@@ -43,6 +43,9 @@ public class MainMenu {
         final JMenuItem locationItem = createFileMenuLocationItem();
         fileMenu.add(locationItem);
 
+        final JMenuItem visibilitySettings = createVisibilitySettingsItem();
+        fileMenu.add(visibilitySettings);
+
         fileMenu.addSeparator();
 
         final JMenuItem exitItem = createFileMenuExitItem();
@@ -51,9 +54,29 @@ public class MainMenu {
         return fileMenu;
     }
 
+    private JMenuItem createVisibilitySettingsItem() {
+        final JMenuItem visibilitySettings = new JMenuItem("Visibility settings", KeyEvent.VK_S);
+        visibilitySettings.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.ALT_MASK));
+        visibilitySettings.addActionListener(a -> {
+            final JTextField starMagnitude = starVisibilityInput();
+            final int userResponse = JOptionPane.showConfirmDialog(visibilitySettings, new Object[]{"Star magnitude", starMagnitude},
+                    "Update star visibility?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (userResponse == JOptionPane.YES_OPTION) {
+                mainMenuController.updateStarVisibilityMagnitude(starMagnitude.getText());
+            }
+        });
+        return visibilitySettings;
+    }
+
+    private JTextField starVisibilityInput() {
+        final JTextField starMagnitude = new JTextField(Double.toString(mainMenuController.currentStarVisibilityMagnitude()));
+        starMagnitude.setToolTipText(String.format("This value should be between %s and %s", mainMenuController.minimalStarMagnitude(),
+                mainMenuController.maximalStarMagnitude()));
+        return starMagnitude;
+    }
+
     private JMenuItem createFileMenuExitItem() {
-        final JMenuItem exit = new JMenuItem("Exit");
-        exit.setMnemonic(KeyEvent.VK_X);
+        final JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_X);
         exit.addActionListener(a -> {
             int userResponse = JOptionPane.showConfirmDialog(exit, "Do you wish to quit?", "Exit", JOptionPane.YES_NO_OPTION);
             if (userClickedOk(userResponse)) {
