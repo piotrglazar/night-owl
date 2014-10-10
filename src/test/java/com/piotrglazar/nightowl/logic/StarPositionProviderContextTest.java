@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.logic;
 
+import com.google.common.collect.Lists;
 import com.piotrglazar.nightowl.AbstractContextTest;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
@@ -17,6 +18,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static com.piotrglazar.nightowl.DatabaseTestConfiguration.STARS;
+import static com.piotrglazar.nightowl.logic.StarPositionProvider.BRIGHT_STAR_MAGNITUDE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.offset;
 
@@ -86,7 +88,7 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
         final ZonedDateTime date = ZonedDateTime.of(LocalDate.of(2014, 7, 16), LocalTime.of(23, 52), ZoneId.of("Europe/Paris"));
 
         // when
-        final List<StarPositionDto> starsPositions = starPositionProvider.getBrightStarPositions(userLocation, date);
+        final List<StarPositionDto> starsPositions = starPositionProvider.getBrightStarPositions(userLocation, date, BRIGHT_STAR_MAGNITUDE);
 
         // then
         assertThat(starsPositions).hasSize(4);
@@ -99,15 +101,19 @@ public class StarPositionProviderContextTest extends AbstractContextTest {
         final ZonedDateTime date = ZonedDateTime.of(LocalDate.of(2014, 7, 16), LocalTime.of(23, 52), ZoneId.of("Europe/Paris"));
 
         // when
-        final List<StarPositionDto> brightStarPositions = starPositionProvider.getBrightStarPositionsCached(userLocation, date);
+        final List<StarPositionDto> brightStarPositions = starPositionProvider.getBrightStarPositionsCached(userLocation, date,
+                BRIGHT_STAR_MAGNITUDE);
 
         // then
-        final List<StarPositionDto> brightStarPositionsCached = getCachedStarPositions(userLocation);
+        final List<StarPositionDto> brightStarPositionsCached = getCachedStarPositions(userLocation, BRIGHT_STAR_MAGNITUDE);
         assertThat(brightStarPositions).isEqualTo(brightStarPositionsCached);
     }
 
-    private List<StarPositionDto> getCachedStarPositions(final UserLocation userLocation) {
-        return (List<StarPositionDto>) guavaCacheManager.getCache("nightOwlCache").get(userLocation).get();
+    private List<StarPositionDto> getCachedStarPositions(final UserLocation userLocation, final double starMagnitude) {
+        return (List<StarPositionDto>) guavaCacheManager
+                .getCache("nightOwlCache")
+                .get(Lists.newArrayList(userLocation, starMagnitude))
+                .get();
     }
 
     private void containsWithTolerance(List<StarPositionDto> starsPositions, StarInfo starInfo, double zenithDistance, double azimuth) {

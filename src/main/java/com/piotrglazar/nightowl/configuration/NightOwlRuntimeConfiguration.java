@@ -46,6 +46,10 @@ public class NightOwlRuntimeConfiguration {
         return runtimeConfiguration.getChosenUserLocation();
     }
 
+    public Double getStarVisibilityMagnitude() {
+        return runtimeConfiguration.getVisibilitySettings().getStarVisibilityMag();
+    }
+
     public void updateUserLocation(UserLocation newUserLocation) {
         LOG.info("Updating runtime configuration - new user location");
 
@@ -55,5 +59,14 @@ public class NightOwlRuntimeConfiguration {
         applicationEventPublisher.publishEvent(new UiUpdateEvent(this, ui -> ui.setUserLocation(newUserLocation)));
 
         LOG.info("Finished updating runtime configuration - new user location");
+    }
+
+    public void updateStarVisibilityMagnitude(final double newStarVisibilityMag) {
+        LOG.info("Updating runtime configuration - new star visibility magnitude");
+
+        runtimeConfiguration.getVisibilitySettings().setStarVisibilityMag(newStarVisibilityMag);
+        configurationProvider.updateConfiguration(runtimeConfiguration);
+
+        LOG.info("Finished updating runtime configuration - new star visibility magnitude");
     }
 }

@@ -192,7 +192,8 @@ public class StarPositionProviderTest {
                 .willReturn(new StarCelestialPosition(60, 0), new StarCelestialPosition(0, 0));
 
         // when
-        final List<StarPositionDto> brightStarPositions = provider.getBrightStarPositions(userLocation, arbitraryDate);
+        final List<StarPositionDto> brightStarPositions = provider.getBrightStarPositions(userLocation, arbitraryDate,
+                StarPositionProvider.BRIGHT_STAR_MAGNITUDE);
 
         // then
         assertThat(brightStarPositions).hasSize(starInfo.size());

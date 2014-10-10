@@ -2,10 +2,13 @@ package com.piotrglazar.nightowl.configuration;
 
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
-import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
+import com.piotrglazar.nightowl.logic.StarPositionProvider;
 import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
-import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.model.SkyObjectVisibilitySettingsRepository;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
+import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,30 +71,53 @@ public class DatabaseConfiguration {
     @Bean(name = "databasePopulator")
     @Autowired
     public DatabasePopulator databasePopulator(UserLocationRepository userLocationRepository,
-                                               RuntimeConfigurationRepository runtimeConfigurationRepository) {
-        return new DatabasePopulator(userLocationRepository, runtimeConfigurationRepository);
+                                               RuntimeConfigurationRepository runtimeConfigurationRepository,
+                                               SkyObjectVisibilitySettingsRepository skyObjectVisibilitySettingsRepository) {
+        return new DatabasePopulator(userLocationRepository, runtimeConfigurationRepository, skyObjectVisibilitySettingsRepository);
     }
 
     static class DatabasePopulator {
 
         private final UserLocationRepository userLocationRepository;
         private final RuntimeConfigurationRepository runtimeConfigurationRepository;
+        private final SkyObjectVisibilitySettingsRepository skyObjectVisibilitySettingsRepository;
 
-        public DatabasePopulator(UserLocationRepository userLocation, RuntimeConfigurationRepository runtimeConfiguration) {
+        public DatabasePopulator(UserLocationRepository userLocation, RuntimeConfigurationRepository runtimeConfiguration,
+                                 SkyObjectVisibilitySettingsRepository skyObjectVisibilitySettingsRepository) {
             this.userLocationRepository = userLocation;
             this.runtimeConfigurationRepository = runtimeConfiguration;
+            this.skyObjectVisibilitySettingsRepository = skyObjectVisibilitySettingsRepository;
         }
 
         @PostConstruct
         public void prepareDatabase() {
             LOG.info("Prepopulating database");
 
-            prepareCapitals();
+            final UserLocation preferredUserLocation = prepareCapitals();
+            final SkyObjectVisibilitySettings skyObjectVisibilitySettings = prepareSkyObjectsVisibility();
+            prepareRuntimeConfiguration(preferredUserLocation, skyObjectVisibilitySettings);
 
             LOG.info("Done prepopulating database");
         }
 
-        private void prepareCapitals() {
+        private void prepareRuntimeConfiguration(UserLocation preferredUserLocation,
+                                                 SkyObjectVisibilitySettings skyObjectVisibilitySettings) {
+            if (runtimeConfigurationRepository.count() == 0) {
+                runtimeConfigurationRepository.saveAndFlush(defaultRuntimeConfiguration(preferredUserLocation, skyObjectVisibilitySettings));
+            }
+        }
+
+        private SkyObjectVisibilitySettings prepareSkyObjectsVisibility() {
+            if (skyObjectVisibilitySettingsRepository.count() == 0) {
+                SkyObjectVisibilitySettings skyObjectVisibilitySettings = new SkyObjectVisibilitySettings();
+                skyObjectVisibilitySettings.setStarVisibilityMag(StarPositionProvider.BRIGHT_STAR_MAGNITUDE);
+                return skyObjectVisibilitySettingsRepository.saveAndFlush(skyObjectVisibilitySettings);
+            } else {
+                return skyObjectVisibilitySettingsRepository.findAll().get(0);
+            }
+        }
+
+        private UserLocation prepareCapitals() {
             if (userLocationRepository.count() == 0) {
                 LOG.info("Prepopulating database with capitals");
 
@@ -101,13 +127,17 @@ public class DatabaseConfiguration {
                 userLocationRepository.save(sydney());
                 userLocationRepository.flush();
 
-                runtimeConfigurationRepository.saveAndFlush(defaultRuntimeConfiguration(warsaw));
+                return warsaw;
+            } else {
+                return userLocationRepository.findAll().get(0);
             }
         }
 
-        private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation) {
+        private RuntimeConfiguration defaultRuntimeConfiguration(UserLocation defaultLocation, SkyObjectVisibilitySettings
+                skyObjectVisibilitySettings) {
             final RuntimeConfiguration runtimeConfiguration = new RuntimeConfiguration();
             runtimeConfiguration.setChosenUserLocation(defaultLocation);
+            runtimeConfiguration.setVisibilitySettings(skyObjectVisibilitySettings);
             return runtimeConfiguration;
         }
 

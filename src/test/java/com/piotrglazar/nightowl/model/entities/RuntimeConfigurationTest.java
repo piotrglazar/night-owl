@@ -1,6 +1,5 @@
-package com.piotrglazar.nightowl.model;
+package com.piotrglazar.nightowl.model.entities;
 
-import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 

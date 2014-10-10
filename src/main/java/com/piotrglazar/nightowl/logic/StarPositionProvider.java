@@ -20,6 +20,8 @@ public class StarPositionProvider {
 
     public static final double BRIGHT_STAR_MAGNITUDE = 1.5;
     public static final String USER_LOCATION_KEY = "#userLocation";
+    public static final String STAR_MAGNITUDE_KEY = "#magnitude";
+    public static final String USER_LOCATION_AND_STAR_MAG_COMPLEX_KEY = "{" + USER_LOCATION_KEY + "," + STAR_MAGNITUDE_KEY + "}";
 
     private final StarInfoProvider starInfoProvider;
     private final StarPositionCalculator starPositionCalculator;
@@ -91,14 +93,14 @@ public class StarPositionProvider {
         return getStarPositions(userLocation, date, stars);
     }
 
-    public List<StarPositionDto> getBrightStarPositions(final UserLocation userLocation, final ZonedDateTime date) {
-        final List<StarInfo> brightStars = starInfoProvider.getStarsBrighterThan(BRIGHT_STAR_MAGNITUDE);
+    public List<StarPositionDto> getBrightStarPositions(UserLocation userLocation, ZonedDateTime date, Double magnitude) {
+        final List<StarInfo> brightStars = starInfoProvider.getStarsBrighterThan(magnitude);
         return getStarPositions(userLocation, date, brightStars);
     }
 
-    @Cacheable(value = ApplicationConfiguration.NIGHT_OWL_CACHE, key = USER_LOCATION_KEY)
-    public List<StarPositionDto> getBrightStarPositionsCached(final UserLocation userLocation, final ZonedDateTime date) {
-        return getBrightStarPositions(userLocation, date);
+    @Cacheable(value = ApplicationConfiguration.NIGHT_OWL_CACHE, key = USER_LOCATION_AND_STAR_MAG_COMPLEX_KEY)
+    public List<StarPositionDto> getBrightStarPositionsCached(UserLocation userLocation, ZonedDateTime date, Double magnitude) {
+        return getBrightStarPositions(userLocation, date, magnitude);
     }
 
     private List<StarPositionDto> getStarPositions(final UserLocation userLocation, final ZonedDateTime date, final List<StarInfo> stars) {

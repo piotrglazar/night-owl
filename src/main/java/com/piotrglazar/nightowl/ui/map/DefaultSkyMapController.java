@@ -47,7 +47,8 @@ public class DefaultSkyMapController implements SkyMapController {
     }
 
     private java.util.List<StarPositionDto> getStarPositions() {
-        return starPositionProvider.getBrightStarPositionsCached(runtimeConfiguration.getUserLocation(), timeProvider.get());
+        return starPositionProvider.getBrightStarPositionsCached(runtimeConfiguration.getUserLocation(), timeProvider.get(),
+                runtimeConfiguration.getStarVisibilityMagnitude());
     }
 
     @Override

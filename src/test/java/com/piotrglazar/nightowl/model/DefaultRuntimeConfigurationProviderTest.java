@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.model;
 
 import com.google.common.collect.Lists;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,10 +13,14 @@ import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultRuntimeConfigurationProviderTest {
+
+    @Mock
+    private SkyObjectVisibilitySettingsRepository settingsRepository;
 
     @Mock
     private RuntimeConfigurationRepository repository;
@@ -36,7 +41,7 @@ public class DefaultRuntimeConfigurationProviderTest {
     }
 
     @Test
-    public void shouldUserRepositoryToUpdateConfiguration() {
+    public void shouldUseRepositoryToUpdateConfiguration() {
         // given
         final RuntimeConfiguration runtimeConfiguration = new RuntimeConfiguration();
 
@@ -44,6 +49,7 @@ public class DefaultRuntimeConfigurationProviderTest {
         provider.updateConfiguration(runtimeConfiguration);
 
         // then
-        verify(repository).saveAndFlush(runtimeConfiguration);
+        verify(settingsRepository).save(any(SkyObjectVisibilitySettings.class));
+        verify(repository).save(runtimeConfiguration);
     }
 }
