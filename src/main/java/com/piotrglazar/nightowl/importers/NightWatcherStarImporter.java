@@ -44,7 +44,7 @@ public class NightWatcherStarImporter {
 
     private static void verifyArguments(final String[] args) {
         if (args == null || args.length == 0) {
-            throw new IllegalArgumentException("Expecting path to star file as the first argument");
+            throw new IllegalArgumentException("Expecting path to star file (cat_mis_65_eng.txt) as the first argument");
         }
     }
 
