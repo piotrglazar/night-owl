@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -39,12 +40,17 @@ public class DatabaseConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Bean
-    public DataSource dataSource() {
-        return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:/home/nightowl/production", "sa", "");
+    public DataSource dataSource(DatabaseLocation databaseLocation) {
+        final String databaseFileLocation = databaseLocation.getDatabaseLocation();
+
+        LOG.info("Using database in {}/db/production", databaseFileLocation);
+
+        return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:" + databaseFileLocation, "sa", "");
     }
 
     @Bean
     @Autowired
+    @DependsOn("databaseFromScriptReader")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource,
                                                                        final JpaVendorAdapter jpaVendorAdapter) {
         final LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
@@ -55,6 +61,7 @@ public class DatabaseConfiguration {
     }
 
     @Bean
+    @DependsOn("databaseFromScriptReader")
     public JpaVendorAdapter jpaVendorAdapter() {
         final HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
         jpaVendorAdapter.setShowSql(true);
@@ -64,6 +71,7 @@ public class DatabaseConfiguration {
     }
 
     @Bean
+    @DependsOn("databaseFromScriptReader")
     public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
