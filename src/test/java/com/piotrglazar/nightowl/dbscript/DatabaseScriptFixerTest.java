@@ -1,0 +1,83 @@
+package com.piotrglazar.nightowl.dbscript;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+@RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("all")
+public class DatabaseScriptFixerTest {
+
+    @Mock
+    private FileReader fileReader;
+
+    private DatabaseScriptFixer databaseScriptFixer;
+
+    @Test
+    public void shouldFixScriptByRemovingUnwantedLines() throws IOException {
+        // given
+        final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
+        given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1", "line2", "line3", "line4").stream());
+        given(fileReader.getNotEmptyLines("forbidden")).willReturn(Sets.newHashSet("line1", "line2", "line3"));
+        given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet());
+        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "forbidden", "tail");
+
+        // when
+        databaseScriptFixer.fixScriptFile(path);
+
+        // then
+        assertThat(Files.readAllLines(path, Charsets.UTF_8)).containsExactly("line0", "line4");
+
+        // cleanup
+        path.toFile().delete();
+    }
+
+    @Test
+    public void shouldFixScriptByMovingSpecificLinesToTail() throws IOException {
+        // given
+        final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
+        given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1", "line2", "line3", "line4").stream());
+        given(fileReader.getNotEmptyLines("forbidden")).willReturn(Sets.newHashSet());
+        given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet("line1", "line2"));
+        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "forbidden", "tail");
+
+        // when
+        databaseScriptFixer.fixScriptFile(path);
+
+        // then
+        assertThat(Files.readAllLines(path, Charsets.UTF_8)).containsExactly("line0", "line3", "line4", "line1", "line2");
+
+        // cleanup
+        path.toFile().delete();
+    }
+
+    @Test
+    public void shouldRemovingLineTakePrecedenceOverMovingLineToTail() throws IOException {
+        // given
+        final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
+        given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1").stream());
+        given(fileReader.getNotEmptyLines("forbidden")).willReturn(Sets.newHashSet("line0"));
+        given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet("line0"));
+        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "forbidden", "tail");
+
+        // when
+        databaseScriptFixer.fixScriptFile(path);
+
+        // then
+        assertThat(Files.readAllLines(path, Charsets.UTF_8)).containsExactly("line1");
+
+        // cleanup
+        path.toFile().delete();
+    }
+}
