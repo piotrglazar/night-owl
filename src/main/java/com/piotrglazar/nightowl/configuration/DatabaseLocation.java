@@ -9,8 +9,12 @@ import java.nio.file.Paths;
 @Profile("default")
 public class DatabaseLocation {
 
+    public String getDatabaseRootLocation() {
+        return ApplicationConfiguration.getCurrentDirectory() + "/db";
+    }
+
     public String getDatabaseLocation() {
-        return ApplicationConfiguration.getCurrentDirectory() + "/db/production";
+        return getDatabaseRootLocation() + "/production";
     }
 
     public String getDatabaseScriptLocation() {
