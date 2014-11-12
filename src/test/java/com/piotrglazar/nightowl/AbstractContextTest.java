@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl;
 
+import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import junitparams.JUnitParamsRunner;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -9,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ContextConfiguration(classes = ApplicationConfiguration.class)
 @ActiveProfiles("test")
 @SuppressWarnings("all")
 public abstract class AbstractContextTest {
