@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.configuration;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.piotrglazar.nightowl.DatabaseFromScriptReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -17,19 +18,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-@Component
+@Component("databaseFromScriptReader")
 @Profile("default")
-public class DatabaseFromScriptReader {
+public class DefaultDatabaseFromScriptReader implements DatabaseFromScriptReader {
 
     private final DataSource dataSource;
     private final DatabaseLocation databaseLocation;
 
     @Autowired
-    public DatabaseFromScriptReader(DataSource dataSource, DatabaseLocation databaseLocation) {
+    public DefaultDatabaseFromScriptReader(DataSource dataSource, DatabaseLocation databaseLocation) {
         this.dataSource = dataSource;
         this.databaseLocation = databaseLocation;
     }
 
+    @Override
     @PostConstruct
     public void createDatabaseFromScript() {
         if (databaseLocation.databaseNeedsCreation()) {

@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.dbscript;
 
+import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.junit.Test;
 
 import java.util.Set;

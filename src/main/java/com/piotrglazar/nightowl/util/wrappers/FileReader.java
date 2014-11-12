@@ -1,4 +1,4 @@
-package com.piotrglazar.nightowl.dbscript;
+package com.piotrglazar.nightowl.util.wrappers;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -16,13 +16,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-@Profile("dbScript")
+@Profile({"dbScript", "importing"})
 public class FileReader {
 
-    public Stream<String> getNotEmptyLines(final Path databaseScriptFileLocation) {
+    public Stream<String> getNotEmptyLines(final Path location) {
         try {
-            return Files.readAllLines(databaseScriptFileLocation, Charsets.UTF_8)
-                    .stream()
+            return Files.lines(location, Charsets.UTF_8)
                     .filter(s -> !s.isEmpty());
         } catch (IOException e) {
             throw new IllegalStateException(e);

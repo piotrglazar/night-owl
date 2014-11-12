@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.dbscript;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
