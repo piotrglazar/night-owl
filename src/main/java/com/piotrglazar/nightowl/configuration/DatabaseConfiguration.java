@@ -34,7 +34,7 @@ import java.lang.invoke.MethodHandles;
 @Configuration
 @EnableJpaRepositories(basePackages = "com.piotrglazar.nightowl")
 @EnableTransactionManagement
-@Profile("default")
+@Profile({"default", "importing"})
 public class DatabaseConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

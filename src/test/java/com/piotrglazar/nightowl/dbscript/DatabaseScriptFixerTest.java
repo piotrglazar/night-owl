@@ -3,6 +3,7 @@ package com.piotrglazar.nightowl.dbscript;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

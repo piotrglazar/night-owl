@@ -28,7 +28,7 @@ public class DatabaseFromScriptReaderTest {
     private DatabaseLocation databaseLocation;
 
     @InjectMocks
-    private DatabaseFromScriptReader reader;
+    private DefaultDatabaseFromScriptReader reader;
 
     @Test
     public void shouldNotExecuteScriptWhenDatabaseIsAlreadyCreated() {

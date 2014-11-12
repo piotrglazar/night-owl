@@ -1,4 +1,4 @@
-package com.piotrglazar.nightowl.dbscript;
+package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.configuration.DatabaseLocation;
 import org.hsqldb.jdbc.JDBCDriver;
@@ -11,9 +11,10 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"com.piotrglazar.nightowl.dbscript", "com.piotrglazar.nightowl.util.wrappers"})
-@Profile("dbScript")
-public class DatabaseScriptConfiguration {
+@ComponentScan(basePackages = {"com.piotrglazar.nightowl.importers", "com.piotrglazar.nightowl.dbscript",
+        "com.piotrglazar.nightowl.configuration", "com.piotrglazar.nightowl.model", "com.piotrglazar.nightowl.util.wrappers"})
+@Profile("importing")
+public class ImporterConfiguration {
 
     @Bean
     public DatabaseLocation databaseLocation() {

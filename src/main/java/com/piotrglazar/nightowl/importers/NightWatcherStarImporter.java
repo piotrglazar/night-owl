@@ -2,57 +2,41 @@ package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.StarInfoProvider;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
+@Profile("importing")
 public class NightWatcherStarImporter {
 
     private static final Logger LOG = LoggerFactory.getLogger("STAR_IMPORTER");
     public static final double APPARENT_MAG_FACTOR = 1000.0;
 
     private final StarInfoProvider starInfoProvider;
+    private final ImportedLineFixer importedLineFixer;
+    private final FileReader fileReader;
 
     @Autowired
-    public NightWatcherStarImporter(final StarInfoProvider starInfoProvider) {
+    public NightWatcherStarImporter(StarInfoProvider starInfoProvider, ImportedLineFixer importedLineFixer, FileReader fileReader) {
         this.starInfoProvider = starInfoProvider;
+        this.importedLineFixer = importedLineFixer;
+        this.fileReader = fileReader;
     }
 
-    public static void main(String[] args) throws IOException {
-        verifyArguments(args);
-
-        final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        applicationContext.registerShutdownHook();
-
-        final Path starsFilePath = Paths.get(args[0]);
-        LOG.info("Importing stars from {}", starsFilePath);
-        applicationContext.getBean(NightWatcherStarImporter.class).importStars(starsFilePath);
-        LOG.info("Done importing stars");
-        System.exit(0);
-    }
-
-    private static void verifyArguments(final String[] args) {
-        if (args == null || args.length == 0) {
-            throw new IllegalArgumentException("Expecting path to star file (cat_mis_65_eng.txt) as the first argument");
-        }
-    }
-
-    public void importStars(final Path path) throws IOException {
+    public void importStars(final Path path) {
         LOG.info("Delete previous stars");
         starInfoProvider.deleteAll();
 
-        Files.lines(path)
+        fileReader.getNotEmptyLines(path)
                 .map(String::trim)
                 .map(line -> line.replace(',', '.'))
                 .map(line -> line.split(" +"))
@@ -84,9 +68,19 @@ public class NightWatcherStarImporter {
 
     private String starNameIfExists(final String[] shards) {
         if (shards.length >= 14) {
-            return getRemainingShardsAsStarName(shards);
+            return starNameFixed(getRemainingShardsAsStarName(shards));
         } else {
             return "";
+        }
+    }
+
+    private String starNameFixed(final String starName) {
+        if (importedLineFixer.shouldBeRemoved(starName)) {
+            return "";
+        } else if (importedLineFixer.shouldBeReplaced(starName)) {
+            return importedLineFixer.getReplacement(starName);
+        } else {
+            return starName;
         }
     }
 
