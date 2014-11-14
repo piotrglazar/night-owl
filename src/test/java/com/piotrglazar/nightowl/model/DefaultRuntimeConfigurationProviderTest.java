@@ -9,9 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.googlecode.catchexception.CatchException.catchException;
-import static com.googlecode.catchexception.CatchException.caughtException;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -28,16 +25,13 @@ public class DefaultRuntimeConfigurationProviderTest {
     @InjectMocks
     private DefaultRuntimeConfigurationProvider provider;
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void shouldFailWhenThereIsMoreThanOneRuntimeConfiguration() {
         // given
         given(repository.findAll()).willReturn(Lists.newArrayList(new RuntimeConfiguration(), new RuntimeConfiguration()));
 
         // when
-        catchException(provider).getConfiguration();
-
-        // then
-        assertThat((Exception) caughtException()).isInstanceOf(IllegalStateException.class);
+        provider.getConfiguration();
     }
 
     @Test

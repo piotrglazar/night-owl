@@ -24,16 +24,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.List;
 import java.util.Optional;
 
-import static com.googlecode.catchexception.CatchException.catchException;
-import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainMenuControllerTest {
@@ -100,17 +95,14 @@ public class MainMenuControllerTest {
         verify(nightOwlRuntimeConfiguration, never()).updateUserLocation(any(UserLocation.class));
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void shouldFailWhenThereAreNoSuchUserLocation() {
         // given
         final UserLocationDto userLocationNotExistingInDb = arbitraryUserLocationDtoWithId(123);
         given(userLocationRepository.findOne(123L)).willReturn(null);
 
         // when
-        catchException(mainMenuController).updateUserLocation(userLocationNotExistingInDb);
-
-        // then
-        assertThat((Exception) caughtException()).isInstanceOf(IllegalStateException.class);
+        mainMenuController.updateUserLocation(userLocationNotExistingInDb);
     }
 
     @Test
