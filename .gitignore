@@ -1,4 +1,3 @@
-*.class
 # JetBrains
 .idea/
 *.iml
@@ -22,7 +21,7 @@ build
 hs_err_pid*
 
 # Production & Test databases
-db/
+database/
 
 # notes
 stuff.txt

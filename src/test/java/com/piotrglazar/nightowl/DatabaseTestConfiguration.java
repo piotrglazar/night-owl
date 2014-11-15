@@ -54,9 +54,9 @@ public class DatabaseTestConfiguration {
     public DataSource dataSource() {
         final String currentDirectory = ApplicationConfiguration.getCurrentDirectory();
 
-        LOG.info("Creating test database in {}/db/test", currentDirectory);
+        LOG.info("Creating test database in {}/database/test", currentDirectory);
 
-        return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:" + currentDirectory + "/db/test", "sa", "");
+        return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:" + currentDirectory + "/database/test", "sa", "");
     }
 
     @Bean
