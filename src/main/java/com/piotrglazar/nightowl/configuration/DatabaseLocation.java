@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class DatabaseLocation {
 
     public String getDatabaseRootLocation() {
-        return ApplicationConfiguration.getCurrentDirectory() + "/db";
+        return ApplicationConfiguration.getCurrentDirectory() + "/database";
     }
 
     public String getDatabaseLocation() {

@@ -16,7 +16,7 @@ public class DatabaseLocationTest {
     @Test
     public void shouldProductionDatabaseBeLocatedInDbProduction() {
         // given
-        final String expectedLocationSuffix = "db/production";
+        final String expectedLocationSuffix = "database/production";
 
         // when
         final String location = databaseLocation.getDatabaseLocation();

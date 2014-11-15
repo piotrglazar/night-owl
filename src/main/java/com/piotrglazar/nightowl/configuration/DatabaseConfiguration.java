@@ -43,7 +43,7 @@ public class DatabaseConfiguration {
     public DataSource dataSource(DatabaseLocation databaseLocation) {
         final String databaseFileLocation = databaseLocation.getDatabaseLocation();
 
-        LOG.info("Using database in {}/db/production", databaseFileLocation);
+        LOG.info("Using database in {}", databaseFileLocation);
 
         return new SimpleDriverDataSource(new JDBCDriver(), "jdbc:hsqldb:file:" + databaseFileLocation, "sa", "");
     }
