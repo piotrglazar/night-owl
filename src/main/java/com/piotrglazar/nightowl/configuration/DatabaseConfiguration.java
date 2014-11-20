@@ -119,6 +119,7 @@ public class DatabaseConfiguration {
             if (skyObjectVisibilitySettingsRepository.count() == 0) {
                 SkyObjectVisibilitySettings skyObjectVisibilitySettings = new SkyObjectVisibilitySettings();
                 skyObjectVisibilitySettings.setStarVisibilityMag(StarPositionProvider.BRIGHT_STAR_MAGNITUDE);
+                skyObjectVisibilitySettings.setShowStarLabels(true);
                 return skyObjectVisibilitySettingsRepository.saveAndFlush(skyObjectVisibilitySettings);
             } else {
                 return skyObjectVisibilitySettingsRepository.findAll().get(0);

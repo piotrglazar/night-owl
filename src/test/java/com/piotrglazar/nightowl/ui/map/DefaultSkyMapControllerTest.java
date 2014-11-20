@@ -11,11 +11,7 @@ import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.awt.*;
 import java.time.ZonedDateTime;
@@ -24,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JUnitParamsRunner.class)
@@ -72,6 +69,7 @@ public class DefaultSkyMapControllerTest {
         skyMapController.draw(graphics, width, height);
 
         // then
+        verifyRuntimeConfigurationWasUsed();
         verify(skyMap).draw(graphicsCaptor.capture(), skyMapDtoCaptor.capture());
         SkyMapDto skyMapDto = skyMapDtoCaptor.getValue();
         assertThat(skyMapDto.getRadius()).isEqualTo(expectedRadius);
@@ -89,6 +87,12 @@ public class DefaultSkyMapControllerTest {
 
         // then
         verify(starPositionProvider).getBrightStarPositionsCached(any(UserLocation.class), any(ZonedDateTime.class), anyDouble());
+    }
+
+    private void verifyRuntimeConfigurationWasUsed() {
+        verify(runtimeConfiguration).skyDisplayContext();
+        verify(runtimeConfiguration, atLeastOnce()).getUserLocation();
+        verify(runtimeConfiguration).getStarVisibilityMagnitude();
     }
 
     private void arbitraryUserLocation() {

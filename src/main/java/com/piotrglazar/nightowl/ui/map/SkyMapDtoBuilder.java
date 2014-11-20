@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.ui.map;
 
 import com.google.common.collect.Lists;
+import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class SkyMapDtoBuilder {
     private int y;
     private double azimuthDistance;
     private List<StarPositionDto> starPositions = Lists.newLinkedList();
+    private SkyDisplayContext skyDisplayContext;
 
     public SkyMapDtoBuilder radius(final int radius) {
         this.radius = radius;
@@ -38,7 +40,12 @@ public class SkyMapDtoBuilder {
         return this;
     }
 
+    public SkyMapDtoBuilder skyDisplayContext(final SkyDisplayContext skyDisplayContext) {
+        this.skyDisplayContext = skyDisplayContext;
+        return this;
+    }
+
     public SkyMapDto build() {
-        return new SkyMapDto(radius, x, y, azimuthDistance, starPositions);
+        return new SkyMapDto(radius, x, y, azimuthDistance, starPositions, skyDisplayContext);
     }
 }

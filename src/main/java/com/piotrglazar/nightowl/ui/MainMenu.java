@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.ui;
 
+import com.piotrglazar.nightowl.model.UserLocationDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +47,23 @@ public class MainMenu {
         final JMenuItem visibilitySettings = createVisibilitySettingsItem();
         fileMenu.add(visibilitySettings);
 
+        final JMenuItem skyObjectSettingsItem = createSkyObjectSettingsItem();
+        fileMenu.add(skyObjectSettingsItem);
+
         fileMenu.addSeparator();
 
         final JMenuItem exitItem = createFileMenuExitItem();
         fileMenu.add(exitItem);
 
         return fileMenu;
+    }
+
+    private JMenuItem createSkyObjectSettingsItem() {
+        final JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem("Labels visibility settings");
+        menuItem.setState(mainMenuController.currentShowStarLabels());
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.ALT_MASK));
+        menuItem.addActionListener(a -> mainMenuController.updateStarLabelsVisibility(menuItem.isSelected()));
+        return menuItem;
     }
 
     private JMenuItem createVisibilitySettingsItem() {
@@ -104,7 +116,7 @@ public class MainMenu {
                     JOptionPane.QUESTION_MESSAGE, null, mainMenuController.getAllUserLocations().toArray(),
                     mainMenuController.getCurrentUserLocation());
             LOG.info("User response {}", response);
-            mainMenuController.updateUserLocation((com.piotrglazar.nightowl.model.UserLocationDto) response);
+            mainMenuController.updateUserLocation((UserLocationDto) response);
         });
         return location;
     }
