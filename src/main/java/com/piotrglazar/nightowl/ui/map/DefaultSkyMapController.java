@@ -42,6 +42,7 @@ public class DefaultSkyMapController implements SkyMapController {
                                             .y(y)
                                             .azimuthDistance(azimuthDistance)
                                             .starPositions(starPositions)
+                                            .skyDisplayContext(runtimeConfiguration.skyDisplayContext())
                                             .build();
         skyMap.draw(graphics, skyMapDto);
     }

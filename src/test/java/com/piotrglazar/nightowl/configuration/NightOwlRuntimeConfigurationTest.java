@@ -4,6 +4,7 @@ import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
@@ -94,8 +95,50 @@ public class NightOwlRuntimeConfigurationTest {
         nightOwlRuntimeConfiguration.updateStarVisibilityMagnitude(starVisibilityMagnitude);
 
         // then
-        assertThat(nightOwlRuntimeConfiguration.getStarVisibilityMagnitude()).isEqualTo(2.0);
+        assertThat(nightOwlRuntimeConfiguration.getStarVisibilityMagnitude()).isEqualTo(starVisibilityMagnitude);
         verify(configurationProvider).updateConfiguration(runtimeConfiguration);
+    }
+
+    @Test
+    public void shouldCreateSkyDisplayContext() throws Exception {
+        // given
+        given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
+        nightOwlRuntimeConfiguration.loadRuntimeConfiguration();
+        setSkyObjectVisibilitySettings(1.0, true);
+
+        // when
+        final SkyDisplayContext skyDisplayContext = nightOwlRuntimeConfiguration.skyDisplayContext();
+
+        // then
+        assertThat(skyDisplayContext.getStarVisibilityMag()).isEqualTo(1.0);
+        assertThat(skyDisplayContext.shouldShowStarLabels()).isEqualTo(true);
+    }
+
+    @Test
+    public void shouldUpdateShowStarLabels() {
+        // given
+        setUpVisibilitySettings();
+        given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
+        nightOwlRuntimeConfiguration.loadRuntimeConfiguration();
+
+        // when
+        nightOwlRuntimeConfiguration.updateShowStarLabels(true);
+
+        // then
+        assertThat(nightOwlRuntimeConfiguration.skyDisplayContext().shouldShowStarLabels()).isTrue();
+        verify(configurationProvider).updateConfiguration(runtimeConfiguration);
+    }
+
+    private void setUpVisibilitySettings() {
+        final SkyObjectVisibilitySettings visibilitySettings = runtimeConfiguration.getVisibilitySettings();
+        visibilitySettings.setShowStarLabels(false);
+        visibilitySettings.setStarVisibilityMag(0.0);
+    }
+
+    private void setSkyObjectVisibilitySettings(double starVisibilityMagnitude, boolean showStarLabels) {
+        final SkyObjectVisibilitySettings visibilitySettings = runtimeConfiguration.getVisibilitySettings();
+        visibilitySettings.setStarVisibilityMag(starVisibilityMagnitude);
+        visibilitySettings.setShowStarLabels(showStarLabels);
     }
 
     private UserLocation arbitraryUserLocation() {

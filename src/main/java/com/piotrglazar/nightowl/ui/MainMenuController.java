@@ -96,4 +96,13 @@ public class MainMenuController {
     private boolean isNewStarVisibilityMagnitudeWithinBounds(final double newStarVisibilityMag) {
         return newStarVisibilityMag >= minimalStarMagnitude() && newStarVisibilityMag <= maximalStarMagnitude();
     }
+
+    public void updateStarLabelsVisibility(final boolean showStarLabels) {
+        nightOwlRuntimeConfiguration.updateShowStarLabels(showStarLabels);
+        updateApplication("Changing show star labels");
+    }
+
+    public boolean currentShowStarLabels() {
+        return nightOwlRuntimeConfiguration.skyDisplayContext().shouldShowStarLabels();
+    }
 }

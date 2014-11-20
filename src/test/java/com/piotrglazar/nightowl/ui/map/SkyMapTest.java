@@ -1,9 +1,10 @@
 package com.piotrglazar.nightowl.ui.map;
 
 import com.google.common.collect.Lists;
+import com.piotrglazar.nightowl.model.SkyDisplayContext;
+import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
-import com.piotrglazar.nightowl.model.StarPositionDto;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -22,9 +23,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnitParamsRunner.class)
 @SuppressWarnings("unchecked")
@@ -52,7 +53,11 @@ public class SkyMapTest {
     }
 
     @Test
-    public void shouldUseAllComponentsToDrawSkyMap() {
+    @Parameters({
+            "true",
+            "false"
+    })
+    public void shouldUseAllComponentsToDrawSkyMap(boolean shouldDrawStarLabel) {
         // given
         final java.util.List<CardinalDirections> cardinalDirections = mockDirectionsSigns();
         final SkyMapDto skyMapDto = new SkyMapDtoBuilder()
@@ -61,6 +66,7 @@ public class SkyMapTest {
                                             .y(160)
                                             .radius(65)
                                             .azimuthDistance(55.5)
+                                            .skyDisplayContext(new SkyDisplayContext(0.0, shouldDrawStarLabel))
                                             .build();
         given(skyMapCalculations.starLocation(anyInt(), anyInt(), anyInt(), anyDouble(), anyDouble())).willReturn(new Point(1, 2));
         given(skyMapCalculations.distanceFromCenter(eq(160), eq(65), eq(55.5))).willReturn(23);
@@ -74,6 +80,8 @@ public class SkyMapTest {
         verify(skyMapDot).draw(eq(graphics), eq(100), eq(23));
         verify(cardinalDirections).forEach(any(Consumer.class));
         verify(graphics).fillRect(eq(199), eq(2), anyInt(), anyInt());
+        // to draw or not to draw?
+        verify(graphics, times(shouldDrawStarLabel ? 1 : 0)).drawString(anyString(), anyInt(), anyInt());
     }
 
     @Test

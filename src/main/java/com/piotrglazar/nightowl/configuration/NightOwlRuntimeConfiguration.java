@@ -1,7 +1,9 @@
 package com.piotrglazar.nightowl.configuration;
 
 import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
+import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
+import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.slf4j.Logger;
@@ -46,8 +48,13 @@ public class NightOwlRuntimeConfiguration {
         return runtimeConfiguration.getChosenUserLocation();
     }
 
-    public Double getStarVisibilityMagnitude() {
+    public double getStarVisibilityMagnitude() {
         return runtimeConfiguration.getVisibilitySettings().getStarVisibilityMag();
+    }
+
+    public SkyDisplayContext skyDisplayContext() {
+        final SkyObjectVisibilitySettings visibilitySettings = runtimeConfiguration.getVisibilitySettings();
+        return new SkyDisplayContext(visibilitySettings.getStarVisibilityMag(), visibilitySettings.getShowStarLabels());
     }
 
     public void updateUserLocation(UserLocation newUserLocation) {
@@ -68,5 +75,14 @@ public class NightOwlRuntimeConfiguration {
         configurationProvider.updateConfiguration(runtimeConfiguration);
 
         LOG.info("Finished updating runtime configuration - new star visibility magnitude");
+    }
+
+    public void updateShowStarLabels(final boolean showStarLabels) {
+        LOG.info("Updating runtime configuration - show star labels changed");
+
+        runtimeConfiguration.getVisibilitySettings().setShowStarLabels(showStarLabels);
+        configurationProvider.updateConfiguration(runtimeConfiguration);
+
+        LOG.info("Finished updating runtime configuration - show star labels changed");
     }
 }

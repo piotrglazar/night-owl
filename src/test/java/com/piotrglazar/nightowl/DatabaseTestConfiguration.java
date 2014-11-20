@@ -5,8 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.SkyObjectVisibilitySettingsRepository;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
+import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
@@ -62,8 +64,8 @@ public class DatabaseTestConfiguration {
     @Bean
     @Autowired
     public DatabasePopulator databasePopulator(StarInfoRepository starInfoRepository, UserLocationRepository userLocationRepository,
-            RuntimeConfigurationRepository runtimeConfigurationRepository) {
-        return new DatabasePopulator(userLocationRepository, runtimeConfigurationRepository, starInfoRepository);
+            RuntimeConfigurationRepository runtimeConfigurationRepository, SkyObjectVisibilitySettingsRepository settingsRepository) {
+        return new DatabasePopulator(userLocationRepository, runtimeConfigurationRepository, starInfoRepository, settingsRepository);
     }
 
     static class DatabasePopulator {
@@ -71,13 +73,15 @@ public class DatabaseTestConfiguration {
         private final UserLocationRepository userLocationRepository;
         private final RuntimeConfigurationRepository runtimeConfigurationRepository;
         private final StarInfoRepository starInfoRepository;
+        private final SkyObjectVisibilitySettingsRepository settingsRepository;
 
         public DatabasePopulator(UserLocationRepository userLocationRepository,
                                  RuntimeConfigurationRepository runtimeConfigurationRepository,
-                                 StarInfoRepository starInfoRepository) {
+                                 StarInfoRepository starInfoRepository, SkyObjectVisibilitySettingsRepository settingsRepository) {
             this.userLocationRepository = userLocationRepository;
             this.runtimeConfigurationRepository = runtimeConfigurationRepository;
             this.starInfoRepository = starInfoRepository;
+            this.settingsRepository = settingsRepository;
         }
 
         @PostConstruct
@@ -90,7 +94,10 @@ public class DatabaseTestConfiguration {
             final UserLocation warsaw = warsaw();
             userLocationRepository.saveAndFlush(warsaw);
 
-            runtimeConfigurationRepository.saveAndFlush(defaultRuntimeConfiguration(warsaw));
+            final SkyObjectVisibilitySettings visibilitySettings = defaultVisibilitySettings();
+            settingsRepository.saveAndFlush(visibilitySettings);
+
+            runtimeConfigurationRepository.saveAndFlush(defaultRuntimeConfiguration(warsaw, visibilitySettings));
         }
 
         private void saveSomeStarInfo() {
@@ -98,10 +105,19 @@ public class DatabaseTestConfiguration {
             starInfoRepository.flush();
         }
 
-        private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation) {
+        private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation,
+                                                                 final SkyObjectVisibilitySettings visibilitySettings) {
             final RuntimeConfiguration runtimeConfiguration = new RuntimeConfiguration();
             runtimeConfiguration.setChosenUserLocation(defaultLocation);
+            runtimeConfiguration.setVisibilitySettings(visibilitySettings);
             return runtimeConfiguration;
+        }
+
+        private SkyObjectVisibilitySettings defaultVisibilitySettings() {
+            final SkyObjectVisibilitySettings skyObjectVisibilitySettings = new SkyObjectVisibilitySettings();
+            skyObjectVisibilitySettings.setShowStarLabels(true);
+            skyObjectVisibilitySettings.setStarVisibilityMag(0.0);
+            return skyObjectVisibilitySettings;
         }
 
         private UserLocation warsaw() {

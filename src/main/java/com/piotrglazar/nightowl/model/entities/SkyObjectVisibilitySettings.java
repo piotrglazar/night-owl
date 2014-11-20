@@ -20,6 +20,8 @@ public final class SkyObjectVisibilitySettings {
 
     private Double starVisibilityMag;
 
+    private Boolean showStarLabels;
+
     public Long getId() {
         return id;
     }
@@ -34,6 +36,14 @@ public final class SkyObjectVisibilitySettings {
 
     public void setStarVisibilityMag(final Double starVisibilityMag) {
         this.starVisibilityMag = starVisibilityMag;
+    }
+
+    public void setShowStarLabels(final Boolean showStarLabels) {
+        this.showStarLabels = showStarLabels;
+    }
+
+    public Boolean getShowStarLabels() {
+        return showStarLabels;
     }
 
     @Override
@@ -57,6 +67,7 @@ public final class SkyObjectVisibilitySettings {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("starVisibilityMag", starVisibilityMag)
+                .add("showStarLabels", showStarLabels)
                 .toString();
     }
 }

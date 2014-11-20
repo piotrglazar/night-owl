@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.util.Arrays;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
 public class SkyMap {
 
@@ -39,13 +41,22 @@ public class SkyMap {
     private void drawStarPositions(final SkyMapDto skyMap, final Graphics graphics) {
         final int x = skyMap.getX();
         final int y = skyMap.getY();
-        skyMap.getStarPositions().stream()
+        final java.util.List<PointAndName> pointAndNames = skyMap.getStarPositions().stream()
                 .map(p -> new PointAndName(skyMapCalculations.starLocation(x, y, skyMap.getRadius(), p.getAzimuth(), p.getZenithDistance()),
-                        p.getName()))
-                .forEach(p -> {
-                    graphics.fillRect(mirrorXCoordinate(p.getX(), x), p.getY(), 1, 1);
-                    graphics.drawString(p.getName(), mirrorXCoordinate(p.getX(), x), p.getY());
-                });
+                        p.getName())).collect(toList());
+
+        drawStars(graphics, x, pointAndNames);
+        drawStarLabelsIfNecessary(skyMap, graphics, x, pointAndNames);
+    }
+
+    private void drawStarLabelsIfNecessary(SkyMapDto skyMap, Graphics graphics, int x, java.util.List<PointAndName> pointAndNames) {
+        if (skyMap.getSkyDisplayContext().shouldShowStarLabels()) {
+            pointAndNames.forEach(p -> graphics.drawString(p.getName(), mirrorXCoordinate(p.getX(), x), p.getY()));
+        }
+    }
+
+    private void drawStars(Graphics graphics, int x, java.util.List<PointAndName> pointAndNames) {
+        pointAndNames.forEach(p -> graphics.fillRect(mirrorXCoordinate(p.getX(), x), p.getY(), 1, 1));
     }
 
     public int mirrorXCoordinate(final int pointX, final int x) {

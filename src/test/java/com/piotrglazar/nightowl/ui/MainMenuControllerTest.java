@@ -5,6 +5,7 @@ import com.piotrglazar.nightowl.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
@@ -181,6 +182,28 @@ public class MainMenuControllerTest {
 
         // then
         assertThat(starVisibilityMagnitude).isEqualTo(2.0);
+    }
+
+    @Test
+    public void shouldFetchCurrentShowStarLabelSettings() {
+        // given
+        given(nightOwlRuntimeConfiguration.skyDisplayContext()).willReturn(new SkyDisplayContext(2.0, true));
+
+        // when
+        final boolean currentShowStarLabels = mainMenuController.currentShowStarLabels();
+
+        // then
+        assertThat(currentShowStarLabels).isTrue();
+    }
+
+    @Test
+    public void shouldUpdateApplicationStateWhenShowStarLabelsChanged() {
+        // when
+        mainMenuController.updateStarLabelsVisibility(true);
+
+        // then
+        verify(nightOwlRuntimeConfiguration).updateShowStarLabels(true);
+        assertThatReloadsAppAndRepaintsUi();
     }
 
     private void assertThatReloadsAppAndRepaintsUi() {
