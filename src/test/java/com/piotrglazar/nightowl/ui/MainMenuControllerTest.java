@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.ui;
 
 import com.google.common.collect.Lists;
-import com.piotrglazar.nightowl.MainWindow;
+import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;

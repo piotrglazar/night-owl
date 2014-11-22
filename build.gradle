@@ -12,6 +12,7 @@ apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'sonar-runner'
 
 jar {
     baseName = 'night-owl'
@@ -75,6 +76,15 @@ jacocoTestReport {
         html.destination "$buildDir/reports/jacoco"
         xml.enabled = true
         html.enabled = true
+    }
+}
+
+sonarRunner {
+    toolVersion = '2.4'
+    sonarProperties {
+        property "sonar.exclusions", "src/main/java/com/piotrglazar/nightowl/configuration/*.java," +
+                    "src/main/java/com/piotrglazar/nightowl/dbscript/DatabaseScriptConfiguration" +
+                    "src/main/java/com/piotrglazar/nightowl/importers/ImporterConfiguration"
     }
 }
 

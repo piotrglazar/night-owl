@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.ui;
 
-import com.piotrglazar.nightowl.MainWindow;
-import com.piotrglazar.nightowl.UiUpdater;
+import com.piotrglazar.nightowl.api.MainWindow;
+import com.piotrglazar.nightowl.api.UiUpdater;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;

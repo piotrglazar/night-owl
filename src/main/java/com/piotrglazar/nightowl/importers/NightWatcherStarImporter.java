@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.importers;
 
-import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.logic;
 
-import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.model.entities.StarInfo;

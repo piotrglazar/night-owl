@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.importers;
 
 import com.google.common.base.Charsets;
-import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.junit.Test;

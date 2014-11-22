@@ -1,4 +1,4 @@
-package com.piotrglazar.nightowl;
+package com.piotrglazar.nightowl.api;
 
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.messages.StarsVisibilityMessage;

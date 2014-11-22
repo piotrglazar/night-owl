@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.google.common.collect.Lists;
-import com.piotrglazar.nightowl.StarInfoProvider;
+import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
 import com.piotrglazar.nightowl.model.entities.StarInfo;

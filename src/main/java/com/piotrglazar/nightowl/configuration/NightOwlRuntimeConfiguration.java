@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
-import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
+import com.piotrglazar.nightowl.api.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;

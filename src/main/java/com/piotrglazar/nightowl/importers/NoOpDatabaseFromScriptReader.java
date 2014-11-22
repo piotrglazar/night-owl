@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.importers;
 
-import com.piotrglazar.nightowl.DatabaseFromScriptReader;
+import com.piotrglazar.nightowl.api.DatabaseFromScriptReader;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
