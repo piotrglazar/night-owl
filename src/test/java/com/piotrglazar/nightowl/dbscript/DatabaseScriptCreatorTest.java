@@ -81,7 +81,7 @@ public class DatabaseScriptCreatorTest {
 
     private File temporaryFile() {
         final File tmpFile = Files.newTemporaryFile();
-        assertThat(tmpFile.exists());
+        assertThat(tmpFile.exists()).isTrue();
         return tmpFile;
     }
 }

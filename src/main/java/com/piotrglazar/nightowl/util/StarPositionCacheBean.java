@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.util;
 
-import com.piotrglazar.nightowl.MainWindow;
+import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;

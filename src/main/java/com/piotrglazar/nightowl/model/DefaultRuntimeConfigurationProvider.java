@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.model;
 
 import com.google.common.base.Preconditions;
-import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
+import com.piotrglazar.nightowl.api.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;

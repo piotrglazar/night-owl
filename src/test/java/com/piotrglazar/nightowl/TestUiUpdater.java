@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl;
 
+import com.piotrglazar.nightowl.api.UiUpdater;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 

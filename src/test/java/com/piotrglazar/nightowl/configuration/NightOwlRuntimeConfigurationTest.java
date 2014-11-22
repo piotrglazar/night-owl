@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.configuration;
 
-import com.piotrglazar.nightowl.MainWindow;
-import com.piotrglazar.nightowl.RuntimeConfigurationProvider;
+import com.piotrglazar.nightowl.api.MainWindow;
+import com.piotrglazar.nightowl.api.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
 import com.piotrglazar.nightowl.model.SkyDisplayContext;

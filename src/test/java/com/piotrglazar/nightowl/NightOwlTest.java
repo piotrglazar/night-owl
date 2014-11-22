@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl;
 
+import com.piotrglazar.nightowl.api.UserInterface;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

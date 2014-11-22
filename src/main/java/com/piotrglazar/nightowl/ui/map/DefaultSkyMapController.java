@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.ui.map;
 
-import com.piotrglazar.nightowl.SkyMapController;
+import com.piotrglazar.nightowl.api.SkyMapController;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.logic.StarPositionProvider;
 import com.piotrglazar.nightowl.model.StarPositionDto;

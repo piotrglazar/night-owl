@@ -1,4 +1,4 @@
-package com.piotrglazar.nightowl;
+package com.piotrglazar.nightowl.api;
 
 import java.awt.*;
 

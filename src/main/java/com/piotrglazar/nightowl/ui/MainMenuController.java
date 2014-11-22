@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.ui;
 
 import com.google.common.base.Preconditions;
-import com.piotrglazar.nightowl.MainWindow;
+import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
@@ -83,7 +83,7 @@ public class MainMenuController {
                 nightOwlRuntimeConfiguration.updateStarVisibilityMagnitude(newStarVisibilityMag);
                 updateApplication("changing star visibility settings");
             }
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException e) {
             LOG.error("Error while parsing star visibility magnitude provided: {}", e);
         }
     }

@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.model;
 
-import com.piotrglazar.nightowl.UserLocationProvider;
+import com.piotrglazar.nightowl.api.UserLocationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.piotrglazar.nightowl.logic;
 
-import com.piotrglazar.nightowl.StarInfoProvider;
-import com.piotrglazar.nightowl.UserLocationProvider;
+import com.piotrglazar.nightowl.api.StarInfoProvider;
+import com.piotrglazar.nightowl.api.UserLocationProvider;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.entities.UserLocation;

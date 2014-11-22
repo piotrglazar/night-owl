@@ -9,9 +9,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class NightWatcherStarImporterRunner {
+public final class NightWatcherStarImporterRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger("STAR_IMPORTER");
+
+    private NightWatcherStarImporterRunner() {
+        // Utility class
+    }
 
     public static void main(String[] args) throws IOException {
         verifyArguments(args);
