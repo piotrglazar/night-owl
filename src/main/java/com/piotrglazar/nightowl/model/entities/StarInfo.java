@@ -2,39 +2,48 @@ package com.piotrglazar.nightowl.model.entities;
 
 import com.google.common.base.MoreObjects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 public final class StarInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     protected Long id;
 
+    @Column(nullable = false)
     private LocalTime rightAscension;
 
+    @Column(nullable = false)
     private double declination;
 
+    @Column(nullable = false)
     private String spectralType;
 
-    private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    private StarInfoDetails starInfoDetails;
 
+    @Column(nullable = false)
     private double apparentMagnitude;
 
     public StarInfo() {
 
     }
 
-    public StarInfo(LocalTime rightAscension, double declination, String spectralType, String name, double apparentMagnitude) {
+    public StarInfo(LocalTime rightAscension, double declination, String spectralType, StarInfoDetails starInfoDetails,
+                    double apparentMagnitude) {
         this.rightAscension = rightAscension;
         this.declination = declination;
         this.spectralType = spectralType;
-        this.name = name;
+        this.starInfoDetails = starInfoDetails;
         this.apparentMagnitude = apparentMagnitude;
     }
 
@@ -66,12 +75,12 @@ public final class StarInfo {
         this.declination = declination;
     }
 
-    public String getName() {
-        return name;
+    public Optional<StarInfoDetails> getStarInfoDetails() {
+        return Optional.ofNullable(starInfoDetails);
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setName(final StarInfoDetails starInfoDetails) {
+        this.starInfoDetails = starInfoDetails;
     }
 
     public double getApparentMagnitude() {
@@ -105,7 +114,7 @@ public final class StarInfo {
                 .add("rightAscension", rightAscension)
                 .add("declination", declination)
                 .add("spectralType", spectralType)
-                .add("name", name)
+                .add("starInfoDetails", starInfoDetails)
                 .add("apparentMagnitude", apparentMagnitude)
                 .toString();
     }

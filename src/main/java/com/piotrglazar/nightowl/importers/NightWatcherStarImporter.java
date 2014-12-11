@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class NightWatcherStarImporter {
                 .map(String::trim)
                 .map(line -> line.replace(',', '.'))
                 .map(line -> line.split(" +"))
-                .map(shards -> new StarInfo(rightAscension(shards), declination(shards), spectralType(shards), starNameIfExists(shards),
+                .map(shards -> new StarInfo(rightAscension(shards), declination(shards), spectralType(shards), starDetailsIfExist(shards),
                         apparentMagnitude(shards)))
                 .forEach(starInfoProvider::saveStarInfo);
         LOG.info("Imported stars: {}",  starInfoProvider.count());
@@ -66,11 +67,22 @@ public class NightWatcherStarImporter {
         return convertTimeAsFractionalPartOfHourToLocalTime(shards[0]);
     }
 
-    private String starNameIfExists(final String[] shards) {
+    private StarInfoDetails starDetailsIfExist(final String[] shards) {
         if (shards.length >= 14) {
-            return starNameFixed(getRemainingShardsAsStarName(shards));
+            return getStarInfoDetailsIfPossible(shards);
         } else {
-            return "";
+            // explicit null, handled by optional inside StarInfo
+            return null;
+        }
+    }
+
+    private StarInfoDetails getStarInfoDetailsIfPossible(final String[] shards) {
+        final String starNameFixed = starNameFixed(getRemainingShardsAsStarName(shards));
+        if (!starNameFixed.isEmpty()) {
+            return new StarInfoDetails(starNameFixed);
+        } else {
+            // explicit null, handled by optional inside StarInfo
+            return null;
         }
     }
 

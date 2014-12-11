@@ -12,13 +12,13 @@ import java.util.Objects;
 public final class RuntimeConfiguration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
-    @OneToOne
+    @OneToOne(optional = false)
     private UserLocation chosenUserLocation;
 
-    @OneToOne
+    @OneToOne(optional = false)
     private SkyObjectVisibilitySettings visibilitySettings;
 
     public Long getId() {

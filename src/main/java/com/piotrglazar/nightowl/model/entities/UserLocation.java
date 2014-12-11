@@ -4,9 +4,9 @@ import com.google.common.base.MoreObjects;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
@@ -14,13 +14,16 @@ import java.util.Objects;
 public final class UserLocation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private Latitude latitude;
 
+    @Column(nullable = false)
     private Longitude longitude;
 
+    @Column(nullable = false)
     private String name;
 
     public UserLocation(){

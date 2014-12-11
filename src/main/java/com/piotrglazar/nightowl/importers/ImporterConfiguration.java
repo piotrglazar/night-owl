@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.importers;
 
+import com.piotrglazar.nightowl.api.UiUpdater;
 import com.piotrglazar.nightowl.configuration.DatabaseLocation;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.springframework.context.annotation.Bean;
@@ -25,5 +26,10 @@ public class ImporterConfiguration {
     public DataSource dataSource(DatabaseLocation databaseLocation) {
         return new SimpleDriverDataSource(
                 new JDBCDriver(), "jdbc:hsqldb:file:" + databaseLocation.getDatabaseLocation(), "sa", "");
+    }
+
+    @Bean
+    public UiUpdater uiUpdater() {
+        return Runnable::run;
     }
 }

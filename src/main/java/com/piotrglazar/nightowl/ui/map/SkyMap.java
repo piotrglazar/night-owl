@@ -1,12 +1,11 @@
 package com.piotrglazar.nightowl.ui.map;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.util.Arrays;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class SkyMap {
@@ -41,52 +40,31 @@ public class SkyMap {
     private void drawStarPositions(final SkyMapDto skyMap, final Graphics graphics) {
         final int x = skyMap.getX();
         final int y = skyMap.getY();
-        final java.util.List<PointAndName> pointAndNames = skyMap.getStarPositions().stream()
-                .map(p -> new PointAndName(skyMapCalculations.starLocation(x, y, skyMap.getRadius(), p.getAzimuth(), p.getZenithDistance()),
-                        p.getName())).collect(toList());
+        final java.util.List<Point> stars = Lists.newLinkedList();
+        final java.util.List<StarName> starNames = Lists.newLinkedList();
 
-        drawStars(graphics, x, pointAndNames);
-        drawStarLabelsIfNecessary(skyMap, graphics, x, pointAndNames);
+        skyMap.getStarPositions().forEach(p -> {
+            final Point star = skyMapCalculations.starLocation(x, y, skyMap.getRadius(), p.getAzimuth(), p.getZenithDistance());
+            stars.add(star);
+            p.getName().ifPresent(starName -> starNames.add(new StarName(star, starName)));
+        });
+
+        drawStars(graphics, x, stars);
+        drawStarNames(skyMap, graphics, x, starNames);
     }
 
-    private void drawStarLabelsIfNecessary(SkyMapDto skyMap, Graphics graphics, int x, java.util.List<PointAndName> pointAndNames) {
+    private void drawStarNames(SkyMapDto skyMap, Graphics graphics, int x, java.util.List<StarName> starNames) {
         if (skyMap.getSkyDisplayContext().shouldShowStarLabels()) {
-            pointAndNames.forEach(p -> graphics.drawString(p.getName(), mirrorXCoordinate(p.getX(), x), p.getY()));
+            starNames.stream().forEach(p -> graphics.drawString(p.getName(), mirrorXCoordinate(p.getX(), x), p.getY()));
         }
     }
 
-    private void drawStars(Graphics graphics, int x, java.util.List<PointAndName> pointAndNames) {
-        pointAndNames.forEach(p -> graphics.fillRect(mirrorXCoordinate(p.getX(), x), p.getY(), 1, 1));
+    private void drawStars(Graphics graphics, int x, java.util.List<Point> stars) {
+        stars.forEach(p -> graphics.fillRect(mirrorXCoordinate(p.getX(), x), p.getY(), 1, 1));
     }
 
     public int mirrorXCoordinate(final int pointX, final int x) {
         final int delta = x - pointX;
         return x + delta;
-    }
-
-    private static class PointAndName {
-        private final Point point;
-        private final String name;
-
-        private PointAndName(final Point point, final String name) {
-            this.point = point;
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Point getPoint() {
-            return point;
-        }
-
-        public int getX() {
-            return point.getX();
-        }
-
-        public int getY() {
-            return point.getY();
-        }
     }
 }

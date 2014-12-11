@@ -3,9 +3,9 @@ package com.piotrglazar.nightowl.model.entities;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -15,12 +15,14 @@ public final class SkyObjectVisibilitySettings {
     public static final double maximalStarVisibilityMag = 10.0;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
-    private Double starVisibilityMag;
+    @Column(nullable = false)
+    private double starVisibilityMag;
 
-    private Boolean showStarLabels;
+    @Column(nullable = false)
+    private boolean showStarLabels;
 
     public Long getId() {
         return id;
@@ -30,19 +32,19 @@ public final class SkyObjectVisibilitySettings {
         this.id = id;
     }
 
-    public Double getStarVisibilityMag() {
+    public double getStarVisibilityMag() {
         return starVisibilityMag;
     }
 
-    public void setStarVisibilityMag(final Double starVisibilityMag) {
+    public void setStarVisibilityMag(final double starVisibilityMag) {
         this.starVisibilityMag = starVisibilityMag;
     }
 
-    public void setShowStarLabels(final Boolean showStarLabels) {
+    public void setShowStarLabels(final boolean showStarLabels) {
         this.showStarLabels = showStarLabels;
     }
 
-    public Boolean getShowStarLabels() {
+    public boolean getShowStarLabels() {
         return showStarLabels;
     }
 
