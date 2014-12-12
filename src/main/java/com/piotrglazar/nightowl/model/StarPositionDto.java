@@ -3,6 +3,9 @@ package com.piotrglazar.nightowl.model;
 import com.google.common.base.MoreObjects;
 import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
+
+import java.util.Optional;
 
 public class StarPositionDto {
 
@@ -30,8 +33,8 @@ public class StarPositionDto {
         return starCelestialPosition.getAzimuth();
     }
 
-    public String getName() {
-        return starInfo.getName();
+    public Optional<String> getName() {
+        return starInfo.getStarInfoDetails().map(StarInfoDetails::getName).map(Optional::of).orElse(Optional.<String>empty());
     }
 
     @Override

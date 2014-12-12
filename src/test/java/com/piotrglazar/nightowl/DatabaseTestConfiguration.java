@@ -11,6 +11,7 @@ import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.StarInfoRepository;
+import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.hsqldb.jdbc.JDBCDriver;
@@ -44,13 +45,17 @@ public class DatabaseTestConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    private static StarInfoDetails name(String name) {
+        return new StarInfoDetails(name);
+    }
+
     public static final List<StarInfo> STARS = ImmutableList.of(
-            new StarInfo(LocalTime.of(23, 36, 32), 77.46, "A0", "Alpha", -2.0),
-            new StarInfo(LocalTime.of(0, 59, 10), 73.17, "B0", "Beta", -1.0),
-            new StarInfo(LocalTime.of(4, 45, 18), 53.17, "C0", "Gamma", 0.0),
-            new StarInfo(LocalTime.of(11, 45, 18), 22.41, "D0", "Delta", 1.0),
-            new StarInfo(LocalTime.of(15, 12, 50), -23.65, "E0", "Epsilon", 2.0),
-            new StarInfo(LocalTime.of(22, 10, 12), -55.22, "F0", "Zeta", 3.0));
+            new StarInfo(LocalTime.of(23, 36, 32), 77.46, "A0", name("Alpha"), -2.0),
+            new StarInfo(LocalTime.of(0, 59, 10), 73.17, "B0", name("Beta"), -1.0),
+            new StarInfo(LocalTime.of(4, 45, 18), 53.17, "C0", name("Gamma"), 0.0),
+            new StarInfo(LocalTime.of(11, 45, 18), 22.41, "D0", name("Delta"), 1.0),
+            new StarInfo(LocalTime.of(15, 12, 50), -23.65, "E0", name("Epsilon"), 2.0),
+            new StarInfo(LocalTime.of(22, 10, 12), -55.22, "F0", name("Zeta"), 3.0));
 
     @Bean
     public DataSource dataSource() {

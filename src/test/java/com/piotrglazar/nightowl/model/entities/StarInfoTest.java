@@ -1,6 +1,5 @@
 package com.piotrglazar.nightowl.model.entities;
 
-import com.piotrglazar.nightowl.model.entities.StarInfo;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
@@ -19,7 +18,7 @@ public class StarInfoTest {
     @Test
     public void shouldToStringDisplayHumanReadableMessage() {
         // given
-        final StarInfo starInfo = new StarInfo(LocalTime.of(12, 35), 44.4, "A0", "Sirius", 12.34);
+        final StarInfo starInfo = new StarInfo(LocalTime.of(12, 35), 44.4, "A0", new StarInfoDetails("Sirius"), 12.34);
 
         // when
         final String toString = starInfo.toString();

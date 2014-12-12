@@ -5,6 +5,7 @@ import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -102,7 +103,8 @@ public class SkyMapTest {
     }
 
     private StarPositionDto arbitraryStarPosition() {
-        return new StarPositionDto(new StarInfo(LocalTime.of(0, 0), 0.0, "A0", "star", 0.0), new StarCelestialPosition(0.0, 0.0));
+        return new StarPositionDto(new StarInfo(LocalTime.of(0, 0), 0.0, "A0", new StarInfoDetails("star"), 0.0),
+                new StarCelestialPosition(0.0, 0.0));
     }
 
     private java.util.List<CardinalDirections> mockDirectionsSigns() {

@@ -3,6 +3,7 @@ package com.piotrglazar.nightowl.importers;
 import com.google.common.base.Charsets;
 import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,7 +61,7 @@ public class NightWatcherStarImporterTest {
     }
 
     @Test
-    public void shouldRemoveInvalidStarName() {
+    public void shouldRemoveInvalidStarNameAndStarInfoDetailsInStarInfoMustBeNull() {
         // given
         final Path path = Paths.get(System.getProperty("java.io.tmpdir"));
         given(fileReader.getNotEmptyLines(path)).willReturn(Stream.of("0,4 1,9 5 -1 -1 G5III 6 4 7 2 4 Psc X Sirius"));
@@ -70,7 +72,7 @@ public class NightWatcherStarImporterTest {
 
         // then
         verify(starInfoProvider).saveStarInfo(starInfoCaptor.capture());
-        assertThat(starInfoCaptor.getValue().getName()).isEqualTo("");
+        assertThat(getStarInfoDetails().isPresent()).isFalse();
     }
 
     @Test
@@ -86,6 +88,14 @@ public class NightWatcherStarImporterTest {
 
         // then
         verify(starInfoProvider).saveStarInfo(starInfoCaptor.capture());
-        assertThat(starInfoCaptor.getValue().getName()).isEqualTo("Antares");
+        assertThat(getStarName()).isEqualTo("Antares");
+    }
+
+    private String getStarName() {
+        return getStarInfoDetails().map(StarInfoDetails::getName).orElseThrow(() -> new IllegalStateException("no star name"));
+    }
+
+    private Optional<StarInfoDetails> getStarInfoDetails() {
+        return starInfoCaptor.getValue().getStarInfoDetails();
     }
 }

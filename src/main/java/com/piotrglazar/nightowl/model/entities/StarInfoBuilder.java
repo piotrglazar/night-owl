@@ -7,7 +7,7 @@ public class StarInfoBuilder {
     private LocalTime rightAscension = LocalTime.of(0, 0);
     private double declination;
     private String spectralType = "";
-    private String name = "";
+    private StarInfoDetails starInfoDetails;
     private double apparentMagnitude;
 
     public StarInfoBuilder rightAscension(final LocalTime rightAscension) {
@@ -26,7 +26,7 @@ public class StarInfoBuilder {
     }
 
     public StarInfoBuilder name(final String name) {
-        this.name = name;
+        this.starInfoDetails = new StarInfoDetails(name);
         return this;
     }
 
@@ -36,6 +36,6 @@ public class StarInfoBuilder {
     }
 
     public StarInfo build() {
-        return new StarInfo(rightAscension, declination, spectralType, name, apparentMagnitude);
+        return new StarInfo(rightAscension, declination, spectralType, starInfoDetails, apparentMagnitude);
     }
 }
