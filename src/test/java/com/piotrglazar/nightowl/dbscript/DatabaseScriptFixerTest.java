@@ -30,9 +30,9 @@ public class DatabaseScriptFixerTest {
         // given
         final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
         given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1", "line2", "line3", "line4").stream());
-        given(fileReader.getNotEmptyLines("forbidden")).willReturn(Sets.newHashSet("line1", "line2", "line3"));
+        given(fileReader.getNotEmptyLines("allowed")).willReturn(Sets.newHashSet("line0", "line4"));
         given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet());
-        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "forbidden", "tail");
+        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "allowed", "tail");
 
         // when
         databaseScriptFixer.fixScriptFile(path);
@@ -49,9 +49,9 @@ public class DatabaseScriptFixerTest {
         // given
         final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
         given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1", "line2", "line3", "line4").stream());
-        given(fileReader.getNotEmptyLines("forbidden")).willReturn(Sets.newHashSet());
+        given(fileReader.getNotEmptyLines("allowed")).willReturn(Sets.newHashSet("line0", "line1", "line2", "line3", "line4"));
         given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet("line1", "line2"));
-        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "forbidden", "tail");
+        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "allowed", "tail");
 
         // when
         databaseScriptFixer.fixScriptFile(path);
@@ -68,9 +68,9 @@ public class DatabaseScriptFixerTest {
         // given
         final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
         given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1").stream());
-        given(fileReader.getNotEmptyLines("forbidden")).willReturn(Sets.newHashSet("line0"));
+        given(fileReader.getNotEmptyLines("allowed")).willReturn(Sets.newHashSet("line1"));
         given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet("line0"));
-        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "forbidden", "tail");
+        databaseScriptFixer = new DatabaseScriptFixer(fileReader, "allowed", "tail");
 
         // when
         databaseScriptFixer.fixScriptFile(path);

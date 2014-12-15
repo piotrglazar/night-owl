@@ -3,21 +3,11 @@ package com.piotrglazar.nightowl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
-import com.piotrglazar.nightowl.coordinates.Latitude;
-import com.piotrglazar.nightowl.coordinates.Longitude;
-import com.piotrglazar.nightowl.model.SkyObjectVisibilitySettingsRepository;
-import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
-import com.piotrglazar.nightowl.model.RuntimeConfigurationRepository;
-import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
-import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
-import com.piotrglazar.nightowl.model.entities.UserLocation;
-import com.piotrglazar.nightowl.model.UserLocationRepository;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -30,7 +20,6 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.lang.invoke.MethodHandles;
@@ -67,75 +56,6 @@ public class DatabaseTestConfiguration {
     }
 
     @Bean
-    @Autowired
-    public DatabasePopulator databasePopulator(StarInfoRepository starInfoRepository, UserLocationRepository userLocationRepository,
-            RuntimeConfigurationRepository runtimeConfigurationRepository, SkyObjectVisibilitySettingsRepository settingsRepository) {
-        return new DatabasePopulator(userLocationRepository, runtimeConfigurationRepository, starInfoRepository, settingsRepository);
-    }
-
-    static class DatabasePopulator {
-
-        private final UserLocationRepository userLocationRepository;
-        private final RuntimeConfigurationRepository runtimeConfigurationRepository;
-        private final StarInfoRepository starInfoRepository;
-        private final SkyObjectVisibilitySettingsRepository settingsRepository;
-
-        public DatabasePopulator(UserLocationRepository userLocationRepository,
-                                 RuntimeConfigurationRepository runtimeConfigurationRepository,
-                                 StarInfoRepository starInfoRepository, SkyObjectVisibilitySettingsRepository settingsRepository) {
-            this.userLocationRepository = userLocationRepository;
-            this.runtimeConfigurationRepository = runtimeConfigurationRepository;
-            this.starInfoRepository = starInfoRepository;
-            this.settingsRepository = settingsRepository;
-        }
-
-        @PostConstruct
-        public void fillTestDatabase() {
-            saveSomeStarInfo();
-            prepareUserLocalisation();
-        }
-
-        private void prepareUserLocalisation() {
-            final UserLocation warsaw = warsaw();
-            userLocationRepository.saveAndFlush(warsaw);
-
-            final SkyObjectVisibilitySettings visibilitySettings = defaultVisibilitySettings();
-            settingsRepository.saveAndFlush(visibilitySettings);
-
-            runtimeConfigurationRepository.saveAndFlush(defaultRuntimeConfiguration(warsaw, visibilitySettings));
-        }
-
-        private void saveSomeStarInfo() {
-            starInfoRepository.save(STARS);
-            starInfoRepository.flush();
-        }
-
-        private RuntimeConfiguration defaultRuntimeConfiguration(final UserLocation defaultLocation,
-                                                                 final SkyObjectVisibilitySettings visibilitySettings) {
-            final RuntimeConfiguration runtimeConfiguration = new RuntimeConfiguration();
-            runtimeConfiguration.setChosenUserLocation(defaultLocation);
-            runtimeConfiguration.setVisibilitySettings(visibilitySettings);
-            return runtimeConfiguration;
-        }
-
-        private SkyObjectVisibilitySettings defaultVisibilitySettings() {
-            final SkyObjectVisibilitySettings skyObjectVisibilitySettings = new SkyObjectVisibilitySettings();
-            skyObjectVisibilitySettings.setShowStarLabels(true);
-            skyObjectVisibilitySettings.setStarVisibilityMag(0.0);
-            return skyObjectVisibilitySettings;
-        }
-
-        private UserLocation warsaw() {
-            return UserLocation.builder()
-                    .latitude(new Latitude(52.23))
-                    .longitude(new Longitude(21.0))
-                    .name("Warsaw")
-                    .build();
-        }
-    }
-
-    @Bean
-    @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource,
                                                                        final JpaVendorAdapter jpaVendorAdapter) {
         final LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();

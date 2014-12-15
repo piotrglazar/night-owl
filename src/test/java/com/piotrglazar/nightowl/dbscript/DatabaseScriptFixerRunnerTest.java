@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DatabaseScriptUtilsTest {
+public class DatabaseScriptFixerRunnerTest {
 
     @Mock
     private DatabaseScriptFileLocation databaseLocation;
@@ -26,7 +26,7 @@ public class DatabaseScriptUtilsTest {
     private DatabaseScriptFixer databaseScriptFixer;
 
     @InjectMocks
-    private DatabaseScriptUtils databaseScriptUtils;
+    private DatabaseScriptFixerRunner databaseScriptFixerRunner;
 
     @Test
     public void shouldPrepareDatabaseScript() {
@@ -35,7 +35,7 @@ public class DatabaseScriptUtilsTest {
         given(databaseLocation.getDatabaseScriptFileLocation()).willReturn(scriptPath);
 
         // when
-        databaseScriptUtils.prepareDbScript();
+        databaseScriptFixerRunner.prepareDbScript();
 
         // then
         final InOrder inOrder = Mockito.inOrder(databaseScriptCreator, databaseScriptFixer);

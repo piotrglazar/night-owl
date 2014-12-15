@@ -31,11 +31,12 @@ public final class NightWatcherStarImporterRunner {
     }
 
     private AnnotationConfigApplicationContext getApplicationContext() {
-        final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        AnnotationConfigApplicationContext parentContext = new AnnotationConfigApplicationContext(DatabaseConfiguration.class);
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.setParent(parentContext);
         applicationContext.getEnvironment().setActiveProfiles("importing");
-        applicationContext.register(ImporterConfiguration.class, DatabaseConfiguration.class);
+        applicationContext.register(ImporterConfiguration.class);
         applicationContext.refresh();
-        applicationContext.registerShutdownHook();
         return applicationContext;
     }
 

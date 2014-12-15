@@ -19,22 +19,22 @@ import java.util.stream.Collectors;
 @Profile("dbScript")
 public class DatabaseScriptFixer {
 
-    private final Set<String> forbiddenLines;
+    private final Set<String> allowedLines;
     private final Set<String> scriptTailLines;
     private final FileReader fileReader;
 
     @Autowired
-    public DatabaseScriptFixer(FileReader fileReader, @Value("db/forbidden.lines.txt") String forbiddenLinesPath,
+    public DatabaseScriptFixer(FileReader fileReader, @Value("db/allowed.lines.txt") String allowedLinesPath,
                                @Value("db/script.tail.lines.txt") String tailLinesPath) {
         this.fileReader = fileReader;
-        this.forbiddenLines = fileReader.getNotEmptyLines(forbiddenLinesPath);
+        this.allowedLines = fileReader.getNotEmptyLines(allowedLinesPath);
         this.scriptTailLines = fileReader.getNotEmptyLines(tailLinesPath);
     }
 
     public void fixScriptFile(final Path databaseScriptFileLocation) {
         final List<String> scriptTail = Lists.newLinkedList();
         final List<String> filteredScriptLines = fileReader.getNotEmptyLines(databaseScriptFileLocation)
-                .filter(s -> !forbiddenLines.contains(s))
+                .filter(s -> allowedLines.stream().anyMatch(s::contains))
                 .filter(s -> {
                     if (scriptTailLines.stream().filter(s::contains).count() > 0) {
                         scriptTail.add(s);

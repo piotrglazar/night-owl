@@ -1,12 +1,7 @@
 package com.piotrglazar.nightowl.configuration;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-
 import java.nio.file.Paths;
 
-@Component
-@Profile("default")
 public class DatabaseLocation {
 
     public String getDatabaseRootLocation() {
