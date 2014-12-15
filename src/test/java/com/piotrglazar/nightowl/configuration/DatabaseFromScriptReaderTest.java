@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
+import com.piotrglazar.nightowl.api.StarInfoProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,10 +14,7 @@ import java.sql.Statement;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DatabaseFromScriptReaderTest {
@@ -25,24 +23,26 @@ public class DatabaseFromScriptReaderTest {
     private DataSource dataSource;
 
     @Mock
-    private DatabaseLocation databaseLocation;
+    private StarInfoProvider starInfoProvider;
 
     @InjectMocks
     private DefaultDatabaseFromScriptReader reader;
 
     @Test
-    public void shouldNotExecuteScriptWhenDatabaseIsAlreadyCreated() {
+    public void shouldNotExecuteScriptWhenDatabaseIsAlreadyCreated() throws SQLException {
+        // given
+        given(starInfoProvider.count()).willReturn(someStarInfoEntriesInDatabase());
+
         // when
         reader.createDatabaseFromScript();
 
         // then
-        verify(databaseLocation, never()).getDatabaseScriptLocation();
+        verify(dataSource, never()).getConnection();
     }
 
     @Test
     public void shouldCreateDatabaseFromScript() throws SQLException {
         // given
-        given(databaseLocation.databaseNeedsCreation()).willReturn(true);
         final Statement statement = connectionStatement();
 
         // when
@@ -51,6 +51,10 @@ public class DatabaseFromScriptReaderTest {
         // then
         verify(statement, atLeastOnce()).execute(anyString());
         verify(statement).close();
+    }
+
+    private long someStarInfoEntriesInDatabase() {
+        return 1;
     }
 
     private Statement connectionStatement() throws SQLException {

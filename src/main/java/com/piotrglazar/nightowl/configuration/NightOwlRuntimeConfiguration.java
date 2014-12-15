@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
+import com.piotrglazar.nightowl.api.DatabasePopulator;
 import com.piotrglazar.nightowl.api.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
@@ -22,17 +23,21 @@ public class NightOwlRuntimeConfiguration {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final RuntimeConfigurationProvider configurationProvider;
+    private final DatabasePopulator databasePopulator;
     private RuntimeConfiguration runtimeConfiguration;
 
     @Autowired
     public NightOwlRuntimeConfiguration(ApplicationEventPublisher applicationEventPublisher,
-                                        RuntimeConfigurationProvider configurationProvider) {
+                                        RuntimeConfigurationProvider configurationProvider,
+                                        DatabasePopulator databasePopulator) {
         this.applicationEventPublisher = applicationEventPublisher;
         this.configurationProvider = configurationProvider;
+        this.databasePopulator = databasePopulator;
     }
 
     @PostConstruct
     public void loadRuntimeConfiguration() {
+        databasePopulator.prepareDatabase();
         runtimeConfiguration = configurationProvider.getConfiguration();
         LOG.info("Running with configuration {}", runtimeConfiguration);
 

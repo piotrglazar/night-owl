@@ -173,6 +173,18 @@ public class MainMenuControllerTest {
     }
 
     @Test
+    public void shouldNotUpdateApplicationStateWhenProvidedMagnitudeIsNotANumber() {
+        // given
+        given(doubleConverter.twoDecimalPlaces(anyString())).willThrow(new NumberFormatException("test exception"));
+
+        // when
+        mainMenuController.updateStarVisibilityMagnitude("invalid number");
+
+        // then
+        verifyNoMoreInteractions(eventPublisher);
+    }
+
+    @Test
     public void shouldFetchCurrentStarVisibilitySettings() {
         // given
         given(nightOwlRuntimeConfiguration.getStarVisibilityMagnitude()).willReturn(2.0);

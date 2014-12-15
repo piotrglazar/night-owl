@@ -1,16 +1,15 @@
 package com.piotrglazar.nightowl.model;
 
-import com.google.common.base.Preconditions;
 import com.piotrglazar.nightowl.api.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.model.entities.RuntimeConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkState;
+
 @Component
-@DependsOn("databasePopulator")
 class DefaultRuntimeConfigurationProvider implements RuntimeConfigurationProvider {
 
     private final RuntimeConfigurationRepository configurationRepository;
@@ -26,7 +25,7 @@ class DefaultRuntimeConfigurationProvider implements RuntimeConfigurationProvide
     @Override
     public RuntimeConfiguration getConfiguration() {
         final List<RuntimeConfiguration> runtimeConfigurations = configurationRepository.findAll();
-        Preconditions.checkState(runtimeConfigurations.size() == 1, "There must be exactly one configuration");
+        checkState(runtimeConfigurations.size() == 1, "There must be exactly one configuration, got " + runtimeConfigurations.size());
         return runtimeConfigurations.get(0);
     }
 

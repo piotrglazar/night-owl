@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
+import com.piotrglazar.nightowl.api.DatabasePopulator;
 import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.api.RuntimeConfigurationProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
@@ -38,12 +39,28 @@ public class NightOwlRuntimeConfigurationTest {
     @Mock
     private MainWindow mainWindow;
 
+    @Mock
+    private DatabasePopulator databasePopulator;
+
     @InjectMocks
     private NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration;
 
     @Before
     public void setUp() {
         runtimeConfiguration.setVisibilitySettings(new SkyObjectVisibilitySettings());
+    }
+
+    @Test
+    public void shouldPrepareDatabaseAndGetUserLocation() {
+        // given
+        given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
+
+        // when
+        nightOwlRuntimeConfiguration.loadRuntimeConfiguration();
+
+        // then
+        verify(databasePopulator).prepareDatabase();
+        verify(configurationProvider).getConfiguration();
     }
 
     @Test
