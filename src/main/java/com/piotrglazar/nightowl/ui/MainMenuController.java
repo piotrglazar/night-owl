@@ -63,11 +63,11 @@ public class MainMenuController {
     }
 
     public double minimalStarMagnitude() {
-        return SkyObjectVisibilitySettings.minimalStarVisibilityMag;
+        return SkyObjectVisibilitySettings.MINIMAL_STAR_VISIBILITY_MAG;
     }
 
     public double maximalStarMagnitude() {
-        return SkyObjectVisibilitySettings.maximalStarVisibilityMag;
+        return SkyObjectVisibilitySettings.MAXIMAL_STAR_VISIBILITY_MAG;
     }
 
     public double currentStarVisibilityMagnitude() {

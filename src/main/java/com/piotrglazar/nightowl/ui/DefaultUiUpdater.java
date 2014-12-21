@@ -4,7 +4,7 @@ import com.piotrglazar.nightowl.api.UiUpdater;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
+import java.awt.EventQueue;
 
 @Component
 @Profile("default")

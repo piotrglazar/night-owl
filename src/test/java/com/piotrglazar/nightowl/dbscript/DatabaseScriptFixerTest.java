@@ -41,7 +41,7 @@ public class DatabaseScriptFixerTest {
         assertThat(Files.readAllLines(path, Charsets.UTF_8)).containsExactly("line0", "line4");
 
         // cleanup
-        path.toFile().delete();
+        deleteFile(path);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class DatabaseScriptFixerTest {
         assertThat(Files.readAllLines(path, Charsets.UTF_8)).containsExactly("line0", "line3", "line4", "line1", "line2");
 
         // cleanup
-        path.toFile().delete();
+        deleteFile(path);
     }
 
     @Test
@@ -79,6 +79,12 @@ public class DatabaseScriptFixerTest {
         assertThat(Files.readAllLines(path, Charsets.UTF_8)).containsExactly("line1");
 
         // cleanup
-        path.toFile().delete();
+        deleteFile(path);
+    }
+
+    private void deleteFile(final Path path) {
+        if (!path.toFile().delete()) {
+            throw new IllegalStateException("Failed to delete " + path);
+        }
     }
 }

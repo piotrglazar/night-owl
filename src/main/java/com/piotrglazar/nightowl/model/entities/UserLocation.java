@@ -26,8 +26,8 @@ public final class UserLocation {
     @Column(nullable = false)
     private String name;
 
-    public UserLocation(){
-
+    public UserLocation() {
+        // Entity
     }
 
     public UserLocation(Latitude latitude, Longitude longitude, String name) {

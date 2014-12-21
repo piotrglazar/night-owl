@@ -13,6 +13,9 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'sonar-runner'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
 
 jar {
     baseName = 'night-owl'
@@ -42,6 +45,7 @@ dependencies {
     compile("org.hsqldb:hsqldb:2.3.2")
     // annotations
     compile("com.google.code.findbugs:jsr305:3.0.0")
+    compile("com.nesscomputing.testing:findbugs-annotations:2.0.0")
 
     testCompile("org.springframework:spring-test:4.1.3.RELEASE")
     testCompile("junit:junit:4.12")
@@ -83,11 +87,34 @@ sonarRunner {
     toolVersion = '2.4'
     sonarProperties {
         property "sonar.exclusions", "src/main/java/com/piotrglazar/nightowl/configuration/*.java," +
-                    "src/main/java/com/piotrglazar/nightowl/dbscript/DatabaseScriptConfiguration" +
-                    "src/main/java/com/piotrglazar/nightowl/importers/ImporterConfiguration"
+                    "src/main/java/com/piotrglazar/nightowl/dbscript/DatabaseScriptConfiguration.java," +
+                    "src/main/java/com/piotrglazar/nightowl/importers/ImporterConfiguration.java," +
+                    "src/main/java/com/piotrglazar/nightowl/ui/DefaultMainWindow.java"
     }
 }
 
 sourceCompatibility = 1.8
 
 mainClassName = "com.piotrglazar.nightowl.NightOwl"
+
+checkstyle {
+    toolVersion = '6.1'
+    ignoreFailures = true
+}
+
+pmd {
+    ignoreFailures = true
+}
+
+findbugs {
+    toolVersion = '3.0.0'
+    effort = 'max'
+    ignoreFailures = true
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}

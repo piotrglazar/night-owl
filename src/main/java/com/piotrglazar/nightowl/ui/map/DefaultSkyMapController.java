@@ -9,7 +9,7 @@ import com.piotrglazar.nightowl.util.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 @Component
 public class DefaultSkyMapController implements SkyMapController {
@@ -20,8 +20,8 @@ public class DefaultSkyMapController implements SkyMapController {
     private final TimeProvider timeProvider;
 
     @Autowired
-    public DefaultSkyMapController(NightOwlRuntimeConfiguration runtimeConfiguration, SkyMap skyMap, StarPositionProvider starPositionProvider,
-                                   TimeProvider timeProvider) {
+    public DefaultSkyMapController(NightOwlRuntimeConfiguration runtimeConfiguration, SkyMap skyMap,
+                                   StarPositionProvider starPositionProvider, TimeProvider timeProvider) {
         this.runtimeConfiguration = runtimeConfiguration;
         this.skyMap = skyMap;
         this.starPositionProvider = starPositionProvider;

@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions;
 
 import static org.assertj.core.api.Assertions.within;
 
-public class StarCelestialPositionAssert {
+public final class StarCelestialPositionAssert {
 
     private final StarCelestialPosition starCelestialPosition;
 

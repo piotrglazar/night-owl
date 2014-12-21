@@ -4,20 +4,24 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.piotrglazar.nightowl.api.MainWindow;
-import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.api.SkyMapController;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.messages.StarsVisibilityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-@SuppressWarnings("all")
+@SuppressWarnings({"all", "linelength", "methodname"})
 public class DefaultMainWindow implements MainWindow {
     private JPanel mainPanel;
     private JLabel timeLabel;

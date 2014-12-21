@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.configuration;
 
 import com.piotrglazar.nightowl.api.StarInfoProvider;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,7 @@ public class DatabaseFromScriptReaderTest {
     private DefaultDatabaseFromScriptReader reader;
 
     @Test
+    @SuppressFBWarnings
     public void shouldNotExecuteScriptWhenDatabaseIsAlreadyCreated() throws SQLException {
         // given
         given(starInfoProvider.count()).willReturn(someStarInfoEntriesInDatabase());
@@ -41,6 +43,7 @@ public class DatabaseFromScriptReaderTest {
     }
 
     @Test
+    @SuppressFBWarnings
     public void shouldCreateDatabaseFromScript() throws SQLException {
         // given
         final Statement statement = connectionStatement();

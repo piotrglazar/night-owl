@@ -11,9 +11,13 @@ import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;

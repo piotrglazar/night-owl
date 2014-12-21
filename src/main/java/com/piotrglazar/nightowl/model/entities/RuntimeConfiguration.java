@@ -2,7 +2,10 @@ package com.piotrglazar.nightowl.model.entities;
 
 import com.google.common.base.MoreObjects;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.Objects;
 
 /**
