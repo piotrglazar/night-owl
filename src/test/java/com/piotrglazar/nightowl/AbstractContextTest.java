@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl;
 
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import junitparams.JUnitParamsRunner;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -13,12 +14,13 @@ import org.springframework.test.context.TestContextManager;
 @ContextConfiguration(classes = ApplicationConfiguration.class)
 @ActiveProfiles("test")
 @SuppressWarnings("all")
+@SuppressFBWarnings
 public abstract class AbstractContextTest {
 
     @Rule
     public SpringInJUnitParams spring = new SpringInJUnitParams(getClass(), this);
 
-    private static class SpringInJUnitParams extends ExternalResource {
+    private static final class SpringInJUnitParams extends ExternalResource {
 
         private final Class<?> testClass;
 

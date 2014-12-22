@@ -149,7 +149,7 @@ public class MainMenuControllerTest {
     @Test
     public void shouldNotUpdateApplicationStateWhenProvidedMagnitudeIsTooLow() {
         // given
-        final double lowMagnitude = SkyObjectVisibilitySettings.minimalStarVisibilityMag - 1.0;
+        final double lowMagnitude = SkyObjectVisibilitySettings.MINIMAL_STAR_VISIBILITY_MAG - 1.0;
         given(doubleConverter.twoDecimalPlaces(anyString())).willReturn(lowMagnitude);
 
         // when
@@ -162,7 +162,7 @@ public class MainMenuControllerTest {
     @Test
     public void shouldNotUpdateApplicationStateWhenProvidedMagnitudeIsTooHigh() {
         // given
-        final double highMagnitude = SkyObjectVisibilitySettings.maximalStarVisibilityMag + 1.0;
+        final double highMagnitude = SkyObjectVisibilitySettings.MAXIMAL_STAR_VISIBILITY_MAG + 1.0;
         given(doubleConverter.twoDecimalPlaces(anyString())).willReturn(highMagnitude);
 
         // when

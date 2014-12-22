@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.dbscript;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.assertj.core.util.Files;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ public class DatabaseScriptCreatorTest {
     private DatabaseScriptCreator databaseScriptCreator;
 
     @Before
+    @SuppressFBWarnings
     public void setUp() throws Exception {
         given(dataSource.getConnection()).willReturn(connection);
         given(connection.createStatement()).willReturn(statement);

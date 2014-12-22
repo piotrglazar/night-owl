@@ -1,13 +1,20 @@
 package com.piotrglazar.nightowl.ui;
 
 import com.piotrglazar.nightowl.model.UserLocationDto;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.swing.*;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.lang.invoke.MethodHandles;
@@ -99,6 +106,7 @@ public class MainMenu {
     }
 
     @SuppressWarnings("all")
+    @SuppressFBWarnings
     private void closeApplication() {
         System.exit(0);
     }

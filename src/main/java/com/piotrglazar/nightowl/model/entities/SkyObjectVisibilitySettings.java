@@ -11,8 +11,8 @@ import javax.persistence.Id;
 @Entity
 public final class SkyObjectVisibilitySettings {
 
-    public static final double minimalStarVisibilityMag = -2.0;
-    public static final double maximalStarVisibilityMag = 10.0;
+    public static final double MINIMAL_STAR_VISIBILITY_MAG = -2.0;
+    public static final double MAXIMAL_STAR_VISIBILITY_MAG = 10.0;
 
     @Id
     @GeneratedValue

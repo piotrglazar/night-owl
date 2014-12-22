@@ -40,8 +40,8 @@ public final class StarsVisibilityMessage {
             return false;
         }
         final StarsVisibilityMessage other = (StarsVisibilityMessage) obj;
-        return Objects.equals(this.starsAlwaysVisible, other.starsAlwaysVisible) &&
-                Objects.equals(this.starsSometimesVisible, other.starsSometimesVisible) &&
-                Objects.equals(this.starsNeverVisible, other.starsNeverVisible);
+        return Objects.equals(this.starsAlwaysVisible, other.starsAlwaysVisible)
+                && Objects.equals(this.starsSometimesVisible, other.starsSometimesVisible)
+                && Objects.equals(this.starsNeverVisible, other.starsNeverVisible);
     }
 }

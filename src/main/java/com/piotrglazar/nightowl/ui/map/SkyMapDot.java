@@ -3,7 +3,7 @@ package com.piotrglazar.nightowl.ui.map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 @Component
 public class SkyMapDot {

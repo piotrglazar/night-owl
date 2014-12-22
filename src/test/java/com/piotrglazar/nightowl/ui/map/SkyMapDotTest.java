@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 import static org.mockito.Mockito.verify;
 

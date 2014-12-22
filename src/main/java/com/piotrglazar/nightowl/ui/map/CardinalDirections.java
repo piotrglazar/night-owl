@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.ui.map;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 public enum CardinalDirections {
 
