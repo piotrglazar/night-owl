@@ -37,6 +37,10 @@ public class StarPositionDto {
         return starInfo.getStarInfoDetails().map(StarInfoDetails::getName).map(Optional::of).orElse(Optional.<String>empty());
     }
 
+    public double getApparentMagnitude() {
+        return starInfo.getApparentMagnitude();
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
