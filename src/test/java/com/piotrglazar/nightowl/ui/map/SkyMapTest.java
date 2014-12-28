@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.awt.Graphics;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,7 +63,8 @@ public class SkyMapTest {
     })
     public void shouldUseAllComponentsToDrawSkyMap(boolean shouldDrawStarLabel) {
         // given
-        final java.util.List<CardinalDirections> cardinalDirections = mockDirectionsSigns();
+        final List<CardinalDirections> cardinalDirections = mockDirectionsSigns();
+        final StarSize starSize = arbitraryStarSize();
         final SkyMapDto skyMapDto = new SkyMapDtoBuilder()
                                             .starPositions(Lists.newArrayList(arbitraryStarPosition()))
                                             .x(100)
@@ -73,18 +75,23 @@ public class SkyMapTest {
                                             .build();
         given(skyMapCalculations.starLocation(anyInt(), anyInt(), anyInt(), anyDouble(), anyDouble())).willReturn(new Point(1, 2));
         given(skyMapCalculations.distanceFromCenter(eq(160), eq(65), eq(55.5))).willReturn(23);
+        given(skyMapCalculations.starSize(anyDouble())).willReturn(starSize);
 
         // when
         skyMap.draw(graphics, skyMapDto);
 
         // then
         verify(skyMapCircle).draw(eq(graphics), eq(100), eq(160), eq(65));
+        verify(skyMapCircle).draw(eq(graphics), eq(199), anyInt(), eq(starSize.getSize()));
         verify(skyMapDot).draw(eq(graphics), eq(100), eq(160));
         verify(skyMapDot).draw(eq(graphics), eq(100), eq(23));
         verify(cardinalDirections).forEach(any(Consumer.class));
-        verify(graphics).fillRect(eq(199), eq(2), anyInt(), anyInt());
         // to draw or not to draw?
         verify(graphics, times(shouldDrawStarLabel ? 1 : 0)).drawString(anyString(), anyInt(), anyInt());
+    }
+
+    private StarSize arbitraryStarSize() {
+        return new StarSize(3);
     }
 
     @Test
@@ -109,8 +116,8 @@ public class SkyMapTest {
                 new StarCelestialPosition(0.0, 0.0));
     }
 
-    private java.util.List<CardinalDirections> mockDirectionsSigns() {
-        java.util.List<CardinalDirections> cardinalDirections = mock(java.util.List.class);
+    private List<CardinalDirections> mockDirectionsSigns() {
+        List<CardinalDirections> cardinalDirections = mock(List.class);
         skyMap.setCardinalDirections(cardinalDirections);
         return cardinalDirections;
     }

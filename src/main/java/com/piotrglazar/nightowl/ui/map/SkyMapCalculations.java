@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 public class SkyMapCalculations {
 
     private final StarPositionCalculator starPositionCalculator;
+    private final StarSizeCalculator starSizeCalculator;
 
     @Autowired
-    public SkyMapCalculations(final StarPositionCalculator starPositionCalculator) {
+    public SkyMapCalculations(StarPositionCalculator starPositionCalculator, StarSizeCalculator starSizeCalculator) {
         this.starPositionCalculator = starPositionCalculator;
+        this.starSizeCalculator = starSizeCalculator;
     }
 
     public int distanceFromCenter(final int y, final int radius, final double angle) {
@@ -30,6 +32,10 @@ public class SkyMapCalculations {
         final double yPoint = -Math.cos(azimuthRadian) * scaleLength(radius, zenithDistance) + y;
 
         return new Point((int) xPoint, (int) yPoint);
+    }
+
+    public StarSize starSize(double magnitude) {
+        return starSizeCalculator.calculateStarSize(magnitude);
     }
 
 }

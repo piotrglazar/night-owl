@@ -19,6 +19,9 @@ public class SkyMapCalculationsTest {
     @Mock
     private StarPositionCalculator starPositionCalculator;
 
+    @Mock
+    private StarSizeCalculator starSizeCalculator;
+
     @InjectMocks
     private SkyMapCalculations skyMapCalculations;
 
@@ -64,5 +67,19 @@ public class SkyMapCalculationsTest {
 
         // then
         assertThat(distanceFromCenter).isEqualTo(expectedPole);
+    }
+
+    @Test
+    public void shouldUseStarSizeCalculator() {
+        // given
+        double arbitraryMagnitude = 1.0;
+        final StarSize arbitraryStarSize = new StarSize(3);
+        given(starSizeCalculator.calculateStarSize(arbitraryMagnitude)).willReturn(arbitraryStarSize);
+
+        // when
+        StarSize starSize = skyMapCalculations.starSize(arbitraryMagnitude);
+
+        // then
+        assertThat(starSize).isEqualTo(arbitraryStarSize);
     }
 }
