@@ -7,6 +7,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'pl.allegro.tech.build.axion-release' version '1.0.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
@@ -16,11 +20,6 @@ apply plugin: 'sonar-runner'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
-
-jar {
-    baseName = 'night-owl'
-    version =  '0.1.0'
-}
 
 repositories {
     mavenCentral()
@@ -65,10 +64,6 @@ idea {
         downloadJavadoc = true
         downloadSources = true
     }
-}
-
-jar {
-    manifest.attributes("Main-Class": "com.piotrglazar.nightowl.NightOwl")
 }
 
 jacoco {
@@ -116,5 +111,22 @@ tasks.withType(FindBugs) {
     reports {
         xml.enabled = false
         html.enabled = true
+    }
+}
+
+scmVersion {
+    tag {
+        prefix = 'night-owl'
+    }
+}
+
+// make our version available to all
+project.version = scmVersion.version
+
+jar {
+    baseName = 'night-owl'
+    version =  project.version
+    manifest {
+        attributes 'Main-Class': 'com.piotrglazar.nightowl.NightOwl'
     }
 }
