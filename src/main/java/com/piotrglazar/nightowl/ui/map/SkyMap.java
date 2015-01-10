@@ -46,7 +46,7 @@ public class SkyMap {
 
         skyMap.getStarPositions().forEach(p -> {
             final Point starLocation = skyMapCalculations.starLocation(x, y, skyMap.getRadius(), p.getAzimuth(), p.getZenithDistance());
-            stars.add(new StarOnSkyMap(starLocation, skyMapCalculations.starSize(p.getApparentMagnitude())));
+            stars.add(new StarOnSkyMap(starLocation, skyMapCalculations.starSize(p.getApparentMagnitude()), p.getStarColor()));
             p.getName().ifPresent(starName -> starNames.add(new StarName(starLocation, starName)));
         });
 
@@ -61,7 +61,7 @@ public class SkyMap {
     }
 
     private void drawStars(Graphics graphics, int x, List<StarOnSkyMap> stars) {
-        stars.forEach(p -> skyMapCircle.draw(graphics, mirrorXCoordinate(p.getX(), x), p.getY(), p.getSize()));
+        stars.forEach(p -> skyMapCircle.fillWithColor(graphics, mirrorXCoordinate(p.getX(), x), p.getY(), p.getSize(), p.getStarColor()));
     }
 
     public int mirrorXCoordinate(final int pointX, final int x) {

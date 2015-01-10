@@ -2,6 +2,7 @@ package com.piotrglazar.nightowl.model;
 
 import com.google.common.base.MoreObjects;
 import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
+import com.piotrglazar.nightowl.model.entities.StarColor;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 
@@ -39,6 +40,10 @@ public class StarPositionDto {
 
     public double getApparentMagnitude() {
         return starInfo.getApparentMagnitude();
+    }
+
+    public StarColor getStarColor() {
+        return starInfo.getStarColor();
     }
 
     @Override

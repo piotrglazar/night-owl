@@ -37,5 +37,4 @@ public class SkyMapCalculations {
     public StarSize starSize(double magnitude) {
         return starSizeCalculator.calculateStarSize(magnitude);
     }
-
 }

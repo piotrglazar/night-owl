@@ -3,6 +3,7 @@ package com.piotrglazar.nightowl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
+import com.piotrglazar.nightowl.model.entities.StarColor;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import org.hsqldb.jdbc.JDBCDriver;
@@ -39,12 +40,12 @@ public class DatabaseTestConfiguration {
     }
 
     public static final List<StarInfo> STARS = ImmutableList.of(
-            new StarInfo(LocalTime.of(23, 36, 32), 77.46, "A0", name("Alpha"), -2.0),
-            new StarInfo(LocalTime.of(0, 59, 10), 73.17, "B0", name("Beta"), -1.0),
-            new StarInfo(LocalTime.of(4, 45, 18), 53.17, "C0", name("Gamma"), 0.0),
-            new StarInfo(LocalTime.of(11, 45, 18), 22.41, "D0", name("Delta"), 1.0),
-            new StarInfo(LocalTime.of(15, 12, 50), -23.65, "E0", name("Epsilon"), 2.0),
-            new StarInfo(LocalTime.of(22, 10, 12), -55.22, "F0", name("Zeta"), 3.0));
+            new StarInfo(LocalTime.of(23, 36, 32), 77.46, "O", name("Alpha"), -2.0, StarColor.O),
+            new StarInfo(LocalTime.of(0, 59, 10), 73.17, "B", name("Beta"), -1.0, StarColor.B),
+            new StarInfo(LocalTime.of(4, 45, 18), 53.17, "A", name("Gamma"), 0.0, StarColor.A),
+            new StarInfo(LocalTime.of(11, 45, 18), 22.41, "F", name("Delta"), 1.0, StarColor.F),
+            new StarInfo(LocalTime.of(15, 12, 50), -23.65, "G", name("Epsilon"), 2.0, StarColor.G),
+            new StarInfo(LocalTime.of(22, 10, 12), -55.22, "K", name("Zeta"), 3.0, StarColor.K));
 
     @Bean
     public DataSource dataSource() {

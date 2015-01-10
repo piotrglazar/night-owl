@@ -18,13 +18,19 @@ public class StarInfoTest {
     @Test
     public void shouldToStringDisplayHumanReadableMessage() {
         // given
-        final StarInfo starInfo = new StarInfo(LocalTime.of(12, 35), 44.4, "A0", new StarInfoDetails("Sirius"), 12.34);
+        final StarInfo starInfo = new StarInfo(LocalTime.of(12, 35), 44.4, "A0", new StarInfoDetails("Sirius"), 12.34, StarColor.O);
 
         // when
         final String toString = starInfo.toString();
 
         // then
-        assertThat(toString).contains("rightAscension", "declination", "spectralType", Integer.toString(12), Integer.toString(35),
-                Double.toString(44.4), "A0", "Sirius", Double.toString(12.34));
+        assertThat(toString)
+                .contains("rightAscension", Integer.toString(starInfo.getRightAscension().getHour()),
+                        Integer.toString(starInfo.getRightAscension().getMinute()))
+                .contains("declination", Double.toString(starInfo.getDeclination()))
+                .contains("spectralType", starInfo.getSpectralType())
+                .contains("starInfoDetails", starInfo.getStarInfoDetails().get().toString())
+                .contains("apparentMagnitude", Double.toString(starInfo.getApparentMagnitude()))
+                .contains("starColor", starInfo.getStarColor().toString());
     }
 }

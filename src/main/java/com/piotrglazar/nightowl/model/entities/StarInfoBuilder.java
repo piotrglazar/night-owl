@@ -9,6 +9,7 @@ public class StarInfoBuilder {
     private String spectralType = "";
     private StarInfoDetails starInfoDetails;
     private double apparentMagnitude;
+    private StarColor starColor = StarColor.M;
 
     public StarInfoBuilder rightAscension(final LocalTime rightAscension) {
         this.rightAscension = rightAscension;
@@ -35,7 +36,12 @@ public class StarInfoBuilder {
         return this;
     }
 
+    public StarInfoBuilder starColor(final StarColor starColor) {
+        this.starColor = starColor;
+        return this;
+    }
+
     public StarInfo build() {
-        return new StarInfo(rightAscension, declination, spectralType, starInfoDetails, apparentMagnitude);
+        return new StarInfo(rightAscension, declination, spectralType, starInfoDetails, apparentMagnitude, starColor);
     }
 }

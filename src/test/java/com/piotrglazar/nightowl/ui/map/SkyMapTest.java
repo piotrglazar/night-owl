@@ -20,6 +20,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.piotrglazar.nightowl.model.entities.StarColor.O;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
@@ -82,7 +83,7 @@ public class SkyMapTest {
 
         // then
         verify(skyMapCircle).draw(eq(graphics), eq(100), eq(160), eq(65));
-        verify(skyMapCircle).draw(eq(graphics), eq(199), anyInt(), eq(starSize.getSize()));
+        verify(skyMapCircle).fillWithColor(eq(graphics), eq(199), anyInt(), eq(starSize.getSize()), eq(O.getColor()));
         verify(skyMapDot).draw(eq(graphics), eq(100), eq(160));
         verify(skyMapDot).draw(eq(graphics), eq(100), eq(23));
         verify(cardinalDirections).forEach(any(Consumer.class));
@@ -112,7 +113,7 @@ public class SkyMapTest {
     }
 
     private StarPositionDto arbitraryStarPosition() {
-        return new StarPositionDto(new StarInfo(LocalTime.of(0, 0), 0.0, "A0", new StarInfoDetails("star"), 0.0),
+        return new StarPositionDto(new StarInfo(LocalTime.of(0, 0), 0.0, "A0", new StarInfoDetails("star"), 0.0, O),
                 new StarCelestialPosition(0.0, 0.0));
     }
 

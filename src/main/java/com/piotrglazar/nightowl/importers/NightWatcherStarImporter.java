@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.importers;
 
 import com.piotrglazar.nightowl.api.StarInfoProvider;
+import com.piotrglazar.nightowl.model.entities.StarColor;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
@@ -14,6 +15,7 @@ import java.nio.file.Path;
 import java.time.LocalTime;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Component
 @Profile("importing")
@@ -21,6 +23,7 @@ public class NightWatcherStarImporter {
 
     private static final Logger LOG = LoggerFactory.getLogger("STAR_IMPORTER");
     public static final double APPARENT_MAG_FACTOR = 1000.0;
+    public static final int MINIMAL_SHARDS_LENGTH = 9;
 
     private final StarInfoProvider starInfoProvider;
     private final ImportedLineFixer importedLineFixer;
@@ -37,14 +40,26 @@ public class NightWatcherStarImporter {
         LOG.info("Delete previous stars");
         starInfoProvider.deleteAll();
 
-        fileReader.getNotEmptyLines(path)
+        processStars(fileReader.getNotEmptyLines(path)).forEach(starInfoProvider::saveStarInfo);
+
+        LOG.info("Imported stars: {}",  starInfoProvider.count());
+    }
+
+    public Stream<StarInfo> processStars(Stream<String> rawLines) {
+        return rawLines
                 .map(String::trim)
                 .map(line -> line.replace(',', '.'))
                 .map(line -> line.split(" +"))
+                // prune invalid entries (not enough data)
+                .filter(shards -> shards.length > MINIMAL_SHARDS_LENGTH)
+                // prune invalid star colors (i.e. spectral type is incorrect)
+                .filter(shards -> starColor(shards) != null)
                 .map(shards -> new StarInfo(rightAscension(shards), declination(shards), spectralType(shards), starDetailsIfExist(shards),
-                        apparentMagnitude(shards)))
-                .forEach(starInfoProvider::saveStarInfo);
-        LOG.info("Imported stars: {}",  starInfoProvider.count());
+                        apparentMagnitude(shards), starColor(shards)));
+    }
+
+    private StarColor starColor(final String[] shards) {
+        return StarColor.fromStarSpectralType(spectralType(shards));
     }
 
     private double apparentMagnitude(final String[] shards) {
