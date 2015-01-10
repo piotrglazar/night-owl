@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.Graphics;
+import java.util.List;
 
 @Component
 public class DefaultSkyMapController implements SkyMapController {
@@ -34,7 +35,7 @@ public class DefaultSkyMapController implements SkyMapController {
         int x = panelCenter(width);
         int y = panelCenter(height);
         double azimuthDistance = azimuthDistance();
-        final java.util.List<StarPositionDto> starPositions = getStarPositions();
+        final List<StarPositionDto> starPositions = getStarPositions();
 
         final SkyMapDto skyMapDto = new SkyMapDtoBuilder()
                                             .radius(radius)
@@ -47,7 +48,7 @@ public class DefaultSkyMapController implements SkyMapController {
         skyMap.draw(graphics, skyMapDto);
     }
 
-    private java.util.List<StarPositionDto> getStarPositions() {
+    private List<StarPositionDto> getStarPositions() {
         return starPositionProvider.getBrightStarPositionsCached(runtimeConfiguration.getUserLocation(), timeProvider.get(),
                 runtimeConfiguration.getStarVisibilityMagnitude());
     }

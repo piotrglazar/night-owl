@@ -91,6 +91,32 @@ public class NightWatcherStarImporterTest {
         assertThat(getStarName()).isEqualTo("Antares");
     }
 
+    @Test
+    public void shouldIgnoreStarEntriesWithInvalidShardsLength() {
+        // given
+        // a sample from imported file
+        final String invalidData = "15,38  30,28  5883   16999  -20458        75312      0        0                               ";
+
+        // when
+        Stream<StarInfo> starInfo = importer.processStars(Stream.of(invalidData));
+
+        // then
+        assertThat(starInfo.count()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldIgnoreStarEntriesWithInvalidSpectralType() {
+        // given
+        // a sample from imported file
+        final String invalidData = " 5,089920661   1,17763581  5870     930    -162 N5     23680  32736      939 112406";
+
+        // when
+        Stream<StarInfo> starInfo = importer.processStars(Stream.of(invalidData));
+
+        // then
+        assertThat(starInfo.count()).isEqualTo(0);
+    }
+
     private String getStarName() {
         return getStarInfoDetails().map(StarInfoDetails::getName).orElseThrow(() -> new IllegalStateException("no star name"));
     }

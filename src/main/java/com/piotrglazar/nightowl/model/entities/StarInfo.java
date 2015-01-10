@@ -28,6 +28,9 @@ public final class StarInfo {
     @Column(nullable = false)
     private String spectralType;
 
+    @Column(nullable = false)
+    private StarColor starColor;
+
     @OneToOne(cascade = CascadeType.ALL)
     private StarInfoDetails starInfoDetails;
 
@@ -39,12 +42,13 @@ public final class StarInfo {
     }
 
     public StarInfo(LocalTime rightAscension, double declination, String spectralType, StarInfoDetails starInfoDetails,
-                    double apparentMagnitude) {
+                    double apparentMagnitude, StarColor starColor) {
         this.rightAscension = rightAscension;
         this.declination = declination;
         this.spectralType = spectralType;
         this.starInfoDetails = starInfoDetails;
         this.apparentMagnitude = apparentMagnitude;
+        this.starColor = starColor;
     }
 
     public Long getId() {
@@ -91,6 +95,18 @@ public final class StarInfo {
         this.apparentMagnitude = apparentMagnitude;
     }
 
+    public StarColor getStarColor() {
+        return starColor;
+    }
+
+    public void setStarColor(final StarColor starColor) {
+        this.starColor = starColor;
+    }
+
+    public void setStarInfoDetails(final StarInfoDetails starInfoDetails) {
+        this.starInfoDetails = starInfoDetails;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -116,6 +132,7 @@ public final class StarInfo {
                 .add("spectralType", spectralType)
                 .add("starInfoDetails", starInfoDetails)
                 .add("apparentMagnitude", apparentMagnitude)
+                .add("starColor", starColor)
                 .toString();
     }
 }
