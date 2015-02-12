@@ -10,6 +10,7 @@ import com.piotrglazar.nightowl.util.messages.StarsVisibilityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,19 +37,31 @@ public class DefaultMainWindow implements MainWindow {
     private JLabel starsNeverVisible;
     private JLabel starsVisibleNow;
     private JPanel mapPanel;
+    private JButton rightButton;
+    private JButton leftButton;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final SkyMapController skyMapController;
+    private final SkyMapRotations skyMapRotations;
 
     @Autowired
-    public DefaultMainWindow(SkyMapController skyMapController) {
+    public DefaultMainWindow(SkyMapController skyMapController, SkyMapRotations skyMapRotations) {
         this.skyMapController = skyMapController;
+        this.skyMapRotations = skyMapRotations;
     }
 
     @Override
     public MainWindow preDisplay() {
         timeLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
         siderealHourAngleLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
+        leftButton.addActionListener(al -> {
+            skyMapRotations.rotateLeft();
+            repaintUi();
+        });
+        rightButton.addActionListener(al -> {
+            skyMapRotations.rotateRight();
+            repaintUi();
+        });
         return this;
     }
 

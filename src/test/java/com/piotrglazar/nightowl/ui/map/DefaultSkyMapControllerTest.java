@@ -13,25 +13,34 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JUnitParamsRunner.class)
 public class DefaultSkyMapControllerTest {
 
     @Mock
-    private Graphics graphics;
+    private SkyMapPreprocessor skyMapPreprocessor;
+
+    @Mock
+    private Graphics2D graphics;
 
     @Mock
     private NightOwlRuntimeConfiguration runtimeConfiguration;
@@ -57,6 +66,7 @@ public class DefaultSkyMapControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        given(graphics.getTransform()).willReturn(mock(AffineTransform.class));
     }
 
     @Test
@@ -91,6 +101,21 @@ public class DefaultSkyMapControllerTest {
 
         // then
         verify(starPositionProvider).getBrightStarPositionsCached(any(UserLocation.class), any(ZonedDateTime.class), anyDouble());
+    }
+
+    @Test
+    public void shouldUsePreProcessorBeforeDrawingSkyMap() {
+        // given
+        arbitraryUserLocation();
+
+        // when
+        skyMapController.draw(graphics, 100, 100);
+
+        // then
+        // call order is necessary because calling skyMap.draw before preprocessor.preProcess results in sky map not being rotated
+        final InOrder inOrder = inOrder(skyMapPreprocessor, skyMap);
+        inOrder.verify(skyMapPreprocessor).preProcess(eq(graphics), any(SkyMapPreprocessingContext.class));
+        inOrder.verify(skyMap).draw(eq(graphics), any(SkyMapDto.class));
     }
 
     private void verifyRuntimeConfigurationWasUsed() {
