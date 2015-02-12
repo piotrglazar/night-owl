@@ -19,14 +19,17 @@ public class DefaultSkyMapController implements SkyMapController {
     private final SkyMap skyMap;
     private final StarPositionProvider starPositionProvider;
     private final TimeProvider timeProvider;
+    private final SkyMapPreprocessor skyMapPreprocessor;
 
     @Autowired
     public DefaultSkyMapController(NightOwlRuntimeConfiguration runtimeConfiguration, SkyMap skyMap,
-                                   StarPositionProvider starPositionProvider, TimeProvider timeProvider) {
+                                   StarPositionProvider starPositionProvider, TimeProvider timeProvider,
+                                   SkyMapPreprocessor skyMapPreprocessor) {
         this.runtimeConfiguration = runtimeConfiguration;
         this.skyMap = skyMap;
         this.starPositionProvider = starPositionProvider;
         this.timeProvider = timeProvider;
+        this.skyMapPreprocessor = skyMapPreprocessor;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class DefaultSkyMapController implements SkyMapController {
                                             .starPositions(starPositions)
                                             .skyDisplayContext(runtimeConfiguration.skyDisplayContext())
                                             .build();
+
+        skyMapPreprocessor.preProcess(graphics, new SkyMapPreprocessingContext(x, y));
         skyMap.draw(graphics, skyMapDto);
     }
 

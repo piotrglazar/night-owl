@@ -42,4 +42,13 @@ public class StarSizeCalculatorTest {
         // then
         assertThat(starSize.getSize()).isEqualTo(expectedStarSize);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldFailWhenInvalidThresholdsProvided() {
+        // given
+        final String invalidThreshold = "1.0 = 3 = 5";
+
+        // expect
+        new StarSizeCalculator(invalidThreshold);
+    }
 }
