@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+import java.awt.KeyboardFocusManager;
 
 @Component
 public class DefaultUserInterface implements UserInterface, ApplicationListener<UiUpdateEvent> {
@@ -17,19 +18,23 @@ public class DefaultUserInterface implements UserInterface, ApplicationListener<
     private final MainWindow mainWindow;
     private final UiUpdater uiUpdater;
     private final MainMenu mainMenu;
+    private final ArrowKeysDispatcher arrowKeysDispatcher;
 
     @Autowired
-    public DefaultUserInterface(final MainWindow mainWindow, final UiUpdater uiUpdater, final MainMenu mainMenu) {
+    public DefaultUserInterface(MainWindow mainWindow, UiUpdater uiUpdater, MainMenu mainMenu, ArrowKeysDispatcher arrowKeysDispatcher) {
         this.mainWindow = mainWindow;
         this.uiUpdater = uiUpdater;
         this.mainMenu = mainMenu;
+        this.arrowKeysDispatcher = arrowKeysDispatcher;
     }
 
     public void runUserInterface() {
         final JFrame frame = new JFrame("NightOwl");
         frame.add(mainWindow.preDisplay().getMainPanel());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        KeyboardFocusManager currentKeyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        currentKeyboardFocusManager.addKeyEventDispatcher(arrowKeysDispatcher);
 
         frame.setJMenuBar(mainMenu.getMenuBar());
 

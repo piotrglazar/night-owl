@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.ui.map;
 
 import com.piotrglazar.nightowl.ui.SkyMapRotations;
+import com.piotrglazar.nightowl.ui.SkyMapZoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,22 +18,42 @@ import static java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 public class SkyMapPreprocessor {
 
     private final SkyMapRotations skyMapRotations;
+    private final SkyMapZoom skyMapZoom;
 
     @Autowired
-    public SkyMapPreprocessor(SkyMapRotations skyMapRotations) {
+    public SkyMapPreprocessor(SkyMapRotations skyMapRotations, SkyMapZoom skyMapZoom) {
         this.skyMapRotations = skyMapRotations;
+        this.skyMapZoom = skyMapZoom;
     }
 
     public void preProcess(Graphics graphics, SkyMapPreprocessingContext context) {
-        Graphics2D graphics2d = (Graphics2D) graphics;
+        final Graphics2D graphics2d = (Graphics2D) graphics;
         setAntiAliasing(graphics2d);
-        rotate(context, graphics2d);
+        affineTransformations(context, graphics2d);
     }
 
-    private void rotate(SkyMapPreprocessingContext context, Graphics2D graphics2d) {
-        AffineTransform affineTransform = graphics2d.getTransform();
-        affineTransform.rotate(skyMapRotations.getRotationRadians(), context.getMapCenterX(), context.getMapCenterY());
+    private void affineTransformations(SkyMapPreprocessingContext context, Graphics2D graphics2d) {
+        final AffineTransform affineTransform = graphics2d.getTransform();
+        scale(context, affineTransform);
+        move(affineTransform);
+        rotate(context, affineTransform);
         graphics2d.setTransform(affineTransform);
+    }
+
+    private void move(AffineTransform affineTransform) {
+        affineTransform.translate(skyMapZoom.getShiftX(), skyMapZoom.getShiftY());
+    }
+
+    private void scale(SkyMapPreprocessingContext context, AffineTransform affineTransform) {
+        final double scale = skyMapZoom.getScale();
+        final double deltaX = (scale - 1.0) * context.getMapCenterX();
+        final double deltaY = (scale - 1.0) * context.getMapCenterY();
+        affineTransform.translate(-deltaX, -deltaY);
+        affineTransform.scale(scale, scale);
+    }
+
+    private void rotate(SkyMapPreprocessingContext context, AffineTransform affineTransform) {
+        affineTransform.rotate(skyMapRotations.getRotationRadians(), context.getMapCenterX(), context.getMapCenterY());
     }
 
     private void setAntiAliasing(Graphics2D graphics2d) {

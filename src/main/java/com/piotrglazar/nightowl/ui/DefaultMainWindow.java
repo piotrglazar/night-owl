@@ -39,15 +39,19 @@ public class DefaultMainWindow implements MainWindow {
     private JPanel mapPanel;
     private JButton rightButton;
     private JButton leftButton;
+    private JButton zoomIn;
+    private JButton zoomOut;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final SkyMapController skyMapController;
     private final SkyMapRotations skyMapRotations;
+    private final SkyMapZoom skyMapZoom;
 
     @Autowired
-    public DefaultMainWindow(SkyMapController skyMapController, SkyMapRotations skyMapRotations) {
+    public DefaultMainWindow(SkyMapController skyMapController, SkyMapRotations skyMapRotations, SkyMapZoom skyMapZoom) {
         this.skyMapController = skyMapController;
         this.skyMapRotations = skyMapRotations;
+        this.skyMapZoom = skyMapZoom;
     }
 
     @Override
@@ -60,6 +64,14 @@ public class DefaultMainWindow implements MainWindow {
         });
         rightButton.addActionListener(al -> {
             skyMapRotations.rotateRight();
+            repaintUi();
+        });
+        zoomIn.addActionListener(al -> {
+            skyMapZoom.zoomIn();
+            repaintUi();
+        });
+        zoomOut.addActionListener(al -> {
+            skyMapZoom.zoomOut();
             repaintUi();
         });
         return this;
