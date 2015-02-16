@@ -10,7 +10,6 @@
             <Bug pattern="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"/>
             <Bug pattern="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"/>
             <Bug pattern="UI_INHERITANCE_UNSAFE_GETRESOURCE"/>
-            <Bug pattern="UI_INHERITANCE_UNSAFE_GETRESOURCE"/>
             <Bug category="STYLE"/>
         </Or>
     </Match>

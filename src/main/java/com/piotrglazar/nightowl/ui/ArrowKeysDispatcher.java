@@ -60,7 +60,7 @@ public class ArrowKeysDispatcher implements KeyEventDispatcher {
         boolean perform();
     }
 
-    private class SkyMapAction implements Action {
+    private final class SkyMapAction implements Action {
 
         private final Runnable action;
 

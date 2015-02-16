@@ -61,6 +61,6 @@ public class SkyMapZoomTest {
 
     private interface SkyMapZoomAction {
 
-        public void action(SkyMapZoom skyMapZoom);
+        void action(SkyMapZoom skyMapZoom);
     }
 }
