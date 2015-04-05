@@ -6,7 +6,6 @@ import com.intellij.uiDesigner.core.Spacer;
 import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.api.SkyMapController;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
-import com.piotrglazar.nightowl.util.messages.StarsVisibilityMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,14 +27,6 @@ public class DefaultMainWindow implements MainWindow {
     private JLabel timeLabel;
     private JLabel siderealHourAngleLabel;
     private JLabel cityName;
-    private JLabel cityLatitude;
-    private JLabel cityLongitude;
-    private JLabel stars;
-    private JLabel userLocations;
-    private JLabel starsAlwaysVisible;
-    private JLabel starsSometimesVisible;
-    private JLabel starsNeverVisible;
-    private JLabel starsVisibleNow;
     private JPanel mapPanel;
     private JButton rightButton;
     private JButton leftButton;
@@ -93,32 +84,8 @@ public class DefaultMainWindow implements MainWindow {
     }
 
     @Override
-    public void setNumberOfStars(long numberOfStars) {
-        stars.setText("Number of stars: " + numberOfStars);
-    }
-
-    @Override
-    public void setNumberOfUserLocations(long numberOfUserLocations) {
-        userLocations.setText("Number of locations: " + numberOfUserLocations);
-    }
-
-    @Override
-    public void setNumberOfStarsVisibleNow(long numberOfStarsVisibleNow) {
-        starsVisibleNow.setText("Stars visible now: " + numberOfStarsVisibleNow);
-    }
-
-    @Override
-    public void setUserLocation(final UserLocation userLocation) {
+    public void setUserLocation(UserLocation userLocation) {
         cityName.setText(userLocation.getName());
-        cityLatitude.setText(String.format("Latitude: %s", userLocation.getLatitude()));
-        cityLongitude.setText(String.format("Longitude: %s", userLocation.getLongitude()));
-    }
-
-    @Override
-    public void setStarsVisibility(final StarsVisibilityMessage message) {
-        starsAlwaysVisible.setText(String.format("Stars always visible: %d", message.getStarsAlwaysVisible()));
-        starsSometimesVisible.setText(String.format("Stars sometimes visible: %d", message.getStarsSometimesVisible()));
-        starsNeverVisible.setText(String.format("Stars never visible: %d", message.getStarsNeverVisible()));
     }
 
     private void createUIComponents() {
@@ -163,30 +130,6 @@ public class DefaultMainWindow implements MainWindow {
         cityName = new JLabel();
         cityName.setText("cityName");
         mainPanel.add(cityName, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(161, 16), null, 0, false));
-        cityLatitude = new JLabel();
-        cityLatitude.setText("Latitude: ");
-        mainPanel.add(cityLatitude, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(239, 16), null, 0, false));
-        cityLongitude = new JLabel();
-        cityLongitude.setText("Longitude:");
-        mainPanel.add(cityLongitude, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(185, 16), null, 0, false));
-        stars = new JLabel();
-        stars.setText("stars: 0");
-        mainPanel.add(stars, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(161, 16), null, 0, false));
-        userLocations = new JLabel();
-        userLocations.setText("userLocations: 0");
-        mainPanel.add(userLocations, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(239, 16), null, 0, false));
-        starsAlwaysVisible = new JLabel();
-        starsAlwaysVisible.setText("stars always visible: 0");
-        mainPanel.add(starsAlwaysVisible, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(161, 16), null, 0, false));
-        starsSometimesVisible = new JLabel();
-        starsSometimesVisible.setText("stars sometimes visible: 0");
-        mainPanel.add(starsSometimesVisible, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(239, 16), null, 0, false));
-        starsNeverVisible = new JLabel();
-        starsNeverVisible.setText("stars never visible: 0");
-        mainPanel.add(starsNeverVisible, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(185, 16), null, 0, false));
-        starsVisibleNow = new JLabel();
-        starsVisibleNow.setText("Stars visible now: 0");
-        mainPanel.add(starsVisibleNow, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mainPanel.add(mapPanel, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 

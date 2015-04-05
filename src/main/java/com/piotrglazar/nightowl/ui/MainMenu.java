@@ -1,6 +1,7 @@
 package com.piotrglazar.nightowl.ui;
 
 import com.piotrglazar.nightowl.model.UserLocationDto;
+import com.piotrglazar.nightowl.util.messages.DatabaseStatisticsMessage;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,14 @@ public class MainMenu {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final MainMenuController mainMenuController;
+    private final MainMenuMessageFormatter formatter;
 
     private JMenuBar menuBar = new JMenuBar();
 
     @Autowired
-    public MainMenu(final MainMenuController mainMenuController) {
+    public MainMenu(MainMenuController mainMenuController, MainMenuMessageFormatter formatter) {
         this.mainMenuController = mainMenuController;
+        this.formatter = formatter;
     }
 
     @PostConstruct
@@ -46,7 +49,7 @@ public class MainMenu {
         final JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
         fileMenu.getAccessibleContext().setAccessibleDescription(
-                "The main entrypoint for actions");
+                "The main entry point for actions");
 
         final JMenuItem locationItem = createFileMenuLocationItem();
         fileMenu.add(locationItem);
@@ -59,10 +62,26 @@ public class MainMenu {
 
         fileMenu.addSeparator();
 
+        final JMenuItem databaseStatistics = createDatabaseStatisticsItem();
+        fileMenu.add(databaseStatistics);
+
+        fileMenu.addSeparator();
+
         final JMenuItem exitItem = createFileMenuExitItem();
         fileMenu.add(exitItem);
 
         return fileMenu;
+    }
+
+    private JMenuItem createDatabaseStatisticsItem() {
+        final JMenuItem databaseStatistics = new JMenuItem("Database statistics");
+        databaseStatistics.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.ALT_MASK));
+        databaseStatistics.addActionListener(a -> {
+            DatabaseStatisticsMessage databaseStatisticsMessage = mainMenuController.databaseStatistics();
+            JOptionPane.showMessageDialog(databaseStatistics, formatter.formatDatabaseStatisticsMessage(databaseStatisticsMessage),
+                    "Database statistics", JOptionPane.PLAIN_MESSAGE);
+        });
+        return databaseStatistics;
     }
 
     private JMenuItem createSkyObjectSettingsItem() {
