@@ -3,6 +3,7 @@ package com.piotrglazar.nightowl.ui;
 import com.google.common.base.Preconditions;
 import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
+import com.piotrglazar.nightowl.logic.DatabaseStatistics;
 import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
@@ -11,6 +12,7 @@ import com.piotrglazar.nightowl.util.DoubleConverter;
 import com.piotrglazar.nightowl.util.MoreCollectors;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
+import com.piotrglazar.nightowl.util.messages.DatabaseStatisticsMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +31,18 @@ public class MainMenuController {
     private final NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final DoubleConverter doubleConverter;
+    private final DatabaseStatistics databaseStatistics;
 
     @Autowired
     public MainMenuController(UserLocationRepository userLocationRepository,
                               NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration,
-                              ApplicationEventPublisher applicationEventPublisher, DoubleConverter doubleConverter) {
+                              ApplicationEventPublisher applicationEventPublisher, DoubleConverter doubleConverter,
+                              DatabaseStatistics databaseStatistics) {
         this.userLocationRepository = userLocationRepository;
         this.nightOwlRuntimeConfiguration = nightOwlRuntimeConfiguration;
         this.applicationEventPublisher = applicationEventPublisher;
         this.doubleConverter = doubleConverter;
+        this.databaseStatistics = databaseStatistics;
     }
 
     public List<UserLocationDto> getAllUserLocations() {
@@ -104,5 +109,9 @@ public class MainMenuController {
 
     public boolean currentShowStarLabels() {
         return nightOwlRuntimeConfiguration.skyDisplayContext().shouldShowStarLabels();
+    }
+
+    public DatabaseStatisticsMessage databaseStatistics() {
+        return databaseStatistics.getDatabaseStatisticsMessage();
     }
 }

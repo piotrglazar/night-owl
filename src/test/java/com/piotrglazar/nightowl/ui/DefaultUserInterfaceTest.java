@@ -2,6 +2,9 @@ package com.piotrglazar.nightowl.ui;
 
 import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.api.UiUpdater;
+import com.piotrglazar.nightowl.coordinates.Latitude;
+import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +30,8 @@ public class DefaultUserInterfaceTest {
     @Test
     public void shouldConsumeUiUpdateEvents() {
         // given
-        UiUpdateEvent uiUpdateEvent = new UiUpdateEvent(this, mainWindow -> mainWindow.setNumberOfStars(42));
+        UserLocation userLocation = new UserLocation(new Latitude(8.0), new Longitude(16.0), "Warsaw");
+        UiUpdateEvent uiUpdateEvent = new UiUpdateEvent(this, mainWindow -> mainWindow.setUserLocation(userLocation));
 
         // when
         defaultUserInterface.onApplicationEvent(uiUpdateEvent);
@@ -37,6 +41,6 @@ public class DefaultUserInterfaceTest {
         verify(uiUpdater).update(uiUpdate.capture());
         // run ui update event
         uiUpdate.getValue().run();
-        verify(mainWindow).setNumberOfStars(42);
+        verify(mainWindow).setUserLocation(userLocation);
     }
 }
