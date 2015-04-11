@@ -54,16 +54,19 @@ public class MainMenu {
         final JMenuItem locationItem = createFileMenuLocationItem();
         fileMenu.add(locationItem);
 
-        final JMenuItem visibilitySettings = createVisibilitySettingsItem();
-        fileMenu.add(visibilitySettings);
+        final JMenuItem visibilitySettingsItem = createVisibilitySettingsItem();
+        fileMenu.add(visibilitySettingsItem);
 
         final JMenuItem skyObjectSettingsItem = createSkyObjectSettingsItem();
         fileMenu.add(skyObjectSettingsItem);
 
+        final JCheckBoxMenuItem clockRunningItem = createClockRunningSettingsItem();
+        fileMenu.add(clockRunningItem);
+
         fileMenu.addSeparator();
 
-        final JMenuItem databaseStatistics = createDatabaseStatisticsItem();
-        fileMenu.add(databaseStatistics);
+        final JMenuItem databaseStatisticsItem = createDatabaseStatisticsItem();
+        fileMenu.add(databaseStatisticsItem);
 
         fileMenu.addSeparator();
 
@@ -71,6 +74,16 @@ public class MainMenu {
         fileMenu.add(exitItem);
 
         return fileMenu;
+    }
+
+    private JCheckBoxMenuItem createClockRunningSettingsItem() {
+        final JCheckBoxMenuItem clockRunning = new JCheckBoxMenuItem("Clock running");
+        clockRunning.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_MASK));
+        clockRunning.setState(true);
+        clockRunning.addActionListener(a -> {
+            mainMenuController.updateClockRunningStatus(clockRunning.getState());
+        });
+        return clockRunning;
     }
 
     private JMenuItem createDatabaseStatisticsItem() {

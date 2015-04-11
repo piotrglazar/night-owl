@@ -10,6 +10,7 @@ import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.util.ClockEvent;
 import com.piotrglazar.nightowl.util.DoubleConverter;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
@@ -216,6 +217,15 @@ public class MainMenuControllerTest {
         // then
         verify(nightOwlRuntimeConfiguration).updateShowStarLabels(true);
         assertThatReloadsAppAndRepaintsUi();
+    }
+
+    @Test
+    public void shouldSendClockChangeEvent() {
+        // when
+        mainMenuController.updateClockRunningStatus(true);
+
+        // then
+        verify(eventPublisher).publishEvent(any(ClockEvent.class));
     }
 
     private void assertThatReloadsAppAndRepaintsUi() {
