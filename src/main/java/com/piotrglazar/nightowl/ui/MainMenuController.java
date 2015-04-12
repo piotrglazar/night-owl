@@ -8,6 +8,7 @@ import com.piotrglazar.nightowl.model.UserLocationDto;
 import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.util.ClockEvent;
 import com.piotrglazar.nightowl.util.DoubleConverter;
 import com.piotrglazar.nightowl.util.MoreCollectors;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
@@ -113,5 +114,13 @@ public class MainMenuController {
 
     public DatabaseStatisticsMessage databaseStatistics() {
         return databaseStatistics.getDatabaseStatisticsMessage();
+    }
+
+    public void updateClockRunningStatus(boolean isClockRunning) {
+        applicationEventPublisher.publishEvent(new ClockEvent(this, getActionType(isClockRunning)));
+    }
+
+    private ClockEvent.ActionType getActionType(boolean isClockRunning) {
+        return isClockRunning ? ClockEvent.ActionType.START : ClockEvent.ActionType.STOP;
     }
 }
