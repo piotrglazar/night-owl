@@ -1,7 +1,9 @@
 package com.piotrglazar.nightowl.util.messages;
 
+import javax.annotation.concurrent.Immutable;
 import java.util.Objects;
 
+@Immutable
 public final class StarsVisibilityMessage {
 
     private final long starsAlwaysVisible;

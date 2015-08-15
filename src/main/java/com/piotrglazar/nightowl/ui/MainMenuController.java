@@ -95,8 +95,8 @@ public class MainMenuController {
     }
 
     private void updateApplication(final String cause) {
-        applicationEventPublisher.publishEvent(new StateReloadEvent(this, cause));
-        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, MainWindow::repaintUi));
+        applicationEventPublisher.publishEvent(new StateReloadEvent(cause));
+        applicationEventPublisher.publishEvent(new UiUpdateEvent(MainWindow::repaintUi));
     }
 
     private boolean isNewStarVisibilityMagnitudeWithinBounds(final double newStarVisibilityMag) {

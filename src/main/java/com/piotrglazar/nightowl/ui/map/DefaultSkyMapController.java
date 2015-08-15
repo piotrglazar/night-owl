@@ -64,6 +64,11 @@ public class DefaultSkyMapController implements SkyMapController {
         return userLocation.getLatitude().getLatitude();
     }
 
+    @Override
+    public String getUserLocation() {
+        return runtimeConfiguration.getUserLocation().getName();
+    }
+
     private int panelCenter(final int dimension) {
         return dimension / 2;
     }

@@ -3,10 +3,10 @@ package com.piotrglazar.nightowl.logic;
 import com.piotrglazar.nightowl.api.MainWindow;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
+import com.piotrglazar.nightowl.util.NightOwlEvent;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -51,17 +51,17 @@ public class MainWindowTimeEvents {
             applicationEventPublisher.publishEvent(timeEvent(now));
         });
         eventScheduler.registerAndStartCyclicEvent("UiSkyMapRefresher", skyMapRefresh, TimeUnit.SECONDS, () ->
-                        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, MainWindow::repaintUi))
+                        applicationEventPublisher.publishEvent(new UiUpdateEvent(MainWindow::repaintUi))
         );
     }
 
-    private ApplicationEvent timeEvent(final ZonedDateTime now) {
-        return new UiUpdateEvent(this, (mainWindow) -> mainWindow.setTimeLabel(now.toLocalDateTime()));
+    private NightOwlEvent timeEvent(final ZonedDateTime now) {
+        return new UiUpdateEvent(mainWindow -> mainWindow.setTimeLabel(now.toLocalDateTime()));
     }
 
-    private ApplicationEvent siderealHourAngleEvent(final ZonedDateTime now) {
+    private NightOwlEvent siderealHourAngleEvent(final ZonedDateTime now) {
         final UserLocation userLocation = runtimeConfiguration.getUserLocation();
         LocalTime siderealHourAngle = siderealHourAngleCalculator.siderealHourAngle(now, userLocation.getLongitude());
-        return new UiUpdateEvent(this, (mainWindow) -> mainWindow.setSiderealHourAngleLabel(siderealHourAngle));
+        return new UiUpdateEvent(mainWindow -> mainWindow.setSiderealHourAngleLabel(siderealHourAngle));
     }
 }

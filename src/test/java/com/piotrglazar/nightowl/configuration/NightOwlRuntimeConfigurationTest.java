@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -64,7 +64,7 @@ public class NightOwlRuntimeConfigurationTest {
     }
 
     @Test
-    public void shouldPostEventWithUserConfiguration() {
+    public void shouldNotPostEventWithUserConfigurationBecauseItCausesDependencyCycle() {
         // given
         given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
 
@@ -72,15 +72,11 @@ public class NightOwlRuntimeConfigurationTest {
         nightOwlRuntimeConfiguration.loadRuntimeConfiguration();
 
         // then
-        ArgumentCaptor<UiUpdateEvent> uiUpdateEvent = ArgumentCaptor.forClass(UiUpdateEvent.class);
-        verify(applicationEventPublisher).publishEvent(uiUpdateEvent.capture());
-        // fire event
-        uiUpdateEvent.getValue().action(mainWindow);
-        verify(mainWindow).setUserLocation(any(UserLocation.class));
+        verify(applicationEventPublisher, never()).publishEvent(UiUpdateEvent.class);
     }
 
     @Test
-    public void shouldUpdateUserLocation() throws Exception {
+    public void shouldUpdateUserLocation() {
         // given
         final UserLocation userLocation = arbitraryUserLocation();
         given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
@@ -93,11 +89,8 @@ public class NightOwlRuntimeConfigurationTest {
         assertThat(runtimeConfiguration.getChosenUserLocation()).isEqualTo(userLocation);
         verify(configurationProvider).updateConfiguration(runtimeConfiguration);
         ArgumentCaptor<UiUpdateEvent> uiUpdateEvent = ArgumentCaptor.forClass(UiUpdateEvent.class);
-        verify(applicationEventPublisher, times(2)).publishEvent(uiUpdateEvent.capture());
-        // fire event
-        assertThat(uiUpdateEvent.getAllValues()).hasSize(2);
-        // ignore the first event, it's tested above
-        uiUpdateEvent.getAllValues().get(1).action(mainWindow);
+        verify(applicationEventPublisher).publishEvent(uiUpdateEvent.capture());
+        uiUpdateEvent.getValue().action(mainWindow);
         verify(mainWindow).setUserLocation(any(UserLocation.class));
     }
 
@@ -117,7 +110,7 @@ public class NightOwlRuntimeConfigurationTest {
     }
 
     @Test
-    public void shouldCreateSkyDisplayContext() throws Exception {
+    public void shouldCreateSkyDisplayContext() {
         // given
         given(configurationProvider.getConfiguration()).willReturn(runtimeConfiguration);
         nightOwlRuntimeConfiguration.loadRuntimeConfiguration();

@@ -1,14 +1,12 @@
 package com.piotrglazar.nightowl.util;
 
 import com.piotrglazar.nightowl.api.MainWindow;
-import org.springframework.context.ApplicationEvent;
 
-public class UiUpdateEvent extends ApplicationEvent {
+public class UiUpdateEvent implements NightOwlEvent {
 
     private final UiUpdateAction uiUpdateAction;
 
-    public UiUpdateEvent(final Object source, final UiUpdateAction uiUpdateAction) {
-        super(source);
+    public UiUpdateEvent(UiUpdateAction uiUpdateAction) {
         this.uiUpdateAction = uiUpdateAction;
     }
 

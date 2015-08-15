@@ -6,6 +6,7 @@ public class TimeMetadata {
 
     private final String name;
     private final long intervalInMillis;
+
     private final Runnable action;
     private boolean active;
     private Timer timer;
@@ -34,6 +35,10 @@ public class TimeMetadata {
         return active;
     }
 
+    public boolean isNotActive() {
+        return !active;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -44,5 +49,9 @@ public class TimeMetadata {
 
     public void setTimer(Timer timer) {
         this.timer = timer;
+    }
+
+    public static TimeMetadata active(String name, long intervalInMillis, Runnable action, Timer timer) {
+        return new TimeMetadata(name, intervalInMillis, action, true, timer);
     }
 }

@@ -71,7 +71,7 @@ public class ArrowKeysDispatcher implements KeyEventDispatcher {
         @Override
         public boolean perform() {
             action.run();
-            applicationEventPublisher.publishEvent(new UiUpdateEvent(this, MainWindow::repaintUi));
+            applicationEventPublisher.publishEvent(new UiUpdateEvent(MainWindow::repaintUi));
             return true;
         }
     }

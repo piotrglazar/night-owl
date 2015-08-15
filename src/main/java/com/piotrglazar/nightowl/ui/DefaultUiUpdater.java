@@ -10,6 +10,7 @@ import java.awt.EventQueue;
 @Profile("default")
 @SuppressWarnings("unused")
 public class DefaultUiUpdater implements UiUpdater {
+
     @Override
     public void update(final Runnable action) {
         EventQueue.invokeLater(action);

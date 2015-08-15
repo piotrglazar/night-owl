@@ -1,9 +1,9 @@
 package com.piotrglazar.nightowl.logic;
 
-import com.piotrglazar.nightowl.api.StarInfoProvider;
-import com.piotrglazar.nightowl.api.UserLocationProvider;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.StarPositionDto;
+import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import com.piotrglazar.nightowl.util.messages.DatabaseStatisticsMessage;
@@ -17,18 +17,18 @@ import java.util.List;
 public class DatabaseStatistics {
 
     private final StarPositionProvider starPositionProvider;
-    private final UserLocationProvider userLocationProvider;
-    private final StarInfoProvider starInfoProvider;
+    private final UserLocationRepository userLocationRepository;
+    private final StarInfoRepository starInfoRepository;
     private final NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration;
     private final TimeProvider timeProvider;
 
     @Autowired
     public DatabaseStatistics(StarPositionProvider starPositionProvider,
-                              UserLocationProvider userLocationProvider, StarInfoProvider starInfoProvider,
+                              UserLocationRepository userLocationRepository, StarInfoRepository starInfoRepository,
                               NightOwlRuntimeConfiguration nightOwlRuntimeConfiguration, TimeProvider timeProvider) {
         this.starPositionProvider = starPositionProvider;
-        this.userLocationProvider = userLocationProvider;
-        this.starInfoProvider = starInfoProvider;
+        this.userLocationRepository = userLocationRepository;
+        this.starInfoRepository = starInfoRepository;
         this.nightOwlRuntimeConfiguration = nightOwlRuntimeConfiguration;
         this.timeProvider = timeProvider;
     }
@@ -39,7 +39,7 @@ public class DatabaseStatistics {
         List<StarPositionDto> starsPositions =
                     starPositionProvider.getStarPositions(nightOwlRuntimeConfiguration.getUserLocation(), timeProvider.get());
 
-        return new DatabaseStatisticsMessage(starInfoProvider.count(), userLocationProvider.count(),
+        return new DatabaseStatisticsMessage(starInfoRepository.count(), userLocationRepository.count(),
                 starsPositions.size(), starsVisibilityMessage.getStarsAlwaysVisible(),
                 starsVisibilityMessage.getStarsNeverVisible(), userLocation.getName(), userLocation.getLatitude().getLatitude(),
                 userLocation.getLongitude().getLongitude());

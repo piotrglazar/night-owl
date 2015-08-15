@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.ui.map;
 
+import com.google.common.collect.ImmutableList;
 import com.piotrglazar.nightowl.model.SkyDisplayContext;
 import com.piotrglazar.nightowl.model.StarPositionDto;
 
@@ -20,7 +21,7 @@ public class SkyMapDto {
         this.x = x;
         this.y = y;
         this.azimuthDistance = azimuthDistance;
-        this.starPositions = starPositions;
+        this.starPositions = ImmutableList.copyOf(starPositions);
         this.skyDisplayContext = skyDisplayContext;
     }
 

@@ -3,6 +3,7 @@ package com.piotrglazar.nightowl.dbscript;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.piotrglazar.nightowl.TestFileUtils;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("all")
-public class DatabaseScriptFixerTest {
+public class DatabaseScriptFixerTest implements TestFileUtils {
 
     @Mock
     private FileReader fileReader;
@@ -28,7 +29,7 @@ public class DatabaseScriptFixerTest {
     @Test
     public void shouldFixScriptByRemovingUnwantedLines() throws IOException {
         // given
-        final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
+        final Path path = tmpTextFile();
         given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1", "line2", "line3", "line4").stream());
         given(fileReader.getNotEmptyLines("allowed")).willReturn(Sets.newHashSet("line0", "line4"));
         given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet());
@@ -47,7 +48,7 @@ public class DatabaseScriptFixerTest {
     @Test
     public void shouldFixScriptByMovingSpecificLinesToTail() throws IOException {
         // given
-        final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
+        final Path path = tmpTextFile();
         given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1", "line2", "line3", "line4").stream());
         given(fileReader.getNotEmptyLines("allowed")).willReturn(Sets.newHashSet("line0", "line1", "line2", "line3", "line4"));
         given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet("line1", "line2"));
@@ -66,7 +67,7 @@ public class DatabaseScriptFixerTest {
     @Test
     public void shouldRemovingLineTakePrecedenceOverMovingLineToTail() throws IOException {
         // given
-        final Path path = Files.createTempFile("", ".txt").toAbsolutePath();
+        final Path path = tmpTextFile();
         given(fileReader.getNotEmptyLines(path)).willReturn(Lists.newArrayList("line0", "line1").stream());
         given(fileReader.getNotEmptyLines("allowed")).willReturn(Sets.newHashSet("line1"));
         given(fileReader.getNotEmptyLines("tail")).willReturn(Sets.newHashSet("line0"));
@@ -80,11 +81,5 @@ public class DatabaseScriptFixerTest {
 
         // cleanup
         deleteFile(path);
-    }
-
-    private void deleteFile(final Path path) {
-        if (!path.toFile().delete()) {
-            throw new IllegalStateException("Failed to delete " + path);
-        }
     }
 }

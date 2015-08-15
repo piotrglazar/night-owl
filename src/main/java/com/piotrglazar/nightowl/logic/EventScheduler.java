@@ -25,7 +25,7 @@ public class EventScheduler {
         long intervalInMillis = convertToMilliseconds(units, timeUnit);
         Timer timer = timerFactory.timer(name);
 
-        TimeMetadata timeMetadata = new TimeMetadata(name, intervalInMillis, action, true, timer);
+        TimeMetadata timeMetadata = TimeMetadata.active(name, intervalInMillis, action, timer);
         events.put(name, timeMetadata);
 
         timer.scheduleAtFixedRate(actionAsTimerTask(action), intervalInMillis, intervalInMillis);
@@ -55,7 +55,7 @@ public class EventScheduler {
 
     public void startAllEvents() {
         events.values().stream()
-                .filter(timeMetadata -> !timeMetadata.isActive())
+                .filter(TimeMetadata::isNotActive)
                 .forEach(timeMetadata -> {
                     Timer timer = timerFactory.timer(timeMetadata.getName());
                     long intervalInMillis = timeMetadata.getIntervalInMillis();

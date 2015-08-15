@@ -5,7 +5,7 @@ import com.piotrglazar.nightowl.api.UiUpdater;
 import com.piotrglazar.nightowl.api.UserInterface;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.swing.JFrame;
@@ -13,7 +13,7 @@ import javax.swing.WindowConstants;
 import java.awt.KeyboardFocusManager;
 
 @Component
-public class DefaultUserInterface implements UserInterface, ApplicationListener<UiUpdateEvent> {
+public class DefaultUserInterface implements UserInterface {
 
     private final MainWindow mainWindow;
     private final UiUpdater uiUpdater;
@@ -41,8 +41,8 @@ public class DefaultUserInterface implements UserInterface, ApplicationListener<
         frame.setVisible(true);
     }
 
-    @Override
-    public void onApplicationEvent(final UiUpdateEvent event) {
+    @EventListener
+    public void updateUi(UiUpdateEvent event) {
         uiUpdater.update(() -> event.action(mainWindow));
     }
 }

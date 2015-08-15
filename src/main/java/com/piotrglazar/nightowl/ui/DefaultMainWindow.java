@@ -49,6 +49,7 @@ public class DefaultMainWindow implements MainWindow {
     public MainWindow preDisplay() {
         timeLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
         siderealHourAngleLabel.setText(LocalDateTime.now().format(dateTimeFormatter));
+        cityName.setText(skyMapController.getUserLocation());
         leftButton.addActionListener(al -> {
             skyMapRotations.rotateLeft();
             repaintUi();

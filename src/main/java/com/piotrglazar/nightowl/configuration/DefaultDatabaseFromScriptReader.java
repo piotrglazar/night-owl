@@ -3,7 +3,7 @@ package com.piotrglazar.nightowl.configuration;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.piotrglazar.nightowl.api.DatabaseFromScriptReader;
-import com.piotrglazar.nightowl.api.StarInfoProvider;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -24,17 +24,17 @@ import java.util.List;
 public class DefaultDatabaseFromScriptReader implements DatabaseFromScriptReader {
 
     private final DataSource dataSource;
-    private final StarInfoProvider starInfoProvider;
+    private final StarInfoRepository starInfoRepository;
 
     @Autowired
-    public DefaultDatabaseFromScriptReader(DataSource dataSource, StarInfoProvider starInfoProvider) {
+    public DefaultDatabaseFromScriptReader(DataSource dataSource, StarInfoRepository starInfoRepository) {
         this.dataSource = dataSource;
-        this.starInfoProvider = starInfoProvider;
+        this.starInfoRepository = starInfoRepository;
     }
 
     @Override
     public void createDatabaseFromScript() {
-        if (starInfoProvider.count() == 0) {
+        if (starInfoRepository.count() == 0) {
             final List<String> allLines = getScriptStatements();
             executeScriptStatements(dataSource, allLines);
         }

@@ -11,8 +11,9 @@ import java.time.ZonedDateTime;
 @Component
 public class SiderealHourAngleCalculator {
 
-    private final TimeConverter timeConverter;
+    private static final ZoneId UTC = ZoneId.of("UTC");
 
+    private final TimeConverter timeConverter;
     private final UtcStarTimeAtZeroUniversalTime zeroUniversalTime;
 
     @Autowired
@@ -27,7 +28,7 @@ public class SiderealHourAngleCalculator {
     }
 
     public LocalTime siderealHourAngleAtGreenwich(final ZonedDateTime time) {
-        final ZonedDateTime utc = time.withZoneSameInstant(ZoneId.of("UTC"));
+        final ZonedDateTime utc = time.withZoneSameInstant(UTC);
 
         final ZonedDateTime utcStarTime = timeConverter.solarToStar(utc);
         final LocalTime utcStarTimeAtZeroUniversalTime = zeroUniversalTime.getTime(utc.toLocalDateTime());

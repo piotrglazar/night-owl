@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.configuration;
 
-import com.piotrglazar.nightowl.api.StarInfoProvider;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,10 @@ import java.sql.Statement;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DatabaseFromScriptReaderTest {
@@ -24,7 +27,7 @@ public class DatabaseFromScriptReaderTest {
     private DataSource dataSource;
 
     @Mock
-    private StarInfoProvider starInfoProvider;
+    private StarInfoRepository starInfoRepository;
 
     @InjectMocks
     private DefaultDatabaseFromScriptReader reader;
@@ -33,7 +36,7 @@ public class DatabaseFromScriptReaderTest {
     @SuppressFBWarnings
     public void shouldNotExecuteScriptWhenDatabaseIsAlreadyCreated() throws SQLException {
         // given
-        given(starInfoProvider.count()).willReturn(someStarInfoEntriesInDatabase());
+        given(starInfoRepository.count()).willReturn(someStarInfoEntriesInDatabase());
 
         // when
         reader.createDatabaseFromScript();

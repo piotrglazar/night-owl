@@ -1,10 +1,10 @@
 package com.piotrglazar.nightowl.logic;
 
-import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.configuration.ApplicationConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
-import com.piotrglazar.nightowl.model.entities.StarInfo;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.StarPositionDto;
+import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.MoreCollectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ public class StarPositionProvider {
     public static final String STAR_MAGNITUDE_KEY = "#magnitude";
     public static final String USER_LOCATION_AND_STAR_MAG_COMPLEX_KEY = "{" + USER_LOCATION_KEY + "," + STAR_MAGNITUDE_KEY + "}";
 
-    private final StarInfoProvider starInfoProvider;
+    private final StarInfoRepository starInfoRepository;
     private final StarPositionCalculator starPositionCalculator;
     private final SiderealHourAngleCalculator siderealHourAngleCalculator;
 
     @Autowired
-    public StarPositionProvider(StarInfoProvider starInfoProvider, StarPositionCalculator starPositionCalculator,
+    public StarPositionProvider(StarInfoRepository starInfoRepository, StarPositionCalculator starPositionCalculator,
                                 SiderealHourAngleCalculator siderealHourAngleCalculator) {
-        this.starInfoProvider = starInfoProvider;
+        this.starInfoRepository = starInfoRepository;
         this.starPositionCalculator = starPositionCalculator;
         this.siderealHourAngleCalculator = siderealHourAngleCalculator;
     }
@@ -49,9 +49,9 @@ public class StarPositionProvider {
 
     private List<StarInfo> getStarsFromDeclinationToPole(final double declination) {
         if (declination > 0) {
-            return starInfoProvider.getStarsWithDeclinationGreaterThan(declination);
+            return starInfoRepository.findByDeclinationGreaterThan(declination);
         } else {
-            return starInfoProvider.getStarsWithDeclinationLessThan(declination);
+            return starInfoRepository.findByDeclinationLessThan(declination);
         }
     }
 
@@ -82,11 +82,11 @@ public class StarPositionProvider {
         return getNumberOfStarsBetween(lowerBoundary, upperBoundary);
     }
 
-    private List<StarInfo> getNumberOfStarsBetween(final double lowerBoundary, final double upperBoundary) {
-        return starInfoProvider.getStarsWithDeclinationBetween(lowerBoundary, upperBoundary);
+    private List<StarInfo> getNumberOfStarsBetween(double lowerBoundary, double upperBoundary) {
+        return starInfoRepository.findByDeclinationBetween(lowerBoundary, upperBoundary);
     }
 
-    public List<StarPositionDto> getStarPositions(final UserLocation userLocation, final ZonedDateTime date) {
+    public List<StarPositionDto> getStarPositions(UserLocation userLocation, ZonedDateTime date) {
         final List<StarInfo> stars = getStarsAlwaysVisible(userLocation);
         stars.addAll(getStarsSometimesVisible(userLocation));
 
@@ -94,7 +94,7 @@ public class StarPositionProvider {
     }
 
     public List<StarPositionDto> getBrightStarPositions(UserLocation userLocation, ZonedDateTime date, Double magnitude) {
-        final List<StarInfo> brightStars = starInfoProvider.getStarsBrighterThan(magnitude);
+        final List<StarInfo> brightStars = starInfoRepository.findByApparentMagnitudeLessThan(magnitude);
         return getStarPositions(userLocation, date, brightStars);
     }
 
@@ -103,7 +103,7 @@ public class StarPositionProvider {
         return getBrightStarPositions(userLocation, date, magnitude);
     }
 
-    private List<StarPositionDto> getStarPositions(final UserLocation userLocation, final ZonedDateTime date, final List<StarInfo> stars) {
+    private List<StarPositionDto> getStarPositions(UserLocation userLocation, ZonedDateTime date, List<StarInfo> stars) {
         final LocalTime siderealHourAngle = siderealHourAngleCalculator.siderealHourAngle(date, userLocation.getLongitude());
         final double maximumZenithDistance = starPositionCalculator.getMaximumZenithDistance();
 
