@@ -3,11 +3,11 @@ package com.piotrglazar.nightowl.logic;
 import com.piotrglazar.nightowl.util.ClockEvent;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ClockStatus implements ApplicationListener<ClockEvent> {
+public class ClockStatus {
 
     private final EventScheduler eventScheduler;
     private final TimeProvider timeProvider;
@@ -18,8 +18,8 @@ public class ClockStatus implements ApplicationListener<ClockEvent> {
         this.timeProvider = timeProvider;
     }
 
-    @Override
-    public void onApplicationEvent(ClockEvent event) {
+    @EventListener
+    public void changeClockStatus(ClockEvent event) {
         ClockEvent.ActionType type = event.getActionType();
         if (type == ClockEvent.ActionType.START) {
             startTimeBasedActivities();

@@ -12,6 +12,7 @@ import com.piotrglazar.nightowl.model.entities.SkyObjectVisibilitySettings;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.ClockEvent;
 import com.piotrglazar.nightowl.util.DoubleConverter;
+import com.piotrglazar.nightowl.util.NightOwlEvent;
 import com.piotrglazar.nightowl.util.StateReloadEvent;
 import com.piotrglazar.nightowl.util.UiUpdateEvent;
 import org.junit.Test;
@@ -20,7 +21,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
@@ -30,7 +30,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainMenuControllerTest {
@@ -229,22 +232,22 @@ public class MainMenuControllerTest {
     }
 
     private void assertThatReloadsAppAndRepaintsUi() {
-        final ArgumentCaptor<ApplicationEvent> eventsCaptor = ArgumentCaptor.forClass(ApplicationEvent.class);
+        final ArgumentCaptor<NightOwlEvent> eventsCaptor = ArgumentCaptor.forClass(NightOwlEvent.class);
         verify(eventPublisher, times(2)).publishEvent(eventsCaptor.capture());
-        final List<ApplicationEvent> events = eventsCaptor.getAllValues();
+        final List<NightOwlEvent> events = eventsCaptor.getAllValues();
         assertThat(events).hasSize(2);
         containsReloadEvent(events);
         containsMainWindowRepaintEvent(events);
     }
 
-    private void containsMainWindowRepaintEvent(final List<ApplicationEvent> events) {
-        final Optional<ApplicationEvent> event = events.stream().filter(e -> e.getClass().equals(UiUpdateEvent.class)).findFirst();
+    private void containsMainWindowRepaintEvent(final List<NightOwlEvent> events) {
+        final Optional<NightOwlEvent> event = events.stream().filter(e -> e.getClass().equals(UiUpdateEvent.class)).findFirst();
         assertThat(event.isPresent());
         ((UiUpdateEvent) event.get()).action(mainWindow);
         verify(mainWindow).repaintUi();
     }
 
-    private void containsReloadEvent(final List<ApplicationEvent> events) {
+    private void containsReloadEvent(final List<NightOwlEvent> events) {
         assertThat(events.stream().filter(e -> e.getClass().equals(StateReloadEvent.class)).count()).isEqualTo(1);
     }
 

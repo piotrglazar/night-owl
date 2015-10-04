@@ -1,5 +1,8 @@
 package com.piotrglazar.nightowl.util.messages;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class DatabaseStatisticsMessage {
 
     private final long numberOfStars;

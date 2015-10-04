@@ -29,7 +29,7 @@ public class ClockStatusTest {
         ClockEvent clockEvent = new ClockEvent(this, ClockEvent.ActionType.START);
 
         // when
-        clockStatus.onApplicationEvent(clockEvent);
+        clockStatus.changeClockStatus(clockEvent);
 
         // then
         verify(eventScheduler).startAllEvents();
@@ -42,7 +42,7 @@ public class ClockStatusTest {
         ClockEvent clockEvent = new ClockEvent(this, ClockEvent.ActionType.STOP);
 
         // when
-        clockStatus.onApplicationEvent(clockEvent);
+        clockStatus.changeClockStatus(clockEvent);
 
         // then
         verify(eventScheduler).stopAllEvents();
@@ -52,6 +52,6 @@ public class ClockStatusTest {
     @Test(expected = IllegalStateException.class)
     public void shouldFailWhenUnknownClockStatusProvided() {
         // expected
-        clockStatus.onApplicationEvent(new ClockEvent(this, null));
+        clockStatus.changeClockStatus(new ClockEvent(this, null));
     }
 }

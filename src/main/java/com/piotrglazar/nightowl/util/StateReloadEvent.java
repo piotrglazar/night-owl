@@ -1,16 +1,12 @@
 package com.piotrglazar.nightowl.util;
 
 import com.google.common.base.MoreObjects;
-import org.springframework.context.ApplicationEvent;
 
-public class StateReloadEvent extends ApplicationEvent {
-
-    private static final long serialVersionUID = 1;
+public class StateReloadEvent implements NightOwlEvent {
 
     private final String cause;
 
-    public StateReloadEvent(Object source, String cause) {
-        super(source);
+    public StateReloadEvent(String cause) {
         this.cause = cause;
     }
 
@@ -21,7 +17,7 @@ public class StateReloadEvent extends ApplicationEvent {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("cause", cause)
+                .add("cause", getCause())
                 .toString();
     }
 }

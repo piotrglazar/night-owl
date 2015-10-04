@@ -1,5 +1,6 @@
 package com.piotrglazar.nightowl.ui;
 
+import com.piotrglazar.nightowl.util.NightOwlEvent;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -8,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.awt.event.KeyEvent;
@@ -63,7 +63,7 @@ public class ArrowKeysDispatcherTest {
 
         // then
         assertThat(consumed).isTrue();
-        verify(applicationEventPublisher).publishEvent(any(ApplicationEvent.class));
+        verify(applicationEventPublisher).publishEvent(any(NightOwlEvent.class));
     }
 
     @Test

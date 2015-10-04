@@ -30,7 +30,7 @@ public class StarPositionCacheBean {
     }
 
     private void repaintUi() {
-        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, MainWindow::repaintUi));
+        applicationEventPublisher.publishEvent(new UiUpdateEvent(MainWindow::repaintUi));
     }
 
     private void clearCache() {

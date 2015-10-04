@@ -1,7 +1,8 @@
 package com.piotrglazar.nightowl.importers;
 
 import com.google.common.base.Charsets;
-import com.piotrglazar.nightowl.api.StarInfoProvider;
+import com.piotrglazar.nightowl.TestFileUtils;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
 import com.piotrglazar.nightowl.util.wrappers.FileReader;
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("all")
-public class NightWatcherStarImporterTest {
+public class NightWatcherStarImporterTest implements TestFileUtils {
 
     @Captor
     private ArgumentCaptor<StarInfo> starInfoCaptor;
@@ -41,7 +41,7 @@ public class NightWatcherStarImporterTest {
     private ImportedLineFixer importedLineFixer;
 
     @Mock
-    private StarInfoProvider starInfoProvider;
+    private StarInfoRepository starInfoRepository;
 
     @InjectMocks
     private NightWatcherStarImporter importer;
@@ -49,21 +49,21 @@ public class NightWatcherStarImporterTest {
     @Test
     public void shouldImportStars() throws IOException, URISyntaxException {
         // given
-        final Path path = Paths.get(getClass().getClassLoader().getResource("importers/nightwatchstars.txt").toURI());
+        final Path path = resourcePath("importers/nightwatchstars.txt");
         given(fileReader.getNotEmptyLines(path)).willReturn(Files.lines(path, Charsets.UTF_8));
 
         // when
         importer.importStars(path);
 
         // then
-        verify(starInfoProvider, times(5)).saveStarInfo(any(StarInfo.class));
-        verify(starInfoProvider).deleteAll();
+        verify(starInfoRepository, times(5)).save(any(StarInfo.class));
+        verify(starInfoRepository).deleteAll();
     }
 
     @Test
     public void shouldRemoveInvalidStarNameAndStarInfoDetailsInStarInfoMustBeNull() {
         // given
-        final Path path = Paths.get(System.getProperty("java.io.tmpdir"));
+        final Path path = tmpDirPath();
         given(fileReader.getNotEmptyLines(path)).willReturn(Stream.of("0,4 1,9 5 -1 -1 G5III 6 4 7 2 4 Psc X Sirius"));
         given(importedLineFixer.shouldBeRemoved("Sirius")).willReturn(true);
 
@@ -71,14 +71,14 @@ public class NightWatcherStarImporterTest {
         importer.importStars(path);
 
         // then
-        verify(starInfoProvider).saveStarInfo(starInfoCaptor.capture());
+        verify(starInfoRepository).save(starInfoCaptor.capture());
         assertThat(getStarInfoDetails().isPresent()).isFalse();
     }
 
     @Test
     public void shouldReplaceInvalidStarName() {
         // given
-        final Path path = Paths.get(System.getProperty("java.io.tmpdir"));
+        final Path path = tmpDirPath();
         given(fileReader.getNotEmptyLines(path)).willReturn(Stream.of("0,4 1,9 5 -1 -1 G5III 6 4 7 2 4 Psc X Sirius"));
         given(importedLineFixer.shouldBeReplaced("Sirius")).willReturn(true);
         given(importedLineFixer.getReplacement("Sirius")).willReturn("Antares");
@@ -87,7 +87,7 @@ public class NightWatcherStarImporterTest {
         importer.importStars(path);
 
         // then
-        verify(starInfoProvider).saveStarInfo(starInfoCaptor.capture());
+        verify(starInfoRepository).save(starInfoCaptor.capture());
         assertThat(getStarName()).isEqualTo("Antares");
     }
 

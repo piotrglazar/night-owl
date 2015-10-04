@@ -40,9 +40,6 @@ public class NightOwlRuntimeConfiguration {
         databasePopulator.prepareDatabase();
         runtimeConfiguration = configurationProvider.getConfiguration();
         LOG.info("Running with configuration {}", runtimeConfiguration);
-
-        final UserLocation chosenUserLocation = runtimeConfiguration.getChosenUserLocation();
-        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, ui -> ui.setUserLocation(chosenUserLocation)));
     }
 
     public RuntimeConfiguration getRuntimeConfiguration() {
@@ -68,7 +65,7 @@ public class NightOwlRuntimeConfiguration {
         runtimeConfiguration.setChosenUserLocation(newUserLocation);
         configurationProvider.updateConfiguration(runtimeConfiguration);
 
-        applicationEventPublisher.publishEvent(new UiUpdateEvent(this, ui -> ui.setUserLocation(newUserLocation)));
+        applicationEventPublisher.publishEvent(new UiUpdateEvent(ui -> ui.setUserLocation(newUserLocation)));
 
         LOG.info("Finished updating runtime configuration - new user location");
     }

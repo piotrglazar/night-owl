@@ -1,11 +1,11 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.google.common.collect.Lists;
-import com.piotrglazar.nightowl.api.StarInfoProvider;
-import com.piotrglazar.nightowl.api.UserLocationProvider;
 import com.piotrglazar.nightowl.configuration.NightOwlRuntimeConfiguration;
 import com.piotrglazar.nightowl.coordinates.Latitude;
 import com.piotrglazar.nightowl.coordinates.Longitude;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
+import com.piotrglazar.nightowl.model.UserLocationRepository;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import com.piotrglazar.nightowl.util.TimeProvider;
 import com.piotrglazar.nightowl.util.messages.DatabaseStatisticsMessage;
@@ -34,10 +34,10 @@ public class DatabaseStatisticsTest {
     private StarPositionProvider starPositionProvider;
 
     @Mock
-    private UserLocationProvider userLocationProvider;
+    private UserLocationRepository userLocationRepository;
 
     @Mock
-    private StarInfoProvider starInfoProvider;
+    private StarInfoRepository starInfoRepository;
 
     @InjectMocks
     private DatabaseStatistics databaseStatistics;
@@ -45,8 +45,8 @@ public class DatabaseStatisticsTest {
     @Test
     public void shouldCreateDatabaseStatisticsMessage() {
         // given
-        given(starInfoProvider.count()).willReturn(42L);
-        given(userLocationProvider.count()).willReturn(3L);
+        given(starInfoRepository.count()).willReturn(42L);
+        given(userLocationRepository.count()).willReturn(3L);
         given(nightOwlRuntimeConfiguration.getUserLocation()).willReturn(new UserLocation(new Latitude(8.0), new Longitude(16.0),
                 "Warsaw"));
         given(starPositionProvider.getNumberOfStarsAlwaysVisible(any(UserLocation.class))).willReturn(5L);

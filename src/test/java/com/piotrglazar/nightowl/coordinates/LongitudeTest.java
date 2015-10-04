@@ -17,24 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LongitudeTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionWhenLongitudeLessThanMinus180() {
+    @Parameters({
+            "-181",
+            "180.1"
+    })
+    public void shouldThrowExceptionWhenLongitudeIsOutOfBoundaries(double longitude) {
         // expect
-        new Longitude(-181);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionWhenLongitudeGreaterThan180() {
-        // expect
-        new Longitude(180.1);
-    }
-
-    @Test
-    public void shouldProperlyConstructLongitude() {
-        // when
-        final Longitude longitude = new Longitude(21);
-
-        // then
-        assertThat(longitude.getLongitude()).isEqualTo(21);
+        new Longitude(longitude);
     }
 
     @Test

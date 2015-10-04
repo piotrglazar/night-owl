@@ -31,10 +31,10 @@ public class DefaultUserInterfaceTest {
     public void shouldConsumeUiUpdateEvents() {
         // given
         UserLocation userLocation = new UserLocation(new Latitude(8.0), new Longitude(16.0), "Warsaw");
-        UiUpdateEvent uiUpdateEvent = new UiUpdateEvent(this, mainWindow -> mainWindow.setUserLocation(userLocation));
+        UiUpdateEvent uiUpdateEvent = new UiUpdateEvent(mainWindow -> mainWindow.setUserLocation(userLocation));
 
         // when
-        defaultUserInterface.onApplicationEvent(uiUpdateEvent);
+        defaultUserInterface.updateUi(uiUpdateEvent);
 
         // then
         ArgumentCaptor<Runnable> uiUpdate = ArgumentCaptor.forClass(Runnable.class);
@@ -43,4 +43,5 @@ public class DefaultUserInterfaceTest {
         uiUpdate.getValue().run();
         verify(mainWindow).setUserLocation(userLocation);
     }
+
 }

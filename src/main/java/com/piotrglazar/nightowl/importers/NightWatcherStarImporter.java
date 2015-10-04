@@ -1,6 +1,6 @@
 package com.piotrglazar.nightowl.importers;
 
-import com.piotrglazar.nightowl.api.StarInfoProvider;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
 import com.piotrglazar.nightowl.model.entities.StarColor;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
 import com.piotrglazar.nightowl.model.entities.StarInfoDetails;
@@ -25,24 +25,24 @@ public class NightWatcherStarImporter {
     public static final double APPARENT_MAG_FACTOR = 1000.0;
     public static final int MINIMAL_SHARDS_LENGTH = 9;
 
-    private final StarInfoProvider starInfoProvider;
+    private final StarInfoRepository starInfoRepository;
     private final ImportedLineFixer importedLineFixer;
     private final FileReader fileReader;
 
     @Autowired
-    public NightWatcherStarImporter(StarInfoProvider starInfoProvider, ImportedLineFixer importedLineFixer, FileReader fileReader) {
-        this.starInfoProvider = starInfoProvider;
+    public NightWatcherStarImporter(StarInfoRepository starInfoRepository, ImportedLineFixer importedLineFixer, FileReader fileReader) {
+        this.starInfoRepository = starInfoRepository;
         this.importedLineFixer = importedLineFixer;
         this.fileReader = fileReader;
     }
 
     public void importStars(final Path path) {
         LOG.info("Delete previous stars");
-        starInfoProvider.deleteAll();
+        starInfoRepository.deleteAll();
 
-        processStars(fileReader.getNotEmptyLines(path)).forEach(starInfoProvider::saveStarInfo);
+        processStars(fileReader.getNotEmptyLines(path)).forEach(starInfoRepository::save);
 
-        LOG.info("Imported stars: {}",  starInfoProvider.count());
+        LOG.info("Imported stars: {}",  starInfoRepository.count());
     }
 
     public Stream<StarInfo> processStars(Stream<String> rawLines) {

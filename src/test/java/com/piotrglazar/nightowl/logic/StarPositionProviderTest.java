@@ -1,11 +1,11 @@
 package com.piotrglazar.nightowl.logic;
 
 import com.google.common.collect.Lists;
-import com.piotrglazar.nightowl.api.StarInfoProvider;
 import com.piotrglazar.nightowl.coordinates.Latitude;
+import com.piotrglazar.nightowl.model.StarInfoRepository;
+import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.entities.StarCelestialPosition;
 import com.piotrglazar.nightowl.model.entities.StarInfo;
-import com.piotrglazar.nightowl.model.StarPositionDto;
 import com.piotrglazar.nightowl.model.entities.UserLocation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class StarPositionProviderTest {
     private SiderealHourAngleCalculator siderealHourAngleCalculator;
 
     @Mock
-    private StarInfoProvider starInfoProvider;
+    private StarInfoRepository starInfoRepository;
 
     @Mock
     private StarPositionCalculator starPositionCalculator;
@@ -48,15 +48,15 @@ public class StarPositionProviderTest {
         final double declination = 40.0;
         final List<StarInfo> starInfo = someStarInfo();
         given(starPositionCalculator.calculateBoundaryDeclination(52.0)).willReturn(declination);
-        given(starInfoProvider.getStarsWithDeclinationGreaterThan(declination)).willReturn(starInfo);
+        given(starInfoRepository.findByDeclinationGreaterThan(declination)).willReturn(starInfo);
 
         // when
         final long numberOfStarsAlwaysVisible = provider.getNumberOfStarsAlwaysVisible(userLocation);
 
         // then
         verify(starPositionCalculator).calculateBoundaryDeclination(52.0);
-        verify(starInfoProvider).getStarsWithDeclinationGreaterThan(declination);
-        verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
+        verify(starInfoRepository).findByDeclinationGreaterThan(declination);
+        verifyNoMoreInteractions(starPositionCalculator, starInfoRepository);
         assertThat(numberOfStarsAlwaysVisible).isEqualTo(starInfo.size());
     }
 
@@ -67,15 +67,15 @@ public class StarPositionProviderTest {
         final double declination = 40.0;
         final List<StarInfo> starInfo = someStarInfo();
         given(starPositionCalculator.calculateBoundaryDeclination(52.0)).willReturn(declination);
-        given(starInfoProvider.getStarsWithDeclinationBetween(-declination, declination)).willReturn(starInfo);
+        given(starInfoRepository.findByDeclinationBetween(-declination, declination)).willReturn(starInfo);
 
         // when
         final long numberOfStarsSometimesVisible = provider.getNumberOfStarsSometimesVisible(userLocation);
 
         // then
         verify(starPositionCalculator).calculateBoundaryDeclination(52.0);
-        verify(starInfoProvider).getStarsWithDeclinationBetween(-declination, declination);
-        verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
+        verify(starInfoRepository).findByDeclinationBetween(-declination, declination);
+        verifyNoMoreInteractions(starPositionCalculator, starInfoRepository);
         assertThat(numberOfStarsSometimesVisible).isEqualTo(starInfo.size());
     }
 
@@ -86,15 +86,15 @@ public class StarPositionProviderTest {
         final double declination = 40.0;
         final List<StarInfo> starInfo = someStarInfo();
         given(starPositionCalculator.calculateBoundaryDeclination(52.0)).willReturn(declination);
-        given(starInfoProvider.getStarsWithDeclinationLessThan(-declination)).willReturn(starInfo);
+        given(starInfoRepository.findByDeclinationLessThan(-declination)).willReturn(starInfo);
 
         // when
         final long numberOfStarsNeverVisible = provider.getNumberOfStarsNeverVisible(userLocation);
 
         // then
         verify(starPositionCalculator).calculateBoundaryDeclination(52.0);
-        verify(starInfoProvider).getStarsWithDeclinationLessThan(-declination);
-        verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
+        verify(starInfoRepository).findByDeclinationLessThan(-declination);
+        verifyNoMoreInteractions(starPositionCalculator, starInfoRepository);
         assertThat(numberOfStarsNeverVisible).isEqualTo(starInfo.size());
     }
 
@@ -105,15 +105,15 @@ public class StarPositionProviderTest {
         final double declination = -40.0;
         final List<StarInfo> starInfo = someStarInfo();
         given(starPositionCalculator.calculateBoundaryDeclination(-52.0)).willReturn(declination);
-        given(starInfoProvider.getStarsWithDeclinationLessThan(declination)).willReturn(starInfo);
+        given(starInfoRepository.findByDeclinationLessThan(declination)).willReturn(starInfo);
 
         // when
         final long numberOfStarsAlwaysVisible = provider.getNumberOfStarsAlwaysVisible(userLocation);
 
         // then
         verify(starPositionCalculator).calculateBoundaryDeclination(-52.0);
-        verify(starInfoProvider).getStarsWithDeclinationLessThan(declination);
-        verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
+        verify(starInfoRepository).findByDeclinationLessThan(declination);
+        verifyNoMoreInteractions(starPositionCalculator, starInfoRepository);
         assertThat(numberOfStarsAlwaysVisible).isEqualTo(starInfo.size());
     }
 
@@ -124,15 +124,15 @@ public class StarPositionProviderTest {
         final double declination = -40.0;
         final List<StarInfo> starInfo = someStarInfo();
         given(starPositionCalculator.calculateBoundaryDeclination(-52.0)).willReturn(declination);
-        given(starInfoProvider.getStarsWithDeclinationBetween(declination, -declination)).willReturn(starInfo);
+        given(starInfoRepository.findByDeclinationBetween(declination, -declination)).willReturn(starInfo);
 
         // when
         final long numberOfStarsSometimesVisible = provider.getNumberOfStarsSometimesVisible(userLocation);
 
         // then
         verify(starPositionCalculator).calculateBoundaryDeclination(-52.0);
-        verify(starInfoProvider).getStarsWithDeclinationBetween(declination, -declination);
-        verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
+        verify(starInfoRepository).findByDeclinationBetween(declination, -declination);
+        verifyNoMoreInteractions(starPositionCalculator, starInfoRepository);
         assertThat(numberOfStarsSometimesVisible).isEqualTo(starInfo.size());
     }
 
@@ -143,15 +143,15 @@ public class StarPositionProviderTest {
         final double declination = -40.0;
         final List<StarInfo> starInfo = someStarInfo();
         given(starPositionCalculator.calculateBoundaryDeclination(-52.0)).willReturn(declination);
-        given(starInfoProvider.getStarsWithDeclinationGreaterThan(-declination)).willReturn(starInfo);
+        given(starInfoRepository.findByDeclinationGreaterThan(-declination)).willReturn(starInfo);
 
         // when
         final long numberOfStarsNeverVisible = provider.getNumberOfStarsNeverVisible(userLocation);
 
         // then
         verify(starPositionCalculator).calculateBoundaryDeclination(-52.0);
-        verify(starInfoProvider).getStarsWithDeclinationGreaterThan(-declination);
-        verifyNoMoreInteractions(starPositionCalculator, starInfoProvider);
+        verify(starInfoRepository).findByDeclinationGreaterThan(-declination);
+        verifyNoMoreInteractions(starPositionCalculator, starInfoRepository);
         assertThat(numberOfStarsNeverVisible).isEqualTo(starInfo.size());
     }
 
@@ -163,8 +163,8 @@ public class StarPositionProviderTest {
         final List<StarInfo> alwaysVisibleStars = someStarInfo();
         final List<StarInfo> sometimesVisibleStars = someStarInfo();
         final int starsCount = alwaysVisibleStars.size() + sometimesVisibleStars.size();
-        given(starInfoProvider.getStarsWithDeclinationLessThan(anyDouble())).willReturn(alwaysVisibleStars);
-        given(starInfoProvider.getStarsWithDeclinationBetween(anyDouble(), anyDouble())).willReturn(sometimesVisibleStars);
+        given(starInfoRepository.findByDeclinationLessThan(anyDouble())).willReturn(alwaysVisibleStars);
+        given(starInfoRepository.findByDeclinationBetween(anyDouble(), anyDouble())).willReturn(sometimesVisibleStars);
         given(starPositionCalculator.getMaximumZenithDistance()).willReturn(50.0);
         given(starPositionCalculator.calculateCelestialPosition(any(Latitude.class), any(LocalTime.class), any(StarInfo.class)))
                 .willReturn(new StarCelestialPosition(60, 0), new StarCelestialPosition(0, 0));
@@ -186,7 +186,7 @@ public class StarPositionProviderTest {
         final UserLocation userLocation = userLocationWithLatitude(52.0);
         final ZonedDateTime arbitraryDate = ZonedDateTime.of(2014, 7, 16, 23, 29, 0, 0, ZoneId.of("UTC"));
         final List<StarInfo> starInfo = someStarInfo();
-        given(starInfoProvider.getStarsBrighterThan(anyDouble())).willReturn(starInfo);
+        given(starInfoRepository.findByApparentMagnitudeLessThan(anyDouble())).willReturn(starInfo);
         given(starPositionCalculator.getMaximumZenithDistance()).willReturn(90.0);
         given(starPositionCalculator.calculateCelestialPosition(any(Latitude.class), any(LocalTime.class), any(StarInfo.class)))
                 .willReturn(new StarCelestialPosition(60, 0), new StarCelestialPosition(0, 0));
