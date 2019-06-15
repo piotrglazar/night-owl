@@ -16,7 +16,6 @@ apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'sonar-runner'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
@@ -78,15 +77,6 @@ jacocoTestReport {
     }
 }
 
-sonarRunner {
-    toolVersion = '2.4'
-    sonarProperties {
-        property "sonar.exclusions", "src/main/java/com/piotrglazar/nightowl/configuration/*.java," +
-                    "src/main/java/com/piotrglazar/nightowl/dbscript/DatabaseScriptConfiguration.java," +
-                    "src/main/java/com/piotrglazar/nightowl/importers/ImporterConfiguration.java," +
-                    "src/main/java/com/piotrglazar/nightowl/ui/DefaultMainWindow.java"
-    }
-}
 
 sourceCompatibility = 1.8
 
